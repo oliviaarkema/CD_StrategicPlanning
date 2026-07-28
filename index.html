@@ -1,0 +1,1409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Country Dairy — Strategic Planning</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --kelly:#3dae2b;
+  --green:#074d1a;
+  --green-mid:#0b6722;
+  --green-dark:#0a1f0d;
+  --ink:#1c1c1c;
+  --bg:#eef2ee;
+  --panel:#ffffff;
+  --border:#dbe2db;
+  --muted:#5f6b60;
+  --shadow:0 2px 10px rgba(10,31,13,.08);
+  --nav-bg:#052e10;
+  --callout-bg:#f0f7ee;
+  --chart-grid:#e4ebe4;
+  --chart-text:#5f6b60;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --ink:#dce8dc;
+    --bg:#0d1a0f;
+    --panel:#162019;
+    --border:#293c2c;
+    --muted:#7a9480;
+    --shadow:0 2px 14px rgba(0,0,0,.35);
+    --nav-bg:#040e06;
+    --callout-bg:#182519;
+    --chart-grid:#253528;
+    --chart-text:#7a9480;
+  }
+}
+:root[data-theme="dark"]{
+  --ink:#dce8dc; --bg:#0d1a0f; --panel:#162019; --border:#293c2c;
+  --muted:#7a9480; --shadow:0 2px 14px rgba(0,0,0,.35);
+  --nav-bg:#040e06; --callout-bg:#182519; --chart-grid:#253528; --chart-text:#7a9480;
+}
+:root[data-theme="light"]{
+  --ink:#1c1c1c; --bg:#eef2ee; --panel:#ffffff; --border:#dbe2db;
+  --muted:#5f6b60; --shadow:0 2px 10px rgba(10,31,13,.08);
+  --nav-bg:#052e10; --callout-bg:#f0f7ee; --chart-grid:#e4ebe4; --chart-text:#5f6b60;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  color:var(--ink);background:var(--bg);line-height:1.5;
+}
+a{color:var(--green)}
+
+/* ── Gate ── */
+#gate{
+  position:fixed;inset:0;z-index:5000;background:var(--green);
+  display:flex;align-items:center;justify-content:center;padding:20px;
+}
+.gate-card{
+  background:var(--panel);border-radius:18px;box-shadow:0 10px 40px rgba(0,0,0,.3);
+  padding:32px 28px;width:100%;max-width:340px;text-align:center;
+  display:flex;flex-direction:column;gap:12px;
+}
+.gate-card img{height:70px;width:auto;margin:0 auto 4px}
+.gate-card h1{margin:0;font-size:1.3rem;color:var(--green-dark)}
+.gate-card p{margin:0;font-size:.88rem;color:var(--muted)}
+.gate-card input{
+  padding:11px 14px;font-size:1rem;border:1px solid var(--border);
+  border-radius:10px;width:100%;background:var(--panel);color:var(--ink);
+}
+.gate-card input:focus{outline:2px solid var(--kelly);outline-offset:1px;border-color:var(--kelly)}
+.gate-card button{
+  padding:11px 14px;font-size:.95rem;font-weight:600;border:0;
+  border-radius:10px;background:var(--green);color:#fff;cursor:pointer;
+}
+.gate-card button:hover{background:var(--green-mid)}
+.gate-err{color:#b00020;font-size:.85rem}
+
+/* ── Sticky top bar ── */
+.topbar{position:sticky;top:0;z-index:400}
+
+/* ── Header ── */
+header{
+  background:var(--green);color:#fff;
+  display:flex;align-items:center;gap:18px;
+  padding:14px 28px;box-shadow:var(--shadow);
+}
+header img{height:52px;width:auto;background:#fff;border-radius:10px;padding:4px}
+header .titles h1{margin:0;font-size:1.2rem;letter-spacing:.3px}
+header .titles p{margin:2px 0 0;font-size:.8rem;color:rgba(255,255,255,.75)}
+header .header-right{margin-left:auto;font-size:.78rem;color:#dfe9df;text-align:right}
+header .header-right b{color:#fff}
+
+/* ── Navbar ── */
+nav.topnav{
+  background:var(--nav-bg);border-bottom:1px solid rgba(255,255,255,.06);
+  display:flex;overflow-x:auto;scrollbar-width:none;
+}
+nav.topnav::-webkit-scrollbar{display:none}
+nav.topnav button{
+  border:0;background:transparent;color:rgba(255,255,255,.58);
+  padding:13px 22px;font-size:.84rem;font-weight:500;cursor:pointer;
+  white-space:nowrap;letter-spacing:.2px;
+  border-bottom:3px solid transparent;
+  transition:color .14s,border-color .14s;
+  flex-shrink:0;
+}
+nav.topnav button:hover{color:rgba(255,255,255,.88)}
+nav.topnav button.active{color:var(--kelly);border-bottom-color:var(--kelly);font-weight:600}
+
+/* ── Sections ── */
+.page-section{display:none;max-width:1200px;margin:0 auto;padding:28px 20px 60px}
+.page-section.active{display:block}
+
+/* ── Section header ── */
+.sec-head{margin-bottom:26px}
+.sec-head h2{margin:0 0 4px;font-size:1.45rem;color:var(--green-dark);font-weight:700}
+.sec-head p{margin:0;font-size:.9rem;color:var(--muted)}
+
+/* ── Stat cards ── */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.stat{
+  background:var(--panel);border:1px solid var(--border);border-radius:14px;
+  padding:16px 18px;box-shadow:var(--shadow);
+}
+.stat .num{
+  font-size:1.85rem;font-weight:700;color:var(--green);
+  line-height:1;font-variant-numeric:tabular-nums;
+}
+.stat .lbl{font-size:.74rem;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);margin-top:7px}
+.stat .sub{display:block;font-size:.78rem;text-transform:none;letter-spacing:0;color:var(--muted);margin-top:3px}
+.stat .delta{font-size:.8rem;margin-top:5px;font-weight:600}
+.stat .delta.up{color:#16a34a}
+.stat .delta.dn{color:#dc2626}
+.stat .delta.neu{color:var(--muted)}
+
+/* ── Panels ── */
+.panel{
+  background:var(--panel);border:1px solid var(--border);border-radius:16px;
+  box-shadow:var(--shadow);margin-bottom:24px;overflow:hidden;
+}
+.panel-head{
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  padding:14px 20px;border-bottom:1px solid var(--border);
+}
+.panel-head h3{margin:0;font-size:1rem;font-weight:600;color:var(--green-dark)}
+.panel-head .hint{font-size:.8rem;color:var(--muted);margin-left:auto}
+.panel-body{padding:20px}
+.chart-box{position:relative}
+.chart-box.h240{height:240px}
+.chart-box.h280{height:280px}
+.chart-box.h320{height:320px}
+.chart-box.h360{height:360px}
+
+/* ── Grid layouts ── */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.span-2{grid-column:1/-1}
+
+/* ── Callout / findings ── */
+.callout{
+  border-left:4px solid var(--kelly);background:var(--callout-bg);
+  border-radius:0 12px 12px 0;padding:16px 20px;margin-bottom:24px;
+}
+.callout .eyebrow{
+  font-size:.68rem;text-transform:uppercase;letter-spacing:.9px;
+  color:var(--green-mid);font-weight:700;margin-bottom:6px;
+}
+.callout h4{margin:0 0 9px;font-size:.97rem;color:var(--green-dark);font-weight:700}
+.callout p{margin:0;font-size:.875rem;color:var(--ink);line-height:1.65}
+.callout p+p{margin-top:8px}
+
+/* ── Tables ── */
+.tbl-wrap{overflow-x:auto}
+table.dt{width:100%;border-collapse:collapse;font-size:.875rem}
+table.dt th{
+  text-align:left;padding:9px 12px;
+  border-bottom:2px solid var(--border);
+  font-size:.71rem;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);
+  white-space:nowrap;
+}
+table.dt td{padding:9px 12px;border-bottom:1px solid var(--border)}
+table.dt td.n{text-align:right;font-variant-numeric:tabular-nums;font-weight:600;color:var(--green)}
+table.dt td.rk{color:var(--kelly);font-weight:700;width:26px}
+table.dt tr:last-child td{border-bottom:0}
+table.dt tr:hover td{background:var(--bg)}
+
+/* ── H-bars ── */
+.hbars{display:flex;flex-direction:column;gap:10px}
+.hbar-row{display:grid;grid-template-columns:160px 1fr 70px;align-items:center;gap:10px;font-size:.83rem}
+.hbar-label{line-height:1.25}
+.hbar-label i{display:block;color:var(--muted);font-size:.72rem}
+.hbar-track{background:var(--bg);border-radius:6px;height:18px;overflow:hidden;position:relative}
+.hbar-fill{height:100%;border-radius:6px;transition:width .4s ease}
+.hbar-fill.primary{background:var(--kelly)}
+.hbar-fill.good{background:#16a34a}
+.hbar-fill.warn{background:#d97706}
+.hbar-fill.bench{background:#9aa79a}
+.hbar-val{text-align:right;font-variant-numeric:tabular-nums;font-weight:600;color:var(--green)}
+
+/* ── Misc ── */
+.err{color:#b00020;font-size:.85rem}
+footer{max-width:1200px;margin:0 auto;padding:0 20px 50px;color:var(--muted);font-size:.8rem}
+.period-badge{
+  display:inline-block;background:var(--green);color:#fff;
+  font-size:.72rem;font-weight:600;padding:3px 10px;border-radius:999px;
+  letter-spacing:.3px;
+}
+
+@media(max-width:860px){
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .grid-2,.grid-3{grid-template-columns:1fr}
+  .span-2{grid-column:auto}
+  header{flex-wrap:wrap}
+  .hbar-row{grid-template-columns:110px 1fr 56px}
+}
+@media(max-width:480px){
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .stat .num{font-size:1.4rem}
+  header .header-right{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ── Access gate ── -->
+<div id="gate">
+  <form id="gateForm" class="gate-card">
+    <img src="assets/CD_Logo_Stacked.png" alt="Country Dairy">
+    <h1>Strategic Planning</h1>
+    <p>Enter the password to continue.</p>
+    <input type="password" id="gatePw" autocomplete="current-password" placeholder="Password" aria-label="Password">
+    <button type="submit">View dashboard</button>
+    <div id="gateErr" class="gate-err" hidden>Incorrect password — try again.</div>
+  </form>
+</div>
+
+<!-- ── Sticky top bar (header + nav) ── -->
+<div class="topbar">
+  <header>
+    <img src="assets/CD_Logo_Stacked.png" alt="Country Dairy logo">
+    <div class="titles">
+      <h1>Strategic Planning Dashboard</h1>
+      <p>Business Intelligence &amp; Operational Analytics</p>
+    </div>
+    <div class="header-right">
+      <span class="period-badge">FY 2025</span>
+    </div>
+  </header>
+
+  <nav class="topnav" role="navigation" aria-label="Dashboard sections">
+    <button data-section="home"    class="active">Home</button>
+    <button data-section="milk">Milk Products</button>
+    <button data-section="animals">Calf / Cow / Steer Sales</button>
+    <button data-section="rawmilk">Raw Milk Production</button>
+    <button data-section="plant">Plant Efficiency</button>
+    <button data-section="crops">Crop Efficiency</button>
+    <button data-section="costs">Fixed vs. Variable Costs</button>
+  </nav>
+</div>
+
+<main>
+
+<!-- ════════════════════════════════════════════
+     HOME
+══════════════════════════════════════════════ -->
+<section id="sec-home" class="page-section">
+  <div class="sec-head">
+    <h2>Business Overview</h2>
+    <p>Annual summary across all operational areas — FY 2025</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="num" id="h-rev">—</div>
+      <div class="lbl">Total Revenue<span class="sub">all sources</span></div>
+      <div class="delta up" id="h-rev-d">—</div>
+    </div>
+    <div class="stat">
+      <div class="num" id="h-cwt">—</div>
+      <div class="lbl">Milk Sold<span class="sub">hundredweight (cwt)</span></div>
+      <div class="delta up" id="h-cwt-d">—</div>
+    </div>
+    <div class="stat">
+      <div class="num" id="h-cows">—</div>
+      <div class="lbl">Milking Herd<span class="sub">average cows in milk</span></div>
+      <div class="delta neu" id="h-cows-d">—</div>
+    </div>
+    <div class="stat">
+      <div class="num" id="h-acres">—</div>
+      <div class="lbl">Cropland<span class="sub">owned &amp; rented acres</span></div>
+      <div class="delta neu" id="h-acres-d">—</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="eyebrow">Executive Summary</div>
+    <h4>A profitable year anchored by strong milk quality and efficient plant operations</h4>
+    <p>Revenue grew 8.3% year-over-year, driven by a favorable Q4 milk price environment and expanded half-pint school contracts. The herd averaged 75.2 lbs/cow/day — above the Michigan state average of 71.4 lbs — while a somatic cell count of 187,000 cells/mL kept Country Dairy in the premium quality tier for the full year.</p>
+    <p>The summer price trough (June–August) remains the primary margin pressure point, compressing monthly operating margin to as low as 6.8% in July. Cost management across plant labor and energy offset much of that seasonal swing. The break-even sits at 72,940 cwt against current production of 94,190 cwt, providing a 22.6% cushion — the strongest buffer in three years.</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="panel">
+      <div class="panel-head">
+        <h3>Monthly Revenue vs. Operating Costs</h3>
+        <span class="hint">$000s</span>
+      </div>
+      <div class="panel-body">
+        <div class="chart-box h280"><canvas id="homeRevChart"></canvas></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-head">
+        <h3>Revenue by Source</h3>
+        <span class="hint">FY 2025 mix</span>
+      </div>
+      <div class="panel-body">
+        <div class="chart-box h280"><canvas id="homeRevMixChart"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head"><h3>Key Metrics at a Glance</h3></div>
+    <div class="panel-body">
+      <div class="tbl-wrap">
+        <table class="dt" id="homeMetricTable"></table>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════
+     MILK PRODUCTS
+══════════════════════════════════════════════ -->
+<section id="sec-milk" class="page-section">
+  <div class="sec-head">
+    <h2>Milk Products</h2>
+    <p>Processed case volume, product mix, and revenue by SKU — FY 2025</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="num">88,590</div>
+      <div class="lbl">Total Cases Sold<span class="sub">all SKUs</span></div>
+      <div class="delta up">▲ 5.2% vs FY 2024</div>
+    </div>
+    <div class="stat">
+      <div class="num">$2.10M</div>
+      <div class="lbl">Est. Product Revenue<span class="sub">at avg $23.70/case</span></div>
+      <div class="delta up">▲ 8.1% vs FY 2024</div>
+    </div>
+    <div class="stat">
+      <div class="num">32.1%</div>
+      <div class="lbl">Top SKU Share<span class="sub">CD Whole Gallons</span></div>
+      <div class="delta up">▲ 1.4 pts</div>
+    </div>
+    <div class="stat">
+      <div class="num">18,600</div>
+      <div class="lbl">School Half-Pints<span class="sub">21% of total mix</span></div>
+      <div class="delta up">▲ 9.4%</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="eyebrow">Strategic Finding</div>
+    <h4>WF gallons and school half-pints are the highest-growth channels — both deserve investment</h4>
+    <p>Country Dairy whole gallons remain the volume anchor at 32% of mix, but water-filtered (WF) gallons are outpacing every other SKU with estimated growth of +12% since FY 2024. This signals a premium-seeking segment in the distributor and specialty retail channel. Half-pint school sales are structurally sticky — these 18,600 cases are weather- and economy-resilient, locked in by institutional contracts.</p>
+    <p>Consider adding a WF half-pint SKU to target health-premium school contracts where conventional half-pints currently dominate. The Cedar Creek gallon line continues to serve a distinct regional identity segment; consolidating its production run with the CD gallon line on alternating days could reduce changeover downtime by an estimated 8 hours annually.</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="panel">
+      <div class="panel-head">
+        <h3>Cases by Product</h3>
+        <span class="hint">FY 2025 total</span>
+      </div>
+      <div class="panel-body">
+        <div class="chart-box h360"><canvas id="milkProdChart"></canvas></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-head">
+        <h3>Monthly Case Volume</h3>
+        <span class="hint">all products combined</span>
+      </div>
+      <div class="panel-body">
+        <div class="chart-box h360"><canvas id="milkTrendChart"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head"><h3>Product Detail</h3><span class="hint">FY 2025</span></div>
+    <div class="panel-body">
+      <div class="tbl-wrap">
+        <table class="dt" id="milkTable"></table>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════
+     CALF / COW / STEER SALES
+══════════════════════════════════════════════ -->
+<section id="sec-animals" class="page-section">
+  <div class="sec-head">
+    <h2>Calf / Cow / Steer Sales</h2>
+    <p>Animal inventory turns, pricing, and seasonal patterns — FY 2025</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="num">246</div>
+      <div class="lbl">Total Head Sold<span class="sub">calves, cull cows, steers</span></div>
+      <div class="delta up">▲ 12 head vs FY 2024</div>
+    </div>
+    <div class="stat">
+      <div class="num">$168K</div>
+      <div class="lbl">Animal Revenue<span class="sub">all categories</span></div>
+      <div class="delta up">▲ 18.4% vs FY 2024</div>
+    </div>
+    <div class="stat">
+      <div class="num">13.5%</div>
+      <div class="lbl">Cull Rate<span class="sub">42 of 312 cows</span></div>
+      <div class="delta neu">within healthy range</div>
+    </div>
+    <div class="stat">
+      <div class="num">$890</div>
+      <div class="lbl">Avg Cull Cow Price<span class="sub">per head</span></div>
+      <div class="delta up">▲ $150 vs FY 2024</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="eyebrow">Strategic Finding</div>
+    <h4>Cull cow quality is improving — capitalize on timing to maximize per-head value</h4>
+    <p>The 13.5% cull rate sits within the healthy 10–15% range, but what has changed is the quality profile of outgoing cows. The average cull cow sold for $890/head in FY 2025 versus $740 in FY 2024 — a 20% increase driven by more cows leaving the herd at peak body condition rather than due to health or reproduction failures. This is a sign of proactive herd management.</p>
+    <p>Q2 steers captured the peak summer beef market, averaging $1,940/head — the strongest quarterly average on record. For calves, Q1 traditionally sees the highest buyer demand from spring dairies; consider holding male calves born in late December through January for a Q1 sale versus immediately marketing them at birth. Based on FY 2025 price differentials, this timing shift could add an estimated $40–60/head in realized value on 30–40 head annually.</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="panel">
+      <div class="panel-head">
+        <h3>Head Sold by Category &amp; Quarter</h3>
+      </div>
+      <div class="panel-body">
+        <div class="chart-box h300"><canvas id="animalBarChart"></canvas></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-head">
+        <h3>Average Price Per Head by Quarter</h3>
+        <span class="hint">$/head</span>
+      </div>
+      <div class="panel-body">
+        <div class="chart-box h300"><canvas id="animalPriceChart"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head"><h3>Annual Summary by Category</h3></div>
+    <div class="panel-body">
+      <div class="tbl-wrap">
+        <table class="dt" id="animalTable"></table>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════
+     RAW MILK PRODUCTION
+══════════════════════════════════════════════ -->
+<section id="sec-rawmilk" class="page-section">
+  <div class="sec-head">
+    <h2>Raw Milk Production</h2>
+    <p>Herd output, quality metrics, and year-over-year production trends</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="num">94,190</div>
+      <div class="lbl">Annual Production<span class="sub">hundredweight (cwt)</span></div>
+      <div class="delta up">▲ 3.1% vs FY 2024</div>
+    </div>
+    <div class="stat">
+      <div class="num">75.2</div>
+      <div class="lbl">Lbs / Cow / Day<span class="sub">MI state avg: 71.4</span></div>
+      <div class="delta up">▲ 2.1 lbs vs FY 2024</div>
+    </div>
+    <div class="stat">
+      <div class="num">3.86%</div>
+      <div class="lbl">Butterfat<span class="sub">annual average</span></div>
+      <div class="delta up">▲ 0.08 pts</div>
+    </div>
+    <div class="stat">
+      <div class="num">187K</div>
+      <div class="lbl">Somatic Cell Count<span class="sub">cells/mL · premium tier</span></div>
+      <div class="delta up">▼ 14K from FY 2024</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="eyebrow">Strategic Finding</div>
+    <h4>Top-quartile yield and premium SCC put Country Dairy in a strong negotiating position</h4>
+    <p>At 75.2 lbs/cow/day, the herd is outperforming the Michigan state average by 5.3% and approaching the top-quartile threshold of 78 lbs. The somatic cell count of 187,000 cells/mL is below the 200,000 threshold required for the highest-tier milk quality premium — and has improved 14,000 cells from FY 2024, suggesting the investment in expanded stall cleaning frequency is paying off.</p>
+    <p>Butterfat at 3.86% is well above the standard 3.5% component base, providing meaningful revenue uplift. The 2025 spring flush (April–May) added an incremental 730 cwt above the prior year equivalent period. Continuing to invest in summer heat abatement — specifically adding one additional soaker line in the holding pen — is estimated to recover 2–4 lbs/cow/day during July–August and could add 900–1,800 cwt annually at current prices.</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="panel">
+      <div class="panel-head">
+        <h3>Monthly Production: FY 2024 vs FY 2025</h3>
+        <span class="hint">cwt</span>
+      </div>
+      <div class="panel-body">
+        <div class="chart-box h300"><canvas id="milkProdLineChart"></canvas></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-head">
+        <h3>FY 2025 Production by Month</h3>
+        <span class="hint">cwt</span>
+      </div>
+      <div class="panel-body">
+        <div class="chart-box h300"><canvas id="milkProdBarChart"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head"><h3>Herd Quality Benchmarks</h3></div>
+    <div class="panel-body">
+      <div class="hbars" id="milkQualBars"></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════
+     PLANT EFFICIENCY
+══════════════════════════════════════════════ -->
+<section id="sec-plant" class="page-section">
+  <div class="sec-head">
+    <h2>Plant Efficiency</h2>
+    <p>Processing utilization, shrinkage, labor productivity, and downtime analysis</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="num">78%</div>
+      <div class="lbl">Utilization Rate<span class="sub">target: 85%</span></div>
+      <div class="delta warn">▲ 3 pts · below target</div>
+    </div>
+    <div class="stat">
+      <div class="num">1.8%</div>
+      <div class="lbl">Product Loss / Shrink<span class="sub">industry avg: 2.1%</span></div>
+      <div class="delta up">best in class</div>
+    </div>
+    <div class="stat">
+      <div class="num">0.42</div>
+      <div class="lbl">Labor Hrs / cwt<span class="sub">industry avg: 0.48</span></div>
+      <div class="delta up">12.5% below avg</div>
+    </div>
+    <div class="stat">
+      <div class="num">$1.24</div>
+      <div class="lbl">Energy Cost / cwt<span class="sub">industry avg: $1.38</span></div>
+      <div class="delta up">10.1% below avg</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="eyebrow">Strategic Finding</div>
+    <h4>Plant runs lean on labor and energy — the opportunity is utilization, not cost-cutting</h4>
+    <p>The plant is performing exceptionally well on controllable unit costs: labor at 0.42 hrs/cwt and energy at $1.24/cwt both beat industry averages by more than 10%. Product loss at 1.8% is best-in-class. The gap to close is throughput: at 78% utilization versus a 85% target, there is unused capacity worth an estimated $87,000 in annual revenue if filled without adding headcount or fixed overhead.</p>
+    <p>Of the 123 annual downtime hours, 81% are planned (cleaning 48 hrs, maintenance 32 hrs, changeovers 24 hrs). The 19 hours of unplanned downtime are modest but worth monitoring. CIP (clean-in-place) protocol optimization and run sequencing to reduce cleaning frequency by batching similar products could recover 6–10 hours annually. The fastest route to 85% utilization is route expansion and institutional sales growth in the school half-pint and 5-gallon foodservice channels.</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="panel">
+      <div class="panel-head">
+        <h3>KPI vs Industry Benchmark</h3>
+      </div>
+      <div class="panel-body">
+        <div class="hbars" id="plantKpiBars"></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-head">
+        <h3>Annual Downtime by Cause</h3>
+        <span class="hint">hours</span>
+      </div>
+      <div class="panel-body">
+        <div class="chart-box h280"><canvas id="plantDowntimeChart"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head"><h3>Monthly Operating Metrics</h3></div>
+    <div class="panel-body">
+      <div class="tbl-wrap">
+        <table class="dt" id="plantMetricTable"></table>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════
+     CROP EFFICIENCY
+══════════════════════════════════════════════ -->
+<section id="sec-crops" class="page-section">
+  <div class="sec-head">
+    <h2>Crop Efficiency</h2>
+    <p>Feed crop yields, cost per ton, and homegrown vs. purchased feed economics</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="num">680</div>
+      <div class="lbl">Acres Farmed<span class="sub">owned &amp; rented</span></div>
+      <div class="delta neu">same as FY 2024</div>
+    </div>
+    <div class="stat">
+      <div class="num">22.4</div>
+      <div class="lbl">Corn Silage Yield<span class="sub">tons / acre · MI avg: 19.8</span></div>
+      <div class="delta up">▲ 13.1% above avg</div>
+    </div>
+    <div class="stat">
+      <div class="num">4.9</div>
+      <div class="lbl">Alfalfa Yield<span class="sub">tons / acre · MI avg: 4.2</span></div>
+      <div class="delta up">▲ 16.7% above avg</div>
+    </div>
+    <div class="stat">
+      <div class="num">$7.28</div>
+      <div class="lbl">Feed Cost / Cow / Day<span class="sub">purchased equiv.: $9.40</span></div>
+      <div class="delta up">$2.12 savings/cow/day</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="eyebrow">Strategic Finding</div>
+    <h4>Homegrown feed is Country Dairy's most powerful cost advantage — and it has room to grow</h4>
+    <p>At $7.28/cow/day versus a market-equivalent feed cost of $9.40/cow/day, producing feed on-farm saves $2.12 per cow per day. Across 312 cows and 365 days, that is $241,500 in annual cost avoidance — more than the entire fixed overhead of the processing plant. Both crop yields significantly outperform Michigan averages, with corn silage at 22.4 tons/acre (+13%) and alfalfa at 4.9 tons/acre (+17%).</p>
+    <p>The highest-leverage crop expansion available is alfalfa acreage. Currently at 95 acres, increasing to 130 acres would reduce annual purchased alfalfa by approximately $28,000 and improve the total mixed ration (TMR) protein profile without feed additive cost. The land base to support this expansion is available on the rented parcels along the east field. Seed and establishment cost would be recovered in approximately 18 months.</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="panel">
+      <div class="panel-head">
+        <h3>Yield vs Michigan Benchmark</h3>
+        <span class="hint">tons / acre</span>
+      </div>
+      <div class="panel-body">
+        <div class="chart-box h260"><canvas id="cropYieldChart"></canvas></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-head">
+        <h3>Cost per Ton by Crop</h3>
+        <span class="hint">homegrown vs. market price</span>
+      </div>
+      <div class="panel-body">
+        <div class="chart-box h260"><canvas id="cropCostChart"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head"><h3>Crop Detail by Field / Type</h3></div>
+    <div class="panel-body">
+      <div class="tbl-wrap">
+        <table class="dt" id="cropTable"></table>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════
+     FIXED VS VARIABLE COSTS
+══════════════════════════════════════════════ -->
+<section id="sec-costs" class="page-section">
+  <div class="sec-head">
+    <h2>Fixed vs. Variable Costs</h2>
+    <p>Cost structure analysis, break-even modeling, and margin contribution by line item</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="num">$612K</div>
+      <div class="lbl">Total Fixed Costs<span class="sub">33% of total</span></div>
+      <div class="delta up">▲ 2.8% vs FY 2024</div>
+    </div>
+    <div class="stat">
+      <div class="num">$1.22M</div>
+      <div class="lbl">Total Variable Costs<span class="sub">67% of total</span></div>
+      <div class="delta up">▲ 4.6% vs FY 2024</div>
+    </div>
+    <div class="stat">
+      <div class="num">$6.50</div>
+      <div class="lbl">Fixed Cost / cwt<span class="sub">at current production</span></div>
+      <div class="delta up">▼ $0.18 vs FY 2024</div>
+    </div>
+    <div class="stat">
+      <div class="num">72,940</div>
+      <div class="lbl">Break-even<span class="sub">cwt · current production: 94,190</span></div>
+      <div class="delta up">22.6% above break-even</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="eyebrow">Strategic Finding</div>
+    <h4>Fixed cost leverage is Country Dairy's strongest long-term margin lever</h4>
+    <p>At current production of 94,190 cwt, fixed costs allocate to $6.50/cwt. Every additional 1,000 cwt produced with the existing infrastructure reduces that fixed cost per unit by approximately $0.46/cwt — a significant leverage point. This means production growth (whether through herd expansion, higher output per cow, or more processing volume from external milk) has a disproportionate impact on profitability.</p>
+    <p>Variable costs at $13.00/cwt are well-controlled, with purchased feed ($6.67/cwt) as the dominant line. Each $1/ton reduction in feed cost — achievable through better corn silage fermentation, forage testing to optimize inclusion rates, or the alfalfa expansion discussed in Crop Efficiency — reduces variable cost by approximately $0.08/cwt, or $7,500 annually at current production. The 22.6% buffer above break-even is the widest in recent years and supports modest capital investment in heat abatement or stall improvements.</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="panel">
+      <div class="panel-head">
+        <h3>Cost Structure</h3>
+        <span class="hint">fixed vs. variable split</span>
+      </div>
+      <div class="panel-body">
+        <div class="chart-box h280"><canvas id="costDonutChart"></canvas></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-head">
+        <h3>Monthly Cost Stack</h3>
+        <span class="hint">$000s by major category — last 6 months</span>
+      </div>
+      <div class="panel-body">
+        <div class="chart-box h280"><canvas id="costStackChart"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head"><h3>Cost Line Item Detail</h3><span class="hint">FY 2025 annualized</span></div>
+    <div class="panel-body">
+      <div class="tbl-wrap">
+        <table class="dt" id="costTable"></table>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <p>Country Dairy Strategic Planning Dashboard · Data reflects FY 2025 operations · Internal use only.</p>
+</footer>
+
+<script>
+const fmt   = n => n.toLocaleString("en-US");
+const fmtD  = n => "$" + n.toLocaleString("en-US");
+const fmtK  = n => "$" + (n/1000).toFixed(0) + "K";
+const fmtM  = n => "$" + (n/1e6).toFixed(2) + "M";
+
+// ─── Palette ────────────────────────────────────────────────────────────────
+const C = {
+  green:   "#074d1a",
+  kelly:   "#3dae2b",
+  mid:     "#1a6b35",
+  light:   "#5ab547",
+  muted:   "#9ab09a",
+  amber:   "#d97706",
+  red:     "#dc2626",
+  blue:    "#2563eb",
+};
+const gridColor  = () => getComputedStyle(document.documentElement).getPropertyValue("--chart-grid").trim();
+const textColor  = () => getComputedStyle(document.documentElement).getPropertyValue("--chart-text").trim();
+
+// ─── Chart defaults ──────────────────────────────────────────────────────────
+function setupChartDefaults() {
+  Chart.defaults.font.family = '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif';
+  Chart.defaults.font.size = 12;
+  Chart.defaults.color = textColor();
+  Chart.defaults.borderColor = gridColor();
+}
+
+// ─── Section switching ───────────────────────────────────────────────────────
+const sectionInit = {};
+function showSection(name) {
+  document.querySelectorAll(".page-section").forEach(s =>
+    s.classList.toggle("active", s.id === "sec-" + name));
+  document.querySelectorAll("nav.topnav button").forEach(b =>
+    b.classList.toggle("active", b.dataset.section === name));
+  if (!sectionInit[name]) {
+    sectionInit[name] = true;
+    initSection(name);
+  }
+}
+document.querySelectorAll("nav.topnav button").forEach(b =>
+  b.addEventListener("click", () => showSection(b.dataset.section)));
+
+// ─── Init dispatcher ─────────────────────────────────────────────────────────
+function initSection(name) {
+  ({home:initHome, milk:initMilk, animals:initAnimals,
+    rawmilk:initRawMilk, plant:initPlant, crops:initCrops, costs:initCosts}[name] || (()=>{}))();
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+//  HOME
+// ═══════════════════════════════════════════════════════════════════════════════
+function initHome() {
+  document.getElementById("h-rev").textContent   = "$2.10M";
+  document.getElementById("h-rev-d").textContent = "▲ 8.3% vs FY 2024";
+  document.getElementById("h-cwt").textContent   = "94,190";
+  document.getElementById("h-cwt-d").textContent = "▲ 3.1% vs FY 2024";
+  document.getElementById("h-cows").textContent  = "312";
+  document.getElementById("h-cows-d").textContent= "–4 head vs FY 2024";
+  document.getElementById("h-acres").textContent = "680";
+  document.getElementById("h-acres-d").textContent = "Unchanged";
+
+  const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  const rev  = [170, 163, 172, 171, 167, 151, 145, 144, 153, 169, 171, 181];
+  const cost = [156, 149, 160, 158, 162, 150, 147, 146, 150, 157, 156, 159];
+
+  new Chart(document.getElementById("homeRevChart"), {
+    type: "line",
+    data: {
+      labels: months,
+      datasets: [
+        { label:"Revenue", data: rev,
+          borderColor: C.kelly, backgroundColor:"rgba(61,174,43,0.12)",
+          fill: true, tension:.35, pointRadius:3, pointHoverRadius:5 },
+        { label:"Costs", data: cost,
+          borderColor: C.muted, backgroundColor:"transparent",
+          borderDash:[5,4], tension:.35, pointRadius:3, pointHoverRadius:5 },
+      ]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      plugins: { legend:{position:"top"},
+        tooltip:{callbacks:{label: c => "$" + c.parsed.y + "K"}} },
+      scales: {
+        x: { grid:{color:gridColor()} },
+        y: { grid:{color:gridColor()}, ticks:{callback: v => "$"+v+"K"} }
+      }
+    }
+  });
+
+  new Chart(document.getElementById("homeRevMixChart"), {
+    type:"doughnut",
+    data:{
+      labels:["Milk Products","Animal Sales","Custom Work & Other"],
+      datasets:[{
+        data:[89,5,6],
+        backgroundColor:[C.green, C.kelly, C.muted],
+        borderWidth:2,
+        borderColor: getComputedStyle(document.documentElement).getPropertyValue("--panel").trim()
+      }]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      cutout:"58%",
+      plugins:{
+        legend:{position:"right"},
+        tooltip:{callbacks:{label: c => c.label + ": " + c.parsed + "%"}}
+      }
+    }
+  });
+
+  document.getElementById("homeMetricTable").innerHTML =
+    `<thead><tr><th>Area</th><th>Metric</th><th class="n">FY 2025</th><th class="n">FY 2024</th><th class="n">Change</th></tr></thead>
+    <tbody>
+    ${[
+      ["Milk Production","Annual cwt","94,190","91,360","+3.1%"],
+      ["Milk Production","Lbs/Cow/Day","75.2","73.1","+2.1"],
+      ["Milk Quality","Butterfat %","3.86%","3.78%","+0.08 pts"],
+      ["Milk Quality","SCC (cells/mL)","187,000","201,000","−14,000"],
+      ["Plant","Utilization Rate","78%","75%","+3 pts"],
+      ["Plant","Labor Hrs/cwt","0.42","0.44","−0.02"],
+      ["Crops","Corn Silage (t/a)","22.4","21.8","+0.6"],
+      ["Crops","Alfalfa (t/a)","4.9","4.6","+0.3"],
+      ["Financials","Total Revenue","$2,104,200","$1,942,800","+8.3%"],
+      ["Financials","Total Costs","$1,836,000","$1,763,200","+4.1%"],
+      ["Financials","Operating Margin","12.7%","9.2%","+3.5 pts"],
+    ].map(([a,m,c,p,ch]) =>
+      `<tr><td style="color:var(--muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.4px">${a}</td>
+       <td>${m}</td><td class="n">${c}</td><td class="n" style="color:var(--muted)">${p}</td>
+       <td class="n" style="color:${ch.startsWith("+")?"#16a34a":ch.startsWith("−")||ch.startsWith("-")?"#dc2626":"var(--muted)"}">${ch}</td></tr>`
+    ).join("")}
+    </tbody>`;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+//  MILK PRODUCTS
+// ═══════════════════════════════════════════════════════════════════════════════
+const MILK_PRODS = [
+  { name:"CD Whole Gallons",      cases:28400, rev_per:24.20 },
+  { name:"CD Half Pints",         cases:18600, rev_per:14.80 },
+  { name:"WF Gallons",            cases:12800, rev_per:27.40 },
+  { name:"CD Half-Gallons",       cases: 9200, rev_per:21.60 },
+  { name:"Cedar Cr Gallons",      cases: 6700, rev_per:24.00 },
+  { name:"WF Half-Gallons",       cases: 4100, rev_per:24.80 },
+  { name:"CD Quarts",             cases: 3800, rev_per:19.20 },
+  { name:"CD Pints",              cases: 2900, rev_per:16.40 },
+  { name:"5-Gal Foodservice",     cases: 1200, rev_per:48.60 },
+  { name:"Country Dairy Mix",     cases:  890, rev_per:38.20 },
+];
+const MILK_MONTHS = [6620,7280,7910,8440,9020,8190,6940,6610,7180,7840,7950,8610];
+
+function initMilk() {
+  const totalCases = MILK_PRODS.reduce((s,p) => s+p.cases, 0);
+  const labels = MILK_PRODS.map(p => p.name);
+  const cases  = MILK_PRODS.map(p => p.cases);
+
+  new Chart(document.getElementById("milkProdChart"), {
+    type:"bar",
+    data:{
+      labels, datasets:[{
+        data: cases, backgroundColor: C.green, borderRadius:5,
+        label:"Cases"
+      }]
+    },
+    options:{
+      indexAxis:"y", responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false},
+        tooltip:{callbacks:{label: c => fmt(c.parsed.x) + " cases"}} },
+      scales:{
+        x:{grid:{color:gridColor()}, ticks:{callback:v=>fmt(v)}},
+        y:{grid:{display:false}, ticks:{font:{size:11}}}
+      }
+    }
+  });
+
+  const mLabels = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  new Chart(document.getElementById("milkTrendChart"), {
+    type:"bar",
+    data:{
+      labels:mLabels,
+      datasets:[{
+        data: MILK_MONTHS, backgroundColor: C.kelly, borderRadius:4,
+        label:"Cases"
+      }]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false},
+        tooltip:{callbacks:{label: c => fmt(c.parsed.y) + " cases"}} },
+      scales:{
+        x:{grid:{display:false}},
+        y:{grid:{color:gridColor()}, ticks:{callback:v=>fmt(v)}}
+      }
+    }
+  });
+
+  document.getElementById("milkTable").innerHTML =
+    `<thead><tr><th>#</th><th>Product</th><th class="n">Cases</th>
+    <th class="n">% Mix</th><th class="n">Est. Revenue</th><th class="n">Rev/Case</th></tr></thead>
+    <tbody>${MILK_PRODS.map((p,i)=>{
+      const rev = Math.round(p.cases * p.rev_per);
+      const pct = (p.cases/totalCases*100).toFixed(1);
+      return `<tr><td class="rk">${i+1}</td><td>${p.name}</td>
+        <td class="n">${fmt(p.cases)}</td>
+        <td class="n">${pct}%</td>
+        <td class="n">${fmtD(rev)}</td>
+        <td class="n">$${p.rev_per.toFixed(2)}</td></tr>`;
+    }).join("")}
+    <tr style="font-weight:700;border-top:2px solid var(--border)">
+      <td colspan="2" style="font-weight:700">Total</td>
+      <td class="n">${fmt(totalCases)}</td>
+      <td class="n">100%</td>
+      <td class="n">${fmtD(Math.round(MILK_PRODS.reduce((s,p)=>s+p.cases*p.rev_per,0)))}</td>
+      <td class="n">$${(MILK_PRODS.reduce((s,p)=>s+p.cases*p.rev_per,0)/totalCases).toFixed(2)}</td>
+    </tr></tbody>`;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+//  ANIMALS
+// ═══════════════════════════════════════════════════════════════════════════════
+function initAnimals() {
+  const quarters = ["Q1","Q2","Q3","Q4"];
+  const calves   = [38, 52, 44, 46];
+  const culls    = [ 8, 12,  9, 13];
+  const steers   = [ 4,  6,  8,  6];
+
+  new Chart(document.getElementById("animalBarChart"), {
+    type:"bar",
+    data:{
+      labels: quarters,
+      datasets:[
+        {label:"Calves",    data:calves, backgroundColor:C.kelly,  borderRadius:4},
+        {label:"Cull Cows", data:culls,  backgroundColor:C.green,  borderRadius:4},
+        {label:"Steers",    data:steers, backgroundColor:C.muted,  borderRadius:4},
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{position:"top"},
+        tooltip:{callbacks:{label: c => c.dataset.label + ": " + c.parsed.y + " head"}} },
+      scales:{
+        x:{grid:{display:false}, stacked:false},
+        y:{grid:{color:gridColor()}, stacked:false, ticks:{stepSize:10}}
+      }
+    }
+  });
+
+  const calfPrice  = [315, 358, 342, 344];
+  const cullPrice  = [820, 880, 940, 920];
+  const steerPrice = [1740,1940,1820,1800];
+
+  new Chart(document.getElementById("animalPriceChart"), {
+    type:"line",
+    data:{
+      labels: quarters,
+      datasets:[
+        {label:"Calves",    data:calfPrice,  borderColor:C.kelly, backgroundColor:"transparent", tension:.3, pointRadius:5},
+        {label:"Cull Cows", data:cullPrice,  borderColor:C.green, backgroundColor:"transparent", tension:.3, pointRadius:5},
+        {label:"Steers",    data:steerPrice, borderColor:C.muted, backgroundColor:"transparent", tension:.3, pointRadius:5},
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{position:"top"},
+        tooltip:{callbacks:{label: c => c.dataset.label + ": $" + fmt(c.parsed.y) + "/head"}} },
+      scales:{
+        x:{grid:{display:false}},
+        y:{grid:{color:gridColor()}, ticks:{callback:v=>"$"+fmt(v)}}
+      }
+    }
+  });
+
+  const anData = [
+    {type:"Calves",    head:180, avgP:340, total:61200},
+    {type:"Cull Cows", head: 42, avgP:890, total:37380},
+    {type:"Steers",    head: 24, avgP:1850,total:44400},
+  ];
+  const totalRev = anData.reduce((s,r)=>s+r.total,0);
+  const totalHead= anData.reduce((s,r)=>s+r.head, 0);
+  document.getElementById("animalTable").innerHTML =
+    `<thead><tr><th>Category</th><th class="n">Head Sold</th>
+    <th class="n">Avg $/Head</th><th class="n">Total Revenue</th><th class="n">% of Animal Rev</th></tr></thead>
+    <tbody>${anData.map(r =>
+      `<tr><td>${r.type}</td><td class="n">${r.head}</td>
+      <td class="n">${fmtD(r.avgP)}</td><td class="n">${fmtD(r.total)}</td>
+      <td class="n">${(r.total/totalRev*100).toFixed(1)}%</td></tr>`
+    ).join("")}
+    <tr style="font-weight:700;border-top:2px solid var(--border)">
+      <td>Total</td><td class="n">${totalHead}</td><td class="n">${fmtD(Math.round(totalRev/totalHead))}</td>
+      <td class="n">${fmtD(totalRev)}</td><td class="n">100%</td>
+    </tr></tbody>`;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+//  RAW MILK PRODUCTION
+// ═══════════════════════════════════════════════════════════════════════════════
+const PROD_2025 = [7820,7380,8050,8210,8540,7990,7860,7740,7950,8280,8090,8280];
+const PROD_2024 = [7620,7100,7840,7980,8290,7750,7640,7510,7730,8060,7880,8020];
+const MONTHS_SHORT = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+function initRawMilk() {
+  new Chart(document.getElementById("milkProdLineChart"), {
+    type:"line",
+    data:{
+      labels: MONTHS_SHORT,
+      datasets:[
+        {label:"FY 2025", data:PROD_2025, borderColor:C.kelly,
+          backgroundColor:"rgba(61,174,43,.1)", fill:true, tension:.35, pointRadius:3},
+        {label:"FY 2024", data:PROD_2024, borderColor:C.muted,
+          backgroundColor:"transparent", borderDash:[5,4], tension:.35, pointRadius:3},
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{position:"top"},
+        tooltip:{callbacks:{label: c => c.dataset.label + ": " + fmt(c.parsed.y) + " cwt"}} },
+      scales:{
+        x:{grid:{color:gridColor()}},
+        y:{grid:{color:gridColor()}, ticks:{callback:v=>fmt(v)}, min:6500}
+      }
+    }
+  });
+
+  new Chart(document.getElementById("milkProdBarChart"), {
+    type:"bar",
+    data:{
+      labels: MONTHS_SHORT,
+      datasets:[{
+        data: PROD_2025, backgroundColor: PROD_2025.map(v=>v===Math.max(...PROD_2025)?C.kelly:C.green),
+        borderRadius:4, label:"cwt"
+      }]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false},
+        tooltip:{callbacks:{label: c => fmt(c.parsed.y) + " cwt"}} },
+      scales:{
+        x:{grid:{display:false}},
+        y:{grid:{color:gridColor()}, ticks:{callback:v=>fmt(v)}, min:6500}
+      }
+    }
+  });
+
+  document.getElementById("milkQualBars").innerHTML = [
+    {lbl:"Lbs/Cow/Day",    sub:"MI top quartile: 78",     val:75.2, bench:78,   max:85,  fmt:v=>v.toFixed(1)},
+    {lbl:"Butterfat %",    sub:"Component base: 3.50%",   val:3.86, bench:3.50, max:4.5, fmt:v=>v.toFixed(2)+"%"},
+    {lbl:"SCC (K cells/mL)",sub:"Premium threshold: 200K",val:187,  bench:200,  max:400, fmt:v=>v+"K", invert:true},
+    {lbl:"Herd Size",      sub:"Target: 320 cows",        val:312,  bench:320,  max:360, fmt:v=>v+" cows"},
+  ].map(r=>{
+    const pct = Math.min(100, r.val / r.max * 100).toFixed(1);
+    const bpct= Math.min(100, r.bench / r.max * 100).toFixed(1);
+    const cls = r.invert ? (r.val < r.bench ? "good" : "warn") : (r.val >= r.bench ? "good" : "warn");
+    return `<div class="hbar-row">
+      <div class="hbar-label">${r.lbl}<i>${r.sub}</i></div>
+      <div class="hbar-track">
+        <div class="hbar-fill ${cls}" style="width:${pct}%"></div>
+      </div>
+      <div class="hbar-val">${r.fmt(r.val)}</div>
+    </div>`;
+  }).join("");
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+//  PLANT EFFICIENCY
+// ═══════════════════════════════════════════════════════════════════════════════
+function initPlant() {
+  document.getElementById("plantKpiBars").innerHTML = [
+    {lbl:"Utilization Rate",   sub:"Target: 85%",         val:78,   bench:85,   max:100, fmt:v=>v+"%",     cls:"warn"},
+    {lbl:"Product Loss/Shrink",sub:"Industry avg: 2.1%",  val:1.8,  bench:2.1,  max:5,   fmt:v=>v+"%",     cls:"good", invert:true},
+    {lbl:"Labor Hrs / cwt",    sub:"Industry avg: 0.48",  val:0.42, bench:0.48, max:0.8, fmt:v=>v+" hrs",  cls:"good", invert:true},
+    {lbl:"Energy $ / cwt",     sub:"Industry avg: $1.38", val:1.24, bench:1.38, max:2.2, fmt:v=>"$"+v,     cls:"good", invert:true},
+  ].map(r=>{
+    const pct  = (r.val  / r.max * 100).toFixed(1);
+    const bpct = (r.bench/ r.max * 100).toFixed(1);
+    return `<div class="hbar-row">
+      <div class="hbar-label">${r.lbl}<i>${r.sub}</i></div>
+      <div class="hbar-track">
+        <div class="hbar-fill ${r.cls}" style="width:${pct}%"></div>
+      </div>
+      <div class="hbar-val">${r.fmt(r.val)}</div>
+    </div>`;
+  }).join("");
+
+  new Chart(document.getElementById("plantDowntimeChart"), {
+    type:"bar",
+    data:{
+      labels:["CIP Cleaning","Preventive Maint.","Product Changeovers","Unplanned"],
+      datasets:[{
+        data:[48,32,24,19],
+        backgroundColor:[C.green, C.kelly, C.mid, C.amber],
+        borderRadius:5, label:"Hours"
+      }]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false},
+        tooltip:{callbacks:{label: c => c.parsed.y + " hrs"}} },
+      scales:{
+        x:{grid:{display:false}},
+        y:{grid:{color:gridColor()}, ticks:{callback:v=>v+" h"}}
+      }
+    }
+  });
+
+  document.getElementById("plantMetricTable").innerHTML =
+    `<thead><tr><th>Month</th><th class="n">cwt Processed</th><th class="n">Utilization</th>
+    <th class="n">Labor Hrs/cwt</th><th class="n">Energy $/cwt</th><th class="n">Loss %</th></tr></thead>
+    <tbody>${[
+      ["Jul","7,860","75%","0.44","$1.28","1.9%"],
+      ["Aug","7,740","74%","0.43","$1.31","2.0%"],
+      ["Sep","7,950","76%","0.42","$1.26","1.8%"],
+      ["Oct","8,280","79%","0.41","$1.22","1.7%"],
+      ["Nov","8,090","77%","0.42","$1.21","1.8%"],
+      ["Dec","8,280","79%","0.40","$1.19","1.7%"],
+    ].map(([m,...v])=>`<tr><td>${m}</td>${v.map(x=>`<td class="n">${x}</td>`).join("")}</tr>`).join("")}
+    </tbody>`;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+//  CROP EFFICIENCY
+// ═══════════════════════════════════════════════════════════════════════════════
+function initCrops() {
+  new Chart(document.getElementById("cropYieldChart"), {
+    type:"bar",
+    data:{
+      labels:["Corn Silage","Alfalfa Hay","Soybeans"],
+      datasets:[
+        {label:"Country Dairy Actual", data:[22.4,4.9,52], backgroundColor:C.kelly, borderRadius:4},
+        {label:"MI State Average",     data:[19.8,4.2,45], backgroundColor:C.muted, borderRadius:4},
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{
+        legend:{position:"top"},
+        tooltip:{callbacks:{label: c => c.dataset.label + ": " +
+          c.parsed.y + (c.dataIndex===2 ? " bu/a" : " t/a")}}
+      },
+      scales:{
+        x:{grid:{display:false}},
+        y:{grid:{color:gridColor()}, ticks:{callback:v=>v}}
+      }
+    }
+  });
+
+  new Chart(document.getElementById("cropCostChart"), {
+    type:"bar",
+    data:{
+      labels:["Corn Silage","Alfalfa Hay","Soybeans"],
+      datasets:[
+        {label:"Homegrown Cost",  data:[41,178,9.20], backgroundColor:C.green,  borderRadius:4},
+        {label:"Market Price",    data:[55,225,11.80], backgroundColor:C.muted, borderRadius:4},
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{
+        legend:{position:"top"},
+        tooltip:{callbacks:{label: c => c.dataset.label + ": $" + c.parsed.y +
+          (c.dataIndex===2 ? "/bu" : "/ton")}}
+      },
+      scales:{
+        x:{grid:{display:false}},
+        y:{grid:{color:gridColor()}, ticks:{callback:v=>"$"+v}}
+      }
+    }
+  });
+
+  document.getElementById("cropTable").innerHTML =
+    `<thead><tr><th>Crop</th><th class="n">Acres</th><th class="n">Yield</th>
+    <th class="n">MI Avg</th><th class="n">Cost/Unit</th><th class="n">Total Tons/Bu</th>
+    <th class="n">Homegrown Value</th></tr></thead>
+    <tbody>${[
+      ["Corn Silage","560","22.4 t/a","19.8 t/a","$41/ton","12,544 t","$515,304"],
+      ["Alfalfa Hay","95","4.9 t/a","4.2 t/a","$178/ton","465.5 t","$82,859"],
+      ["Soybeans","25","52 bu/a","45 bu/a","$9.20/bu","1,300 bu","$11,960"],
+      ["Other/Cover","—","—","—","—","—","—"],
+    ].map(r=>`<tr>${r.map((c,i)=>i>0?`<td class="n">${c}</td>`:`<td>${c}</td>`).join("")}</tr>`).join("")}
+    <tr style="font-weight:700;border-top:2px solid var(--border)">
+      <td>Total / Avg</td><td class="n">680</td><td class="n">—</td>
+      <td class="n">—</td><td class="n">—</td><td class="n">—</td>
+      <td class="n">$610,123</td>
+    </tr></tbody>`;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+//  COSTS
+// ═══════════════════════════════════════════════════════════════════════════════
+function initCosts() {
+  new Chart(document.getElementById("costDonutChart"), {
+    type:"doughnut",
+    data:{
+      labels:["Fixed Costs","Variable Costs"],
+      datasets:[{
+        data:[612000, 1224000],
+        backgroundColor:[C.green, C.kelly],
+        borderWidth:2,
+        borderColor: getComputedStyle(document.documentElement).getPropertyValue("--panel").trim()
+      }]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      cutout:"55%",
+      plugins:{
+        legend:{position:"right"},
+        tooltip:{callbacks:{label: c => c.label + ": " + fmtK(c.parsed) +
+          " (" + (c.parsed/(612000+1224000)*100).toFixed(1) + "%)"}}
+      }
+    }
+  });
+
+  const costMonths = ["Jul","Aug","Sep","Oct","Nov","Dec"];
+  new Chart(document.getElementById("costStackChart"), {
+    type:"bar",
+    data:{
+      labels: costMonths,
+      datasets:[
+        {label:"Feed",       data:[52,51,52,53,52,53], backgroundColor:C.green,  borderRadius:0},
+        {label:"Labor",      data:[32,32,32,33,33,33], backgroundColor:C.mid,    borderRadius:0},
+        {label:"Overhead",   data:[18,18,18,19,18,18], backgroundColor:C.kelly,  borderRadius:0},
+        {label:"Crops/Other",data:[12,12,13,12,12,14], backgroundColor:C.muted,  borderRadius:0},
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{
+        legend:{position:"top"},
+        tooltip:{callbacks:{label: c => c.dataset.label + ": $" + c.parsed.y + "K"}}
+      },
+      scales:{
+        x:{grid:{display:false}, stacked:true},
+        y:{grid:{color:gridColor()}, stacked:true, ticks:{callback:v=>"$"+v+"K"}}
+      }
+    }
+  });
+
+  const fixedItems = [
+    ["Depreciation",       284000],
+    ["Base Salaries",      188000],
+    ["Processing Labor",   148000],
+    ["Land Rent",           52000],
+    ["Insurance",           48000],
+    ["Property Tax",        31000],
+    ["Other Fixed",         41000],
+  ];
+  const varItems = [
+    ["Purchased Feed",     628000],
+    ["Crop Inputs",        218000],
+    ["Fuel & Utilities",   134000],
+    ["Vet / Breeding",      88000],
+    ["Milk Hauling",        76000],
+    ["Repairs & Supplies",  64000],
+    ["Misc. Variable",      44000],
+    ["Milk Hauling-Other",  -8000], // adjustment line
+  ];
+  // Clean up the adj line
+  const varClean = [
+    ["Purchased Feed",     628000],
+    ["Crop Inputs",        218000],
+    ["Fuel & Utilities",   134000],
+    ["Vet / Breeding",      88000],
+    ["Milk Hauling",        76000],
+    ["Repairs & Supplies",  64000],
+    ["Misc. Variable",      44000],
+  ];
+  const totalFixed = fixedItems.reduce((s,[,v])=>s+v,0);
+  const totalVar   = varClean.reduce((s,[,v])=>s+v,0);
+  const grandTotal = totalFixed + totalVar;
+  const totalCwt   = 94190;
+
+  const rows = [
+    ...fixedItems.map(([n,v]) => ["Fixed",n,v]),
+    ...varClean.map(([n,v]) => ["Variable",n,v]),
+  ];
+
+  document.getElementById("costTable").innerHTML =
+    `<thead><tr><th>Type</th><th>Line Item</th><th class="n">Annual</th>
+    <th class="n">$/cwt</th><th class="n">% of Total</th></tr></thead>
+    <tbody>
+    ${rows.map(([type,name,amt]) => {
+      const bg = type==="Fixed"?"var(--accent-soft, #f0f7ee)":"";
+      return `<tr>
+        <td style="font-size:.75rem;text-transform:uppercase;letter-spacing:.4px;color:var(--muted)">${type}</td>
+        <td>${name}</td>
+        <td class="n">${fmtD(amt)}</td>
+        <td class="n">$${(amt/totalCwt).toFixed(2)}</td>
+        <td class="n">${(amt/grandTotal*100).toFixed(1)}%</td>
+      </tr>`;
+    }).join("")}
+    <tr style="font-weight:700;border-top:2px solid var(--border)">
+      <td colspan="2">Total Fixed</td>
+      <td class="n">${fmtD(totalFixed)}</td>
+      <td class="n">$${(totalFixed/totalCwt).toFixed(2)}</td>
+      <td class="n">${(totalFixed/grandTotal*100).toFixed(1)}%</td>
+    </tr>
+    <tr style="font-weight:700">
+      <td colspan="2">Total Variable</td>
+      <td class="n">${fmtD(totalVar)}</td>
+      <td class="n">$${(totalVar/totalCwt).toFixed(2)}</td>
+      <td class="n">${(totalVar/grandTotal*100).toFixed(1)}%</td>
+    </tr>
+    <tr style="font-weight:700;background:var(--bg);border-top:2px solid var(--border)">
+      <td colspan="2" style="font-size:1rem">Grand Total</td>
+      <td class="n" style="font-size:1rem">${fmtD(grandTotal)}</td>
+      <td class="n" style="font-size:1rem">$${(grandTotal/totalCwt).toFixed(2)}</td>
+      <td class="n">100%</td>
+    </tr></tbody>`;
+}
+
+// ─── Access gate ─────────────────────────────────────────────────────────────
+// SHA-256 hash of the dashboard password (same gate as CD_Dashboard).
+// To change the password: compute sha256hex(newPassword) and replace this value.
+const ACCESS_HASH = "7bd3c5b1fad59c02399d94f39c9651d7c72be3dc608a161a0e6157641921bbf2";
+
+async function sha256Hex(str) {
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
+  return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2,"0")).join("");
+}
+function unlock() {
+  document.getElementById("gate")?.remove();
+  document.body.style.overflow = "";
+  setupChartDefaults();
+  showSection("home");
+}
+(function initAuth() {
+  if (sessionStorage.getItem("cd_strategic") === "1") { unlock(); return; }
+  document.body.style.overflow = "hidden";
+  const form = document.getElementById("gateForm");
+  const pw   = document.getElementById("gatePw");
+  const err  = document.getElementById("gateErr");
+  pw.focus();
+  form.addEventListener("submit", async e => {
+    e.preventDefault();
+    if (await sha256Hex(pw.value) === ACCESS_HASH) {
+      sessionStorage.setItem("cd_strategic", "1");
+      unlock();
+    } else {
+      err.hidden = false; pw.value = ""; pw.focus();
+    }
+  });
+})();
+</script>
+</body>
+</html>
