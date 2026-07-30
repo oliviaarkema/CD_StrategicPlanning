@@ -155,6 +155,15 @@ nav.topnav button.active{color:var(--kelly);border-bottom-color:var(--kelly);fon
 .chart-box.h280{height:280px}
 .chart-box.h320{height:320px}
 .chart-box.h360{height:360px}
+.chart-box canvas{filter:grayscale(1);opacity:.35}
+.chart-box::after{
+  content:"Pending Data Connection";
+  position:absolute;inset:0;margin:auto;height:28px;width:max-content;max-width:90%;
+  display:flex;align-items:center;justify-content:center;
+  padding:0 14px;border-radius:999px;
+  font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;
+  color:#fff;background:rgba(20,30,20,.72);pointer-events:none;
+}
 
 /* ── Grid layouts ── */
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
@@ -202,6 +211,17 @@ table.dt tr:hover td{background:var(--bg)}
 .hbar-fill.bench{background:#9aa79a}
 .hbar-val{text-align:right;font-variant-numeric:tabular-nums;font-weight:600;color:var(--green)}
 
+#milkQualBars,#plantKpiBars{position:relative;min-height:80px}
+#milkQualBars>*,#plantKpiBars>*{filter:grayscale(1);opacity:.35}
+#milkQualBars::after,#plantKpiBars::after{
+  content:"Pending Data Connection";
+  position:absolute;inset:0;margin:auto;height:28px;width:max-content;max-width:90%;
+  display:flex;align-items:center;justify-content:center;
+  padding:0 14px;border-radius:999px;
+  font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;
+  color:#fff;background:rgba(20,30,20,.72);pointer-events:none;
+}
+
 /* ── Misc ── */
 .err{color:#b00020;font-size:.85rem}
 footer{max-width:1200px;margin:0 auto;padding:0 20px 50px;color:var(--muted);font-size:.8rem}
@@ -245,10 +265,9 @@ footer{max-width:1200px;margin:0 auto;padding:0 20px 50px;color:var(--muted);fon
     <img src="assets/CD_Logo_Stacked.png" alt="Country Dairy logo">
     <div class="titles">
       <h1>Strategic Planning Dashboard</h1>
-      <p>Business Intelligence &amp; Operational Analytics</p>
     </div>
     <div class="header-right">
-      <span class="period-badge">FY 2025</span>
+      <span class="period-badge">Jul 1, 2025 &ndash; Jul 1, 2026</span>
     </div>
   </header>
 
@@ -260,6 +279,7 @@ footer{max-width:1200px;margin:0 auto;padding:0 20px 50px;color:var(--muted);fon
     <button data-section="plant">Plant Efficiency</button>
     <button data-section="crops">Crop Efficiency</button>
     <button data-section="costs">Fixed vs. Variable Costs</button>
+    <button data-section="market">Market - Demand-Side Scan</button>
   </nav>
 </div>
 
@@ -271,7 +291,7 @@ footer{max-width:1200px;margin:0 auto;padding:0 20px 50px;color:var(--muted);fon
 <section id="sec-home" class="page-section">
   <div class="sec-head">
     <h2>Business Overview</h2>
-    <p>Annual summary across all operational areas — FY 2025</p>
+    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
   </div>
 
   <div class="stats">
@@ -299,9 +319,9 @@ footer{max-width:1200px;margin:0 auto;padding:0 20px 50px;color:var(--muted);fon
 
   <div class="callout">
     <div class="eyebrow">Executive Summary</div>
-    <h4>A profitable year anchored by strong milk quality and efficient plant operations</h4>
-    <p>Revenue grew 8.3% year-over-year, driven by a favorable Q4 milk price environment and expanded half-pint school contracts. The herd averaged 75.2 lbs/cow/day — above the Michigan state average of 71.4 lbs — while a somatic cell count of 187,000 cells/mL kept Country Dairy in the premium quality tier for the full year.</p>
-    <p>The summer price trough (June–August) remains the primary margin pressure point, compressing monthly operating margin to as low as 6.8% in July. Cost management across plant labor and energy offset much of that seasonal swing. The break-even sits at 72,940 cwt against current production of 94,190 cwt, providing a 22.6% cushion — the strongest buffer in three years.</p>
+    <h4>Lorem ipsum dolor sit amet consectetur adipiscing elit</h4>
+    <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Curabitur pretium tincidunt lacus, nulla gravida orci a odio.</p>
+    <p>Nullam quis risus eget urna mollis ornare vel eu leo. Cras mattis consectetur purus sit amet fermentum. Donec ullamcorper nulla non metus auctor fringilla.</p>
   </div>
 
   <div class="grid-2">
@@ -317,7 +337,7 @@ footer{max-width:1200px;margin:0 auto;padding:0 20px 50px;color:var(--muted);fon
     <div class="panel">
       <div class="panel-head">
         <h3>Revenue by Source</h3>
-        <span class="hint">FY 2025 mix</span>
+        <span class="hint">TTM Jul 2026 mix</span>
       </div>
       <div class="panel-body">
         <div class="chart-box h280"><canvas id="homeRevMixChart"></canvas></div>
@@ -342,44 +362,44 @@ footer{max-width:1200px;margin:0 auto;padding:0 20px 50px;color:var(--muted);fon
 <section id="sec-milk" class="page-section">
   <div class="sec-head">
     <h2>Milk Products</h2>
-    <p>Processed case volume, product mix, and revenue by SKU — FY 2025</p>
+    <p>Vestibulum id ligula porta felis euismod semper. Maecenas faucibus mollis interdum. Etiam porta sem malesuada magna mollis euismod.</p>
   </div>
 
   <div class="stats">
     <div class="stat">
-      <div class="num">88,590</div>
+      <div class="num">###</div>
       <div class="lbl">Total Cases Sold<span class="sub">all SKUs</span></div>
-      <div class="delta up">▲ 5.2% vs FY 2024</div>
+      <div class="delta up">▲ ###% vs TTM Jul 2025</div>
     </div>
     <div class="stat">
-      <div class="num">$2.10M</div>
-      <div class="lbl">Est. Product Revenue<span class="sub">at avg $23.70/case</span></div>
-      <div class="delta up">▲ 8.1% vs FY 2024</div>
+      <div class="num">###</div>
+      <div class="lbl">Est. Product Revenue<span class="sub">at avg $###/case</span></div>
+      <div class="delta up">▲ ###% vs TTM Jul 2025</div>
     </div>
     <div class="stat">
-      <div class="num">32.1%</div>
+      <div class="num">###</div>
       <div class="lbl">Top SKU Share<span class="sub">CD Whole Gallons</span></div>
-      <div class="delta up">▲ 1.4 pts</div>
+      <div class="delta up">▲ ### pts</div>
     </div>
     <div class="stat">
-      <div class="num">18,600</div>
-      <div class="lbl">School Half-Pints<span class="sub">21% of total mix</span></div>
-      <div class="delta up">▲ 9.4%</div>
+      <div class="num">###</div>
+      <div class="lbl">School Half-Pints<span class="sub">###% of total mix</span></div>
+      <div class="delta up">▲ ###%</div>
     </div>
   </div>
 
   <div class="callout">
     <div class="eyebrow">Strategic Finding</div>
-    <h4>WF gallons and school half-pints are the highest-growth channels — both deserve investment</h4>
-    <p>Country Dairy whole gallons remain the volume anchor at 32% of mix, but water-filtered (WF) gallons are outpacing every other SKU with estimated growth of +12% since FY 2024. This signals a premium-seeking segment in the distributor and specialty retail channel. Half-pint school sales are structurally sticky — these 18,600 cases are weather- and economy-resilient, locked in by institutional contracts.</p>
-    <p>Consider adding a WF half-pint SKU to target health-premium school contracts where conventional half-pints currently dominate. The Cedar Creek gallon line continues to serve a distinct regional identity segment; consolidating its production run with the CD gallon line on alternating days could reduce changeover downtime by an estimated 8 hours annually.</p>
+    <h4>Sed do eiusmod tempor incididunt ut labore et dolore</h4>
+    <p>Aenean lacinia bibendum nulla sed consectetur. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
+    <p>Sed posuere consectetur est at lobortis. Nulla vitae elit libero, a pharetra augue. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh.</p>
   </div>
 
   <div class="grid-2">
     <div class="panel">
       <div class="panel-head">
         <h3>Cases by Product</h3>
-        <span class="hint">FY 2025 total</span>
+        <span class="hint">TTM Jul 2026 total</span>
       </div>
       <div class="panel-body">
         <div class="chart-box h360"><canvas id="milkProdChart"></canvas></div>
@@ -397,7 +417,7 @@ footer{max-width:1200px;margin:0 auto;padding:0 20px 50px;color:var(--muted);fon
   </div>
 
   <div class="panel">
-    <div class="panel-head"><h3>Product Detail</h3><span class="hint">FY 2025</span></div>
+    <div class="panel-head"><h3>Product Detail</h3><span class="hint">TTM Jul 2026</span></div>
     <div class="panel-body">
       <div class="tbl-wrap">
         <table class="dt" id="milkTable"></table>
@@ -413,37 +433,37 @@ footer{max-width:1200px;margin:0 auto;padding:0 20px 50px;color:var(--muted);fon
 <section id="sec-animals" class="page-section">
   <div class="sec-head">
     <h2>Calf / Cow / Steer Sales</h2>
-    <p>Animal inventory turns, pricing, and seasonal patterns — FY 2025</p>
+    <p>Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
   </div>
 
   <div class="stats">
     <div class="stat">
-      <div class="num">246</div>
+      <div class="num">###</div>
       <div class="lbl">Total Head Sold<span class="sub">calves, cull cows, steers</span></div>
-      <div class="delta up">▲ 12 head vs FY 2024</div>
+      <div class="delta up">▲ ### head vs TTM Jul 2025</div>
     </div>
     <div class="stat">
-      <div class="num">$168K</div>
+      <div class="num">###</div>
       <div class="lbl">Animal Revenue<span class="sub">all categories</span></div>
-      <div class="delta up">▲ 18.4% vs FY 2024</div>
+      <div class="delta up">▲ ###% vs TTM Jul 2025</div>
     </div>
     <div class="stat">
-      <div class="num">13.5%</div>
-      <div class="lbl">Cull Rate<span class="sub">42 of 312 cows</span></div>
+      <div class="num">###</div>
+      <div class="lbl">Cull Rate<span class="sub">### of ### cows</span></div>
       <div class="delta neu">within healthy range</div>
     </div>
     <div class="stat">
-      <div class="num">$890</div>
+      <div class="num">###</div>
       <div class="lbl">Avg Cull Cow Price<span class="sub">per head</span></div>
-      <div class="delta up">▲ $150 vs FY 2024</div>
+      <div class="delta up">▲ $### vs TTM Jul 2025</div>
     </div>
   </div>
 
   <div class="callout">
     <div class="eyebrow">Strategic Finding</div>
-    <h4>Cull cow quality is improving — capitalize on timing to maximize per-head value</h4>
-    <p>The 13.5% cull rate sits within the healthy 10–15% range, but what has changed is the quality profile of outgoing cows. The average cull cow sold for $890/head in FY 2025 versus $740 in FY 2024 — a 20% increase driven by more cows leaving the herd at peak body condition rather than due to health or reproduction failures. This is a sign of proactive herd management.</p>
-    <p>Q2 steers captured the peak summer beef market, averaging $1,940/head — the strongest quarterly average on record. For calves, Q1 traditionally sees the highest buyer demand from spring dairies; consider holding male calves born in late December through January for a Q1 sale versus immediately marketing them at birth. Based on FY 2025 price differentials, this timing shift could add an estimated $40–60/head in realized value on 30–40 head annually.</p>
+    <h4>Ut enim ad minim veniam quis nostrud exercitation</h4>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
   </div>
 
   <div class="grid-2">
@@ -483,43 +503,43 @@ footer{max-width:1200px;margin:0 auto;padding:0 20px 50px;color:var(--muted);fon
 <section id="sec-rawmilk" class="page-section">
   <div class="sec-head">
     <h2>Raw Milk Production</h2>
-    <p>Herd output, quality metrics, and year-over-year production trends</p>
+    <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Curabitur pretium tincidunt lacus, nulla gravida orci a odio.</p>
   </div>
 
   <div class="stats">
     <div class="stat">
-      <div class="num">94,190</div>
+      <div class="num">###</div>
       <div class="lbl">Annual Production<span class="sub">hundredweight (cwt)</span></div>
-      <div class="delta up">▲ 3.1% vs FY 2024</div>
+      <div class="delta up">▲ ###% vs TTM Jul 2025</div>
     </div>
     <div class="stat">
-      <div class="num">75.2</div>
-      <div class="lbl">Lbs / Cow / Day<span class="sub">MI state avg: 71.4</span></div>
-      <div class="delta up">▲ 2.1 lbs vs FY 2024</div>
+      <div class="num">###</div>
+      <div class="lbl">Lbs / Cow / Day<span class="sub">MI state avg: ###</span></div>
+      <div class="delta up">▲ ### lbs vs TTM Jul 2025</div>
     </div>
     <div class="stat">
-      <div class="num">3.86%</div>
+      <div class="num">###</div>
       <div class="lbl">Butterfat<span class="sub">annual average</span></div>
-      <div class="delta up">▲ 0.08 pts</div>
+      <div class="delta up">▲ ### pts</div>
     </div>
     <div class="stat">
-      <div class="num">187K</div>
+      <div class="num">###</div>
       <div class="lbl">Somatic Cell Count<span class="sub">cells/mL · premium tier</span></div>
-      <div class="delta up">▼ 14K from FY 2024</div>
+      <div class="delta up">▼ ### from TTM Jul 2025</div>
     </div>
   </div>
 
   <div class="callout">
     <div class="eyebrow">Strategic Finding</div>
-    <h4>Top-quartile yield and premium SCC put Country Dairy in a strong negotiating position</h4>
-    <p>At 75.2 lbs/cow/day, the herd is outperforming the Michigan state average by 5.3% and approaching the top-quartile threshold of 78 lbs. The somatic cell count of 187,000 cells/mL is below the 200,000 threshold required for the highest-tier milk quality premium — and has improved 14,000 cells from FY 2024, suggesting the investment in expanded stall cleaning frequency is paying off.</p>
-    <p>Butterfat at 3.86% is well above the standard 3.5% component base, providing meaningful revenue uplift. The 2025 spring flush (April–May) added an incremental 730 cwt above the prior year equivalent period. Continuing to invest in summer heat abatement — specifically adding one additional soaker line in the holding pen — is estimated to recover 2–4 lbs/cow/day during July–August and could add 900–1,800 cwt annually at current prices.</p>
+    <h4>Duis aute irure dolor in reprehenderit in voluptate</h4>
+    <p>Nullam quis risus eget urna mollis ornare vel eu leo. Cras mattis consectetur purus sit amet fermentum. Donec ullamcorper nulla non metus auctor fringilla.</p>
+    <p>Vestibulum id ligula porta felis euismod semper. Maecenas faucibus mollis interdum. Etiam porta sem malesuada magna mollis euismod.</p>
   </div>
 
   <div class="grid-2">
     <div class="panel">
       <div class="panel-head">
-        <h3>Monthly Production: FY 2024 vs FY 2025</h3>
+        <h3>Monthly Production: TTM Jul 2025 vs TTM Jul 2026</h3>
         <span class="hint">cwt</span>
       </div>
       <div class="panel-body">
@@ -528,7 +548,7 @@ footer{max-width:1200px;margin:0 auto;padding:0 20px 50px;color:var(--muted);fon
     </div>
     <div class="panel">
       <div class="panel-head">
-        <h3>FY 2025 Production by Month</h3>
+        <h3>TTM Jul 2026 Production by Month</h3>
         <span class="hint">cwt</span>
       </div>
       <div class="panel-body">
@@ -552,37 +572,37 @@ footer{max-width:1200px;margin:0 auto;padding:0 20px 50px;color:var(--muted);fon
 <section id="sec-plant" class="page-section">
   <div class="sec-head">
     <h2>Plant Efficiency</h2>
-    <p>Processing utilization, shrinkage, labor productivity, and downtime analysis</p>
+    <p>Aenean lacinia bibendum nulla sed consectetur. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
   </div>
 
   <div class="stats">
     <div class="stat">
-      <div class="num">78%</div>
-      <div class="lbl">Utilization Rate<span class="sub">target: 85%</span></div>
-      <div class="delta warn">▲ 3 pts · below target</div>
+      <div class="num">###</div>
+      <div class="lbl">Utilization Rate<span class="sub">target: ###%</span></div>
+      <div class="delta warn">▲ ### pts · below target</div>
     </div>
     <div class="stat">
-      <div class="num">1.8%</div>
-      <div class="lbl">Product Loss / Shrink<span class="sub">industry avg: 2.1%</span></div>
+      <div class="num">###</div>
+      <div class="lbl">Product Loss / Shrink<span class="sub">industry avg: ###%</span></div>
       <div class="delta up">best in class</div>
     </div>
     <div class="stat">
-      <div class="num">0.42</div>
-      <div class="lbl">Labor Hrs / cwt<span class="sub">industry avg: 0.48</span></div>
-      <div class="delta up">12.5% below avg</div>
+      <div class="num">###</div>
+      <div class="lbl">Labor Hrs / cwt<span class="sub">industry avg: ###</span></div>
+      <div class="delta up">###% below avg</div>
     </div>
     <div class="stat">
-      <div class="num">$1.24</div>
-      <div class="lbl">Energy Cost / cwt<span class="sub">industry avg: $1.38</span></div>
-      <div class="delta up">10.1% below avg</div>
+      <div class="num">###</div>
+      <div class="lbl">Energy Cost / cwt<span class="sub">industry avg: $###</span></div>
+      <div class="delta up">###% below avg</div>
     </div>
   </div>
 
   <div class="callout">
     <div class="eyebrow">Strategic Finding</div>
-    <h4>Plant runs lean on labor and energy — the opportunity is utilization, not cost-cutting</h4>
-    <p>The plant is performing exceptionally well on controllable unit costs: labor at 0.42 hrs/cwt and energy at $1.24/cwt both beat industry averages by more than 10%. Product loss at 1.8% is best-in-class. The gap to close is throughput: at 78% utilization versus a 85% target, there is unused capacity worth an estimated $87,000 in annual revenue if filled without adding headcount or fixed overhead.</p>
-    <p>Of the 123 annual downtime hours, 81% are planned (cleaning 48 hrs, maintenance 32 hrs, changeovers 24 hrs). The 19 hours of unplanned downtime are modest but worth monitoring. CIP (clean-in-place) protocol optimization and run sequencing to reduce cleaning frequency by batching similar products could recover 6–10 hours annually. The fastest route to 85% utilization is route expansion and institutional sales growth in the school half-pint and 5-gallon foodservice channels.</p>
+    <h4>Excepteur sint occaecat cupidatat non proident sunt</h4>
+    <p>Sed posuere consectetur est at lobortis. Nulla vitae elit libero, a pharetra augue. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh.</p>
+    <p>Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
   </div>
 
   <div class="grid-2">
@@ -622,37 +642,37 @@ footer{max-width:1200px;margin:0 auto;padding:0 20px 50px;color:var(--muted);fon
 <section id="sec-crops" class="page-section">
   <div class="sec-head">
     <h2>Crop Efficiency</h2>
-    <p>Feed crop yields, cost per ton, and homegrown vs. purchased feed economics</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
   </div>
 
   <div class="stats">
     <div class="stat">
-      <div class="num">680</div>
+      <div class="num">###</div>
       <div class="lbl">Acres Farmed<span class="sub">owned &amp; rented</span></div>
-      <div class="delta neu">same as FY 2024</div>
+      <div class="delta neu">same as TTM Jul 2025</div>
     </div>
     <div class="stat">
-      <div class="num">22.4</div>
-      <div class="lbl">Corn Silage Yield<span class="sub">tons / acre · MI avg: 19.8</span></div>
-      <div class="delta up">▲ 13.1% above avg</div>
+      <div class="num">###</div>
+      <div class="lbl">Corn Silage Yield<span class="sub">tons / acre · MI avg: ###</span></div>
+      <div class="delta up">▲ ###% above avg</div>
     </div>
     <div class="stat">
-      <div class="num">4.9</div>
-      <div class="lbl">Alfalfa Yield<span class="sub">tons / acre · MI avg: 4.2</span></div>
-      <div class="delta up">▲ 16.7% above avg</div>
+      <div class="num">###</div>
+      <div class="lbl">Alfalfa Yield<span class="sub">tons / acre · MI avg: ###</span></div>
+      <div class="delta up">▲ ###% above avg</div>
     </div>
     <div class="stat">
-      <div class="num">$7.28</div>
-      <div class="lbl">Feed Cost / Cow / Day<span class="sub">purchased equiv.: $9.40</span></div>
-      <div class="delta up">$2.12 savings/cow/day</div>
+      <div class="num">###</div>
+      <div class="lbl">Feed Cost / Cow / Day<span class="sub">purchased equiv.: $###</span></div>
+      <div class="delta up">$### savings/cow/day</div>
     </div>
   </div>
 
   <div class="callout">
     <div class="eyebrow">Strategic Finding</div>
-    <h4>Homegrown feed is Country Dairy's most powerful cost advantage — and it has room to grow</h4>
-    <p>At $7.28/cow/day versus a market-equivalent feed cost of $9.40/cow/day, producing feed on-farm saves $2.12 per cow per day. Across 312 cows and 365 days, that is $241,500 in annual cost avoidance — more than the entire fixed overhead of the processing plant. Both crop yields significantly outperform Michigan averages, with corn silage at 22.4 tons/acre (+13%) and alfalfa at 4.9 tons/acre (+17%).</p>
-    <p>The highest-leverage crop expansion available is alfalfa acreage. Currently at 95 acres, increasing to 130 acres would reduce annual purchased alfalfa by approximately $28,000 and improve the total mixed ration (TMR) protein profile without feed additive cost. The land base to support this expansion is available on the rented parcels along the east field. Seed and establishment cost would be recovered in approximately 18 months.</p>
+    <h4>Nullam quis risus eget urna mollis ornare vel</h4>
+    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+    <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Curabitur pretium tincidunt lacus, nulla gravida orci a odio.</p>
   </div>
 
   <div class="grid-2">
@@ -693,37 +713,37 @@ footer{max-width:1200px;margin:0 auto;padding:0 20px 50px;color:var(--muted);fon
 <section id="sec-costs" class="page-section">
   <div class="sec-head">
     <h2>Fixed vs. Variable Costs</h2>
-    <p>Cost structure analysis, break-even modeling, and margin contribution by line item</p>
+    <p>Nullam quis risus eget urna mollis ornare vel eu leo. Cras mattis consectetur purus sit amet fermentum. Donec ullamcorper nulla non metus auctor fringilla.</p>
   </div>
 
   <div class="stats">
     <div class="stat">
-      <div class="num">$612K</div>
-      <div class="lbl">Total Fixed Costs<span class="sub">33% of total</span></div>
-      <div class="delta up">▲ 2.8% vs FY 2024</div>
+      <div class="num">###</div>
+      <div class="lbl">Total Fixed Costs<span class="sub">###% of total</span></div>
+      <div class="delta up">▲ ###% vs TTM Jul 2025</div>
     </div>
     <div class="stat">
-      <div class="num">$1.22M</div>
-      <div class="lbl">Total Variable Costs<span class="sub">67% of total</span></div>
-      <div class="delta up">▲ 4.6% vs FY 2024</div>
+      <div class="num">###</div>
+      <div class="lbl">Total Variable Costs<span class="sub">###% of total</span></div>
+      <div class="delta up">▲ ###% vs TTM Jul 2025</div>
     </div>
     <div class="stat">
-      <div class="num">$6.50</div>
+      <div class="num">###</div>
       <div class="lbl">Fixed Cost / cwt<span class="sub">at current production</span></div>
-      <div class="delta up">▼ $0.18 vs FY 2024</div>
+      <div class="delta up">▼ $### vs TTM Jul 2025</div>
     </div>
     <div class="stat">
-      <div class="num">72,940</div>
-      <div class="lbl">Break-even<span class="sub">cwt · current production: 94,190</span></div>
-      <div class="delta up">22.6% above break-even</div>
+      <div class="num">###</div>
+      <div class="lbl">Break-even<span class="sub">cwt · current production: ###</span></div>
+      <div class="delta up">###% above break-even</div>
     </div>
   </div>
 
   <div class="callout">
     <div class="eyebrow">Strategic Finding</div>
     <h4>Fixed cost leverage is Country Dairy's strongest long-term margin lever</h4>
-    <p>At current production of 94,190 cwt, fixed costs allocate to $6.50/cwt. Every additional 1,000 cwt produced with the existing infrastructure reduces that fixed cost per unit by approximately $0.46/cwt — a significant leverage point. This means production growth (whether through herd expansion, higher output per cow, or more processing volume from external milk) has a disproportionate impact on profitability.</p>
-    <p>Variable costs at $13.00/cwt are well-controlled, with purchased feed ($6.67/cwt) as the dominant line. Each $1/ton reduction in feed cost — achievable through better corn silage fermentation, forage testing to optimize inclusion rates, or the alfalfa expansion discussed in Crop Efficiency — reduces variable cost by approximately $0.08/cwt, or $7,500 annually at current production. The 22.6% buffer above break-even is the widest in recent years and supports modest capital investment in heat abatement or stall improvements.</p>
+    <p>Vestibulum id ligula porta felis euismod semper. Maecenas faucibus mollis interdum. Etiam porta sem malesuada magna mollis euismod.</p>
+    <p>Aenean lacinia bibendum nulla sed consectetur. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
   </div>
 
   <div class="grid-2">
@@ -748,7 +768,7 @@ footer{max-width:1200px;margin:0 auto;padding:0 20px 50px;color:var(--muted);fon
   </div>
 
   <div class="panel">
-    <div class="panel-head"><h3>Cost Line Item Detail</h3><span class="hint">FY 2025 annualized</span></div>
+    <div class="panel-head"><h3>Cost Line Item Detail</h3><span class="hint">TTM Jul 2026 annualized</span></div>
     <div class="panel-body">
       <div class="tbl-wrap">
         <table class="dt" id="costTable"></table>
@@ -757,10 +777,81 @@ footer{max-width:1200px;margin:0 auto;padding:0 20px 50px;color:var(--muted);fon
   </div>
 </section>
 
+
+<!-- ════════════════════════════════════════════
+     MARKET — DEMAND-SIDE SCAN
+══════════════════════════════════════════════ -->
+<section id="sec-market" class="page-section">
+  <div class="sec-head">
+    <h2>Market — Demand-Side Scan</h2>
+    <p>Sed posuere consectetur est at lobortis. Nulla vitae elit libero, a pharetra augue. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh.</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="num">###</div>
+      <div class="lbl">Regional Dairy Category Growth<span class="sub">retail volume, YoY</span></div>
+      <div class="delta up">▲ ### pts vs TTM Jul 2025</div>
+    </div>
+    <div class="stat">
+      <div class="num">###</div>
+      <div class="lbl">Local/Premium Segment Share<span class="sub">of category retail $</span></div>
+      <div class="delta up">▲ ### pts vs TTM Jul 2025</div>
+    </div>
+    <div class="stat">
+      <div class="num">###</div>
+      <div class="lbl">School/Institutional Demand<span class="sub">contract volume growth</span></div>
+      <div class="delta up">strongest channel</div>
+    </div>
+    <div class="stat">
+      <div class="num">###</div>
+      <div class="lbl">Direct-to-Consumer Growth<span class="sub">farm store &amp; online</span></div>
+      <div class="delta up">smallest base, fastest growth</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="eyebrow">Strategic Finding</div>
+    <h4>Demand is shifting toward local/premium and institutional channels — production mix should follow</h4>
+    <p>Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="panel">
+      <div class="panel-head">
+        <h3>Demand Growth by Channel</h3>
+        <span class="hint">YoY %</span>
+      </div>
+      <div class="panel-body">
+        <div class="chart-box h280"><canvas id="marketDemandChart"></canvas></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-head">
+        <h3>Primary Demand Drivers</h3>
+        <span class="hint">relative consumer weighting</span>
+      </div>
+      <div class="panel-body">
+        <div class="chart-box h280"><canvas id="marketDriverChart"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head"><h3>Demand Indicators by Segment</h3></div>
+    <div class="panel-body">
+      <div class="tbl-wrap">
+        <table class="dt" id="marketTable"></table>
+      </div>
+    </div>
+  </div>
+</section>
+
 </main>
 
 <footer>
-  <p>Country Dairy Strategic Planning Dashboard · Data reflects FY 2025 operations · Internal use only.</p>
+  <p>Country Dairy Strategic Planning Dashboard · Data reflects Jul 1, 2025 &ndash; Jul 1, 2026 operations · Internal use only.</p>
 </footer>
 
 <script>
@@ -809,20 +900,21 @@ document.querySelectorAll("nav.topnav button").forEach(b =>
 // ─── Init dispatcher ─────────────────────────────────────────────────────────
 function initSection(name) {
   ({home:initHome, milk:initMilk, animals:initAnimals,
-    rawmilk:initRawMilk, plant:initPlant, crops:initCrops, costs:initCosts}[name] || (()=>{}))();
+    rawmilk:initRawMilk, plant:initPlant, crops:initCrops, costs:initCosts,
+    market:initMarket}[name] || (()=>{}))();
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
 //  HOME
 // ═══════════════════════════════════════════════════════════════════════════════
 function initHome() {
-  document.getElementById("h-rev").textContent   = "$2.10M";
-  document.getElementById("h-rev-d").textContent = "▲ 8.3% vs FY 2024";
-  document.getElementById("h-cwt").textContent   = "94,190";
-  document.getElementById("h-cwt-d").textContent = "▲ 3.1% vs FY 2024";
-  document.getElementById("h-cows").textContent  = "312";
-  document.getElementById("h-cows-d").textContent= "–4 head vs FY 2024";
-  document.getElementById("h-acres").textContent = "680";
+  document.getElementById("h-rev").textContent   = "###";
+  document.getElementById("h-rev-d").textContent = "▲ ###% vs TTM Jul 2025";
+  document.getElementById("h-cwt").textContent   = "###";
+  document.getElementById("h-cwt-d").textContent = "▲ ###% vs TTM Jul 2025";
+  document.getElementById("h-cows").textContent  = "###";
+  document.getElementById("h-cows-d").textContent= "–### head vs TTM Jul 2025";
+  document.getElementById("h-acres").textContent = "###";
   document.getElementById("h-acres-d").textContent = "Unchanged";
 
   const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
@@ -875,24 +967,24 @@ function initHome() {
   });
 
   document.getElementById("homeMetricTable").innerHTML =
-    `<thead><tr><th>Area</th><th>Metric</th><th class="n">FY 2025</th><th class="n">FY 2024</th><th class="n">Change</th></tr></thead>
+    `<thead><tr><th>Area</th><th>Metric</th><th class="n">TTM Jul 2026</th><th class="n">TTM Jul 2025</th><th class="n">Change</th></tr></thead>
     <tbody>
     ${[
-      ["Milk Production","Annual cwt","94,190","91,360","+3.1%"],
-      ["Milk Production","Lbs/Cow/Day","75.2","73.1","+2.1"],
-      ["Milk Quality","Butterfat %","3.86%","3.78%","+0.08 pts"],
-      ["Milk Quality","SCC (cells/mL)","187,000","201,000","−14,000"],
-      ["Plant","Utilization Rate","78%","75%","+3 pts"],
-      ["Plant","Labor Hrs/cwt","0.42","0.44","−0.02"],
-      ["Crops","Corn Silage (t/a)","22.4","21.8","+0.6"],
-      ["Crops","Alfalfa (t/a)","4.9","4.6","+0.3"],
-      ["Financials","Total Revenue","$2,104,200","$1,942,800","+8.3%"],
-      ["Financials","Total Costs","$1,836,000","$1,763,200","+4.1%"],
-      ["Financials","Operating Margin","12.7%","9.2%","+3.5 pts"],
-    ].map(([a,m,c,p,ch]) =>
+      ["Milk Production","Annual cwt"],
+      ["Milk Production","Lbs/Cow/Day"],
+      ["Milk Quality","Butterfat %"],
+      ["Milk Quality","SCC (cells/mL)"],
+      ["Plant","Utilization Rate"],
+      ["Plant","Labor Hrs/cwt"],
+      ["Crops","Corn Silage (t/a)"],
+      ["Crops","Alfalfa (t/a)"],
+      ["Financials","Total Revenue"],
+      ["Financials","Total Costs"],
+      ["Financials","Operating Margin"],
+    ].map(([a,m]) =>
       `<tr><td style="color:var(--muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.4px">${a}</td>
-       <td>${m}</td><td class="n">${c}</td><td class="n" style="color:var(--muted)">${p}</td>
-       <td class="n" style="color:${ch.startsWith("+")?"#16a34a":ch.startsWith("−")||ch.startsWith("-")?"#dc2626":"var(--muted)"}">${ch}</td></tr>`
+       <td>${m}</td><td class="n">###</td><td class="n" style="color:var(--muted)">###</td>
+       <td class="n" style="color:var(--muted)">###</td></tr>`
     ).join("")}
     </tbody>`;
 }
@@ -963,20 +1055,18 @@ function initMilk() {
     `<thead><tr><th>#</th><th>Product</th><th class="n">Cases</th>
     <th class="n">% Mix</th><th class="n">Est. Revenue</th><th class="n">Rev/Case</th></tr></thead>
     <tbody>${MILK_PRODS.map((p,i)=>{
-      const rev = Math.round(p.cases * p.rev_per);
-      const pct = (p.cases/totalCases*100).toFixed(1);
       return `<tr><td class="rk">${i+1}</td><td>${p.name}</td>
-        <td class="n">${fmt(p.cases)}</td>
-        <td class="n">${pct}%</td>
-        <td class="n">${fmtD(rev)}</td>
-        <td class="n">$${p.rev_per.toFixed(2)}</td></tr>`;
+        <td class="n">###</td>
+        <td class="n">###</td>
+        <td class="n">###</td>
+        <td class="n">###</td></tr>`;
     }).join("")}
     <tr style="font-weight:700;border-top:2px solid var(--border)">
       <td colspan="2" style="font-weight:700">Total</td>
-      <td class="n">${fmt(totalCases)}</td>
-      <td class="n">100%</td>
-      <td class="n">${fmtD(Math.round(MILK_PRODS.reduce((s,p)=>s+p.cases*p.rev_per,0)))}</td>
-      <td class="n">$${(MILK_PRODS.reduce((s,p)=>s+p.cases*p.rev_per,0)/totalCases).toFixed(2)}</td>
+      <td class="n">###</td>
+      <td class="n">###</td>
+      <td class="n">###</td>
+      <td class="n">###</td>
     </tr></tbody>`;
 }
 
@@ -1046,13 +1136,13 @@ function initAnimals() {
     `<thead><tr><th>Category</th><th class="n">Head Sold</th>
     <th class="n">Avg $/Head</th><th class="n">Total Revenue</th><th class="n">% of Animal Rev</th></tr></thead>
     <tbody>${anData.map(r =>
-      `<tr><td>${r.type}</td><td class="n">${r.head}</td>
-      <td class="n">${fmtD(r.avgP)}</td><td class="n">${fmtD(r.total)}</td>
-      <td class="n">${(r.total/totalRev*100).toFixed(1)}%</td></tr>`
+      `<tr><td>${r.type}</td><td class="n">###</td>
+      <td class="n">###</td><td class="n">###</td>
+      <td class="n">###</td></tr>`
     ).join("")}
     <tr style="font-weight:700;border-top:2px solid var(--border)">
-      <td>Total</td><td class="n">${totalHead}</td><td class="n">${fmtD(Math.round(totalRev/totalHead))}</td>
-      <td class="n">${fmtD(totalRev)}</td><td class="n">100%</td>
+      <td>Total</td><td class="n">###</td><td class="n">###</td>
+      <td class="n">###</td><td class="n">###</td>
     </tr></tbody>`;
 }
 
@@ -1069,9 +1159,9 @@ function initRawMilk() {
     data:{
       labels: MONTHS_SHORT,
       datasets:[
-        {label:"FY 2025", data:PROD_2025, borderColor:C.kelly,
+        {label:"TTM Jul 2026", data:PROD_2025, borderColor:C.kelly,
           backgroundColor:"rgba(61,174,43,.1)", fill:true, tension:.35, pointRadius:3},
-        {label:"FY 2024", data:PROD_2024, borderColor:C.muted,
+        {label:"TTM Jul 2025", data:PROD_2024, borderColor:C.muted,
           backgroundColor:"transparent", borderDash:[5,4], tension:.35, pointRadius:3},
       ]
     },
@@ -1171,12 +1261,12 @@ function initPlant() {
     `<thead><tr><th>Month</th><th class="n">cwt Processed</th><th class="n">Utilization</th>
     <th class="n">Labor Hrs/cwt</th><th class="n">Energy $/cwt</th><th class="n">Loss %</th></tr></thead>
     <tbody>${[
-      ["Jul","7,860","75%","0.44","$1.28","1.9%"],
-      ["Aug","7,740","74%","0.43","$1.31","2.0%"],
-      ["Sep","7,950","76%","0.42","$1.26","1.8%"],
-      ["Oct","8,280","79%","0.41","$1.22","1.7%"],
-      ["Nov","8,090","77%","0.42","$1.21","1.8%"],
-      ["Dec","8,280","79%","0.40","$1.19","1.7%"],
+      ["Jul","###","###","###","###","###"],
+      ["Aug","###","###","###","###","###"],
+      ["Sep","###","###","###","###","###"],
+      ["Oct","###","###","###","###","###"],
+      ["Nov","###","###","###","###","###"],
+      ["Dec","###","###","###","###","###"],
     ].map(([m,...v])=>`<tr><td>${m}</td>${v.map(x=>`<td class="n">${x}</td>`).join("")}</tr>`).join("")}
     </tbody>`;
 }
@@ -1236,15 +1326,15 @@ function initCrops() {
     <th class="n">MI Avg</th><th class="n">Cost/Unit</th><th class="n">Total Tons/Bu</th>
     <th class="n">Homegrown Value</th></tr></thead>
     <tbody>${[
-      ["Corn Silage","560","22.4 t/a","19.8 t/a","$41/ton","12,544 t","$515,304"],
-      ["Alfalfa Hay","95","4.9 t/a","4.2 t/a","$178/ton","465.5 t","$82,859"],
-      ["Soybeans","25","52 bu/a","45 bu/a","$9.20/bu","1,300 bu","$11,960"],
+      ["Corn Silage","###","###","###","###","###","###"],
+      ["Alfalfa Hay","###","###","###","###","###","###"],
+      ["Soybeans","###","###","###","###","###","###"],
       ["Other/Cover","—","—","—","—","—","—"],
     ].map(r=>`<tr>${r.map((c,i)=>i>0?`<td class="n">${c}</td>`:`<td>${c}</td>`).join("")}</tr>`).join("")}
     <tr style="font-weight:700;border-top:2px solid var(--border)">
-      <td>Total / Avg</td><td class="n">680</td><td class="n">—</td>
+      <td>Total / Avg</td><td class="n">###</td><td class="n">—</td>
       <td class="n">—</td><td class="n">—</td><td class="n">—</td>
-      <td class="n">$610,123</td>
+      <td class="n">###</td>
     </tr></tbody>`;
 }
 
@@ -1343,33 +1433,96 @@ function initCosts() {
     <th class="n">$/cwt</th><th class="n">% of Total</th></tr></thead>
     <tbody>
     ${rows.map(([type,name,amt]) => {
-      const bg = type==="Fixed"?"var(--accent-soft, #f0f7ee)":"";
       return `<tr>
         <td style="font-size:.75rem;text-transform:uppercase;letter-spacing:.4px;color:var(--muted)">${type}</td>
         <td>${name}</td>
-        <td class="n">${fmtD(amt)}</td>
-        <td class="n">$${(amt/totalCwt).toFixed(2)}</td>
-        <td class="n">${(amt/grandTotal*100).toFixed(1)}%</td>
+        <td class="n">###</td>
+        <td class="n">###</td>
+        <td class="n">###</td>
       </tr>`;
     }).join("")}
     <tr style="font-weight:700;border-top:2px solid var(--border)">
       <td colspan="2">Total Fixed</td>
-      <td class="n">${fmtD(totalFixed)}</td>
-      <td class="n">$${(totalFixed/totalCwt).toFixed(2)}</td>
-      <td class="n">${(totalFixed/grandTotal*100).toFixed(1)}%</td>
+      <td class="n">###</td>
+      <td class="n">###</td>
+      <td class="n">###</td>
     </tr>
     <tr style="font-weight:700">
       <td colspan="2">Total Variable</td>
-      <td class="n">${fmtD(totalVar)}</td>
-      <td class="n">$${(totalVar/totalCwt).toFixed(2)}</td>
-      <td class="n">${(totalVar/grandTotal*100).toFixed(1)}%</td>
+      <td class="n">###</td>
+      <td class="n">###</td>
+      <td class="n">###</td>
     </tr>
     <tr style="font-weight:700;background:var(--bg);border-top:2px solid var(--border)">
       <td colspan="2" style="font-size:1rem">Grand Total</td>
-      <td class="n" style="font-size:1rem">${fmtD(grandTotal)}</td>
-      <td class="n" style="font-size:1rem">$${(grandTotal/totalCwt).toFixed(2)}</td>
-      <td class="n">100%</td>
+      <td class="n" style="font-size:1rem">###</td>
+      <td class="n" style="font-size:1rem">###</td>
+      <td class="n">###</td>
     </tr></tbody>`;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+//  MARKET — DEMAND-SIDE SCAN
+// ═══════════════════════════════════════════════════════════════════════════════
+function initMarket() {
+  new Chart(document.getElementById("marketDemandChart"), {
+    type:"bar",
+    data:{
+      labels:["School / Institutional","Direct-to-Consumer","Local/Premium Retail","Category Average","Distributor / Wholesale"],
+      datasets:[{
+        data:[9.4, 14, 6.8, 2.1, -0.6],
+        backgroundColor:[C.green, C.kelly, C.mid, C.muted, C.amber],
+        borderRadius:5, label:"YoY %"
+      }]
+    },
+    options:{
+      indexAxis:"y", responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false},
+        tooltip:{callbacks:{label: c => (c.parsed.x>=0?"+":"") + c.parsed.x + "% YoY"}} },
+      scales:{
+        x:{grid:{color:gridColor()}, ticks:{callback:v=>(v>0?"+":"")+v+"%"}},
+        y:{grid:{display:false}, ticks:{font:{size:11}}}
+      }
+    }
+  });
+
+  new Chart(document.getElementById("marketDriverChart"), {
+    type:"doughnut",
+    data:{
+      labels:["Local/Regional Identity","Health & Wellness","Price","Convenience","Sustainability"],
+      datasets:[{
+        data:[32,26,20,14,8],
+        backgroundColor:[C.green, C.kelly, C.mid, C.muted, C.amber],
+        borderWidth:2,
+        borderColor: getComputedStyle(document.documentElement).getPropertyValue("--panel").trim()
+      }]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      cutout:"58%",
+      plugins:{
+        legend:{position:"right"},
+        tooltip:{callbacks:{label: c => c.label + ": " + c.parsed + "%"}}
+      }
+    }
+  });
+
+  const marketData = [
+    ["School / Institutional",  "High",     "+9.4%", "Regional supplier preference, contract stability", "Expand"],
+    ["Direct-to-Consumer",      "Moderate", "+14%",  "Local-buying preference, farm store visibility",    "Invest"],
+    ["Local/Premium Retail",    "High",     "+6.8%", "Health & wellness, provenance",                     "Expand"],
+    ["Category Average",        "Moderate", "+2.1%", "General household consumption",                     "Maintain"],
+    ["Distributor / Wholesale", "Low",      "−0.6%", "Price competition from national brands",             "Defend"],
+  ];
+  document.getElementById("marketTable").innerHTML =
+    `<thead><tr><th>Segment</th><th>Demand Level</th><th class="n">YoY Growth</th>
+    <th>Primary Driver</th><th>Recommended Posture</th></tr></thead>
+    <tbody>${marketData.map(([seg,lvl,gr,drv,pos]) =>
+      `<tr><td>${seg}</td><td>${lvl}</td>
+      <td class="n" style="color:var(--muted)">###</td>
+      <td>${drv}</td><td>${pos}</td></tr>`
+    ).join("")}
+    </tbody>`;
 }
 
 // ─── Access gate ─────────────────────────────────────────────────────────────
