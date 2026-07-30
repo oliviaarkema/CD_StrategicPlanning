@@ -212,9 +212,9 @@ table.dt tr:hover td{background:var(--bg)}
 .hbar-fill.bench{background:#9aa79a}
 .hbar-val{text-align:right;font-variant-numeric:tabular-nums;font-weight:600;color:var(--green)}
 
-#milkQualBars,#plantKpiBars{position:relative;min-height:80px}
-#milkQualBars>*,#plantKpiBars>*{filter:grayscale(1);opacity:.35}
-#milkQualBars::after,#plantKpiBars::after{
+#milkQualBars,#plantKpiBars,#marketRadiusHeatmap{position:relative;min-height:80px}
+#milkQualBars>*,#plantKpiBars>*,#marketRadiusHeatmap>*{filter:grayscale(1);opacity:.35}
+#milkQualBars::after,#plantKpiBars::after,#marketRadiusHeatmap::after{
   content:"Pending Data Connection";
   position:absolute;inset:0;margin:auto;height:28px;width:max-content;max-width:90%;
   display:flex;align-items:center;justify-content:center;
@@ -222,6 +222,15 @@ table.dt tr:hover td{background:var(--bg)}
   font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;
   color:#fff;background:rgba(20,30,20,.72);pointer-events:none;
 }
+
+/* ── Radius heatmap ── */
+.radius-heatmap{display:flex;align-items:center;gap:28px;flex-wrap:wrap}
+.radius-heatmap-svg{width:200px;height:200px;flex-shrink:0}
+.radius-legend{display:flex;flex-direction:column;gap:9px;flex:1;min-width:170px}
+.radius-legend-row{display:flex;align-items:center;gap:10px;font-size:.83rem}
+.radius-swatch{width:14px;height:14px;border-radius:4px;flex-shrink:0}
+.radius-legend-label{flex:1;color:var(--ink)}
+.radius-legend-val{font-weight:600;color:var(--green);font-variant-numeric:tabular-nums}
 
 /* ── Misc ── */
 .err{color:#b00020;font-size:.85rem}

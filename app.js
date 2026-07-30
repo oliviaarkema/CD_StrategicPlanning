@@ -650,6 +650,64 @@ function initMarket() {
     }
   });
 
+  const RADIUS_BANDS = [
+    {label:"0–24 mi",    pen:82},
+    {label:"25–49 mi",   pen:61},
+    {label:"50–99 mi",   pen:43},
+    {label:"100–199 mi", pen:24},
+    {label:"200–499 mi", pen:9},
+  ];
+  const heatLow = [216,227,218], heatHigh = [7,77,26];
+  const heatColor = pct => {
+    const t = pct/100;
+    return "rgb(" + heatLow.map((l,i) => Math.round(l + (heatHigh[i]-l)*t)).join(",") + ")";
+  };
+  const ringCx = 150, ringCy = 150, ringMaxR = 140, ringCount = RADIUS_BANDS.length;
+  let ringsSvg = "";
+  for (let i = ringCount - 1; i >= 0; i--) {
+    const r = ringMaxR * (i+1) / ringCount;
+    ringsSvg += `<circle cx="${ringCx}" cy="${ringCy}" r="${r}" fill="${heatColor(RADIUS_BANDS[i].pen)}"/>`;
+  }
+  ringsSvg += `<circle cx="${ringCx}" cy="${ringCy}" r="4" fill="#fff" stroke="${C.green}" stroke-width="2"/>`;
+
+  document.getElementById("marketRadiusHeatmap").innerHTML = `
+    <svg class="radius-heatmap-svg" viewBox="0 0 300 300" role="img" aria-label="Market penetration by radius from distribution center">${ringsSvg}</svg>
+    <div class="radius-legend">
+      ${RADIUS_BANDS.map(b => `
+        <div class="radius-legend-row">
+          <span class="radius-swatch" style="background:${heatColor(b.pen)}"></span>
+          <span class="radius-legend-label">${b.label}</span>
+          <span class="radius-legend-val">${b.pen}%</span>
+        </div>`).join("")}
+    </div>`;
+
+  const PEN_RANGES = RADIUS_BANDS.map(b => b.label);
+  const PEN_BY_TYPE = [
+    {label:"Convenience Store", data:[88,74,55,31,12], color:C.green},
+    {label:"School",            data:[76,68,52,29,14], color:C.kelly},
+    {label:"Coffee Shop",       data:[64,49,33,17, 6], color:C.mid},
+    {label:"Supermarket",       data:[92,81,63,38,19], color:C.blue},
+    {label:"Restaurant",        data:[57,45,30,15, 5], color:C.amber},
+  ];
+  new Chart(document.getElementById("marketPenetrationChart"), {
+    type:"bar",
+    data:{
+      labels: PEN_RANGES,
+      datasets: PEN_BY_TYPE.map(t => ({
+        label:t.label, data:t.data, backgroundColor:t.color, borderRadius:4
+      }))
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{position:"top"},
+        tooltip:{callbacks:{label: c => c.dataset.label + ": " + c.parsed.y + "%"}} },
+      scales:{
+        x:{grid:{display:false}},
+        y:{grid:{color:gridColor()}, ticks:{callback:v=>v+"%"}, max:100}
+      }
+    }
+  });
+
   const marketData = [
     ["School / Institutional",  "High",     "+9.4%", "Regional supplier preference, contract stability", "Expand"],
     ["Direct-to-Consumer",      "Moderate", "+14%",  "Local-buying preference, farm store visibility",    "Invest"],
