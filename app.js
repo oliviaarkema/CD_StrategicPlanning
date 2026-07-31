@@ -194,6 +194,40 @@ function initMilk() {
     }
   });
 
+  const MARGIN_PRODS = ["Class 1 Milk","Ice Cream","Soft Serve Mix","Sour Cream","Chip Dip","Butter","Other"];
+  const MARGIN_REV    = [18.4, 9.6, 4.2, 3.1, 1.8, 2.6, 1.2];
+  const MARGIN_PCT    = [22, 34, 41, 29, 33, 18, 25];
+
+  new Chart(document.getElementById("milkMarginChart"), {
+    type:"bar",
+    data:{
+      labels: MARGIN_PRODS,
+      datasets:[
+        {label:"Revenue ($M)", data:MARGIN_REV, backgroundColor:C.green, borderRadius:4, yAxisID:"y"},
+        {label:"Profit Margin (%)", data:MARGIN_PCT, backgroundColor:C.kelly, borderRadius:4, yAxisID:"y1"},
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{position:"top"},
+        tooltip:{callbacks:{label: c => c.dataset.label + ": " +
+          (c.dataset.yAxisID==="y1" ? c.parsed.y+"%" : "$"+c.parsed.y+"M")}} },
+      scales:{
+        x:{grid:{display:false}},
+        y:{
+          type:"linear", position:"left", min:0, max:25,
+          grid:{color:gridColor()}, ticks:{callback:v=>"$"+v+"M"},
+          title:{display:true, text:"Revenue ($M)"}
+        },
+        y1:{
+          type:"linear", position:"right", min:0, max:100,
+          grid:{drawOnChartArea:false}, ticks:{callback:v=>v+"%"},
+          title:{display:true, text:"Profit Margin (%)"}
+        }
+      }
+    }
+  });
+
   document.getElementById("milkTable").innerHTML =
     `<thead><tr><th>#</th><th>Product</th><th class="n">Cases</th>
     <th class="n">% Mix</th><th class="n">Est. Revenue</th><th class="n">Rev/Case</th></tr></thead>
