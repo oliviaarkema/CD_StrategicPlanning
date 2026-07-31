@@ -1,0 +1,18 @@
+Type,Line Item,Annual ($),$/cwt,% of Total,$/gal
+Fixed,Depreciation,,,,=D2/11.63
+Fixed,Base Salaries,,,,=D3/11.63
+Fixed,Processing Labor,,,,=D4/11.63
+Fixed,Land Rent,,,,=D5/11.63
+Fixed,Insurance,,,,=D6/11.63
+Fixed,Property Tax,,,,=D7/11.63
+Fixed,Other Fixed,,,,=D8/11.63
+Variable,Purchased Feed,,,,=D9/11.63
+Variable,Crop Inputs,,,,=D10/11.63
+Variable,Fuel & Utilities,,,,=D11/11.63
+Variable,Vet / Breeding,,,,=D12/11.63
+Variable,Milk Hauling,,,,=D13/11.63
+Variable,Repairs & Supplies,,,,=D14/11.63
+Variable,Misc. Variable,,,,=D15/11.63
+,Total Fixed,,,,=D16/11.63
+,Total Variable,,,,=D17/11.63
+,Grand Total,,,,=D18/11.63

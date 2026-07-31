@@ -1,0 +1,5 @@
+Metric,Value,Benchmark Label,Benchmark Value,Value (gal),Benchmark Value (gal)
+Utilization Rate,,Target,,,
+Product Loss/Shrink,,Industry avg,,,
+Labor Hrs/cwt,,Industry avg,,=B4/11.63,=D4/11.63
+Energy $/cwt,,Industry avg,,=B5/11.63,=D5/11.63

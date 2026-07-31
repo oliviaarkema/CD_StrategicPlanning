@@ -1,0 +1,5 @@
+Metric,Sub-label,TTM Jul 2026,TTM Jul 2025,TTM Jul 2026 (gal),TTM Jul 2025 (gal)
+Annual Production,hundredweight (cwt),,,=C2*11.63,=D2*11.63
+Lbs / Cow / Day,vs. MI state avg,,,,
+Butterfat,annual average,,,,
+Somatic Cell Count,"cells/mL, premium tier",,,,
