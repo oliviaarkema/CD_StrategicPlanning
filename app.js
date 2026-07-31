@@ -149,6 +149,48 @@ const MILK_PRODS = [
 ];
 const MILK_MONTHS = [6620,7280,7910,8440,9020,8190,6940,6610,7180,7840,7950,8610];
 
+function weightedAvg(weights, values) {
+  const sumW = weights.reduce((s,w) => s+w, 0);
+  const sumWV = weights.reduce((s,w,i) => s + w*values[i], 0);
+  return sumWV / sumW;
+}
+
+function renderMarginChart(canvasId, labels, revData, pctData, revMax) {
+  const overallMargin = weightedAvg(revData, pctData);
+  new Chart(document.getElementById(canvasId), {
+    type:"bar",
+    data:{
+      labels,
+      datasets:[
+        {label:"Revenue ($M)", data:revData, backgroundColor:C.green, borderRadius:4, yAxisID:"y"},
+        {label:"Profit Margin (%)", data:pctData, backgroundColor:C.kelly, borderRadius:4, yAxisID:"y1"},
+        {label:"Overall Margin (wtd avg)", type:"line", data:labels.map(()=>overallMargin),
+          yAxisID:"y1", borderColor:C.red, borderDash:[6,4], borderWidth:2,
+          pointRadius:0, tension:0, fill:false},
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{position:"top"},
+        tooltip:{callbacks:{label: c => c.dataset.label + ": " +
+          (c.dataset.yAxisID==="y1" ? c.parsed.y.toFixed(1)+"%" : "$"+c.parsed.y+"M")}} },
+      scales:{
+        x:{grid:{display:false}},
+        y:{
+          type:"linear", position:"left", min:0, max:revMax,
+          grid:{color:gridColor()}, ticks:{callback:v=>"$"+v+"M"},
+          title:{display:true, text:"Revenue ($M)"}
+        },
+        y1:{
+          type:"linear", position:"right", min:0, max:100,
+          grid:{drawOnChartArea:false}, ticks:{callback:v=>v+"%"},
+          title:{display:true, text:"Profit Margin (%)"}
+        }
+      }
+    }
+  });
+}
+
 function initMilk() {
   const totalCases = MILK_PRODS.reduce((s,p) => s+p.cases, 0);
   const labels = MILK_PRODS.map(p => p.name);
@@ -197,36 +239,12 @@ function initMilk() {
   const MARGIN_PRODS = ["Class 1 Milk","Ice Cream","Soft Serve Mix","Sour Cream","Chip Dip","Butter","Other"];
   const MARGIN_REV    = [18.4, 9.6, 4.2, 3.1, 1.8, 2.6, 1.2];
   const MARGIN_PCT    = [22, 34, 41, 29, 33, 18, 25];
+  renderMarginChart("milkMarginChart", MARGIN_PRODS, MARGIN_REV, MARGIN_PCT, 25);
 
-  new Chart(document.getElementById("milkMarginChart"), {
-    type:"bar",
-    data:{
-      labels: MARGIN_PRODS,
-      datasets:[
-        {label:"Revenue ($M)", data:MARGIN_REV, backgroundColor:C.green, borderRadius:4, yAxisID:"y"},
-        {label:"Profit Margin (%)", data:MARGIN_PCT, backgroundColor:C.kelly, borderRadius:4, yAxisID:"y1"},
-      ]
-    },
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      plugins:{ legend:{position:"top"},
-        tooltip:{callbacks:{label: c => c.dataset.label + ": " +
-          (c.dataset.yAxisID==="y1" ? c.parsed.y+"%" : "$"+c.parsed.y+"M")}} },
-      scales:{
-        x:{grid:{display:false}},
-        y:{
-          type:"linear", position:"left", min:0, max:25,
-          grid:{color:gridColor()}, ticks:{callback:v=>"$"+v+"M"},
-          title:{display:true, text:"Revenue ($M)"}
-        },
-        y1:{
-          type:"linear", position:"right", min:0, max:100,
-          grid:{drawOnChartArea:false}, ticks:{callback:v=>v+"%"},
-          title:{display:true, text:"Profit Margin (%)"}
-        }
-      }
-    }
-  });
+  const CUSTOMER_NAMES = ["Cedar Crest","Quality Dairy","Kuster's","Farm Store","Other"];
+  const CUSTOMER_REV   = [14.5, 11.2, 8.6, 4.1, 2.9];
+  const CUSTOMER_PCT   = [24, 31, 27, 38, 19];
+  renderMarginChart("customerMarginChart", CUSTOMER_NAMES, CUSTOMER_REV, CUSTOMER_PCT, 20);
 
   document.getElementById("milkTable").innerHTML =
     `<thead><tr><th>#</th><th>Product</th><th class="n">Cases</th>

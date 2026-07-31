@@ -1,0 +1,7 @@
+Customer,Revenue ($M),Profit Margin (%)
+Cedar Crest,,
+Quality Dairy,,
+Kuster's,,
+Farm Store,,
+Other,,
+Overall Profit Margin (weighted avg),,=SUMPRODUCT(B2:B6,C2:C6)/SUM(B2:B6)
