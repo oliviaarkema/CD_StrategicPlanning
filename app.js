@@ -245,24 +245,6 @@ function initMilk() {
   const CUSTOMER_REV   = [14.5, 11.2, 8.6, 4.1, 2.9];
   const CUSTOMER_PCT   = [24, 31, 27, 38, 19];
   renderMarginChart("customerMarginChart", CUSTOMER_NAMES, CUSTOMER_REV, CUSTOMER_PCT, 20);
-
-  document.getElementById("milkTable").innerHTML =
-    `<thead><tr><th>#</th><th>Product</th><th class="n">Cases</th>
-    <th class="n">% Mix</th><th class="n">Est. Revenue</th><th class="n">Rev/Case</th></tr></thead>
-    <tbody>${MILK_PRODS.map((p,i)=>{
-      return `<tr><td class="rk">${i+1}</td><td>${p.name}</td>
-        <td class="n">###</td>
-        <td class="n">###</td>
-        <td class="n">###</td>
-        <td class="n">###</td></tr>`;
-    }).join("")}
-    <tr style="font-weight:700;border-top:2px solid var(--border)">
-      <td colspan="2" style="font-weight:700">Total</td>
-      <td class="n">###</td>
-      <td class="n">###</td>
-      <td class="n">###</td>
-      <td class="n">###</td>
-    </tr></tbody>`;
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
