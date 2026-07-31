@@ -349,7 +349,7 @@ const PROD_2024 = [7620,7100,7840,7980,8290,7750,7640,7510,7730,8060,7880,8020];
 const MONTHS_SHORT = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 const CWT_TO_GAL = 11.63; // 1 cwt of milk ≈ 11.63 gallons (100 lb / ~8.6 lb per gallon)
 
-let rawMilkLineChart = null, rawMilkBarChart = null;
+let rawMilkLineChart = null;
 
 function renderRawMilkCharts(unit) {
   const factor = unit === "gal" ? CWT_TO_GAL : 1;
@@ -358,7 +358,6 @@ function renderRawMilkCharts(unit) {
   const data2024 = PROD_2024.map(v => Math.round(v * factor));
 
   if (rawMilkLineChart) rawMilkLineChart.destroy();
-  if (rawMilkBarChart)  rawMilkBarChart.destroy();
 
   rawMilkLineChart = new Chart(document.getElementById("milkProdLineChart"), {
     type:"line",
@@ -381,26 +380,6 @@ function renderRawMilkCharts(unit) {
       }
     }
   });
-
-  rawMilkBarChart = new Chart(document.getElementById("milkProdBarChart"), {
-    type:"bar",
-    data:{
-      labels: MONTHS_SHORT,
-      datasets:[{
-        data: data2025, backgroundColor: data2025.map(v=>v===Math.max(...data2025)?C.kelly:C.green),
-        borderRadius:4, label:label
-      }]
-    },
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      plugins:{ legend:{display:false},
-        tooltip:{callbacks:{label: c => fmt(c.parsed.y) + " " + label}} },
-      scales:{
-        x:{grid:{display:false}},
-        y:{grid:{color:gridColor()}, ticks:{callback:v=>fmt(v)}, min:Math.round(6500*factor)}
-      }
-    }
-  });
 }
 
 function initRawMilk() {
@@ -413,6 +392,27 @@ function initRawMilk() {
         b.classList.toggle("active", b.dataset.unit === unit));
       renderRawMilkCharts(unit);
     }));
+
+  new Chart(document.getElementById("a2StatusChart"), {
+    type:"doughnut",
+    data:{
+      labels:["A2/A2 (Homozygous)","A1/A2 (Heterozygous)","A1/A1","Untested"],
+      datasets:[{
+        data:[58, 27, 9, 6],
+        backgroundColor:[C.green, C.kelly, C.amber, C.muted],
+        borderWidth:2,
+        borderColor: getComputedStyle(document.documentElement).getPropertyValue("--panel").trim()
+      }]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      cutout:"58%",
+      plugins:{
+        legend:{position:"right"},
+        tooltip:{callbacks:{label: c => c.label + ": " + c.parsed + "% of herd"}}
+      }
+    }
+  });
 
   document.getElementById("milkQualBars").innerHTML = [
     {lbl:"Lbs/Cow/Day",    sub:"MI top quartile: 78",     val:75.2, bench:78,   max:85,  fmt:v=>v.toFixed(1)},
