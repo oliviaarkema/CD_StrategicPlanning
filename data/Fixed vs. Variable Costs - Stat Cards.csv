@@ -1,5 +1,0 @@
-Metric,Sub-label,TTM Jul 2026,TTM Jul 2025,TTM Jul 2026 (gal),TTM Jul 2025 (gal)
-Total Fixed Costs,% of total,,,,
-Total Variable Costs,% of total,,,,
-Fixed Cost / cwt,at current production,,,=C4/11.63,=D4/11.63
-Break-even,"cwt, vs. current production",,,=C5*11.63,=D5*11.63

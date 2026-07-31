@@ -1,9 +1,0 @@
-Product,Revenue ($M),Profit Margin (%)
-Class 1 Milk,,
-Ice Cream,,
-Soft Serve Mix,,
-Sour Cream,,
-Chip Dip,,
-Butter,,
-Other,,
-Overall Profit Margin (weighted avg),,=SUMPRODUCT(B2:B8,C2:C8)/SUM(B2:B8)
