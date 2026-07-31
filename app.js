@@ -51,8 +51,8 @@ function initSection(name) {
 //  HOME
 // ═══════════════════════════════════════════════════════════════════════════════
 function initHome() {
-  document.getElementById("h-rev").textContent   = "###";
-  document.getElementById("h-rev-d").textContent = "▲ ###% vs TTM Jul 2025";
+  document.getElementById("h-rev").textContent   = "$812,574";
+  document.getElementById("h-rev-d").textContent = "▲ 118.0% vs TTM Jul 2025";
   document.getElementById("h-cwt").textContent   = "###";
   document.getElementById("h-cwt-d").textContent = "▲ ###% vs TTM Jul 2025";
   document.getElementById("h-cows").textContent  = "###";
