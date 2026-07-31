@@ -295,49 +295,72 @@ function initAnimals() {
 const PROD_2025 = [7820,7380,8050,8210,8540,7990,7860,7740,7950,8280,8090,8280];
 const PROD_2024 = [7620,7100,7840,7980,8290,7750,7640,7510,7730,8060,7880,8020];
 const MONTHS_SHORT = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const CWT_TO_GAL = 11.63; // 1 cwt of milk ≈ 11.63 gallons (100 lb / ~8.6 lb per gallon)
 
-function initRawMilk() {
-  new Chart(document.getElementById("milkProdLineChart"), {
+let rawMilkLineChart = null, rawMilkBarChart = null;
+
+function renderRawMilkCharts(unit) {
+  const factor = unit === "gal" ? CWT_TO_GAL : 1;
+  const label  = unit === "gal" ? "gal" : "cwt";
+  const data2025 = PROD_2025.map(v => Math.round(v * factor));
+  const data2024 = PROD_2024.map(v => Math.round(v * factor));
+
+  if (rawMilkLineChart) rawMilkLineChart.destroy();
+  if (rawMilkBarChart)  rawMilkBarChart.destroy();
+
+  rawMilkLineChart = new Chart(document.getElementById("milkProdLineChart"), {
     type:"line",
     data:{
       labels: MONTHS_SHORT,
       datasets:[
-        {label:"TTM Jul 2026", data:PROD_2025, borderColor:C.kelly,
+        {label:"TTM Jul 2026", data:data2025, borderColor:C.kelly,
           backgroundColor:"rgba(61,174,43,.1)", fill:true, tension:.35, pointRadius:3},
-        {label:"TTM Jul 2025", data:PROD_2024, borderColor:C.muted,
+        {label:"TTM Jul 2025", data:data2024, borderColor:C.muted,
           backgroundColor:"transparent", borderDash:[5,4], tension:.35, pointRadius:3},
       ]
     },
     options:{
       responsive:true, maintainAspectRatio:false,
       plugins:{ legend:{position:"top"},
-        tooltip:{callbacks:{label: c => c.dataset.label + ": " + fmt(c.parsed.y) + " cwt"}} },
+        tooltip:{callbacks:{label: c => c.dataset.label + ": " + fmt(c.parsed.y) + " " + label}} },
       scales:{
         x:{grid:{color:gridColor()}},
-        y:{grid:{color:gridColor()}, ticks:{callback:v=>fmt(v)}, min:6500}
+        y:{grid:{color:gridColor()}, ticks:{callback:v=>fmt(v)}, min:Math.round(6500*factor)}
       }
     }
   });
 
-  new Chart(document.getElementById("milkProdBarChart"), {
+  rawMilkBarChart = new Chart(document.getElementById("milkProdBarChart"), {
     type:"bar",
     data:{
       labels: MONTHS_SHORT,
       datasets:[{
-        data: PROD_2025, backgroundColor: PROD_2025.map(v=>v===Math.max(...PROD_2025)?C.kelly:C.green),
-        borderRadius:4, label:"cwt"
+        data: data2025, backgroundColor: data2025.map(v=>v===Math.max(...data2025)?C.kelly:C.green),
+        borderRadius:4, label:label
       }]
     },
     options:{
       responsive:true, maintainAspectRatio:false,
       plugins:{ legend:{display:false},
-        tooltip:{callbacks:{label: c => fmt(c.parsed.y) + " cwt"}} },
+        tooltip:{callbacks:{label: c => fmt(c.parsed.y) + " " + label}} },
       scales:{
         x:{grid:{display:false}},
-        y:{grid:{color:gridColor()}, ticks:{callback:v=>fmt(v)}, min:6500}
+        y:{grid:{color:gridColor()}, ticks:{callback:v=>fmt(v)}, min:Math.round(6500*factor)}
       }
     }
   });
+}
+
+function initRawMilk() {
+  renderRawMilkCharts("cwt");
+
+  document.querySelectorAll(".js-rawmilk-unit-toggle button").forEach(btn =>
+    btn.addEventListener("click", () => {
+      const unit = btn.dataset.unit;
+      document.querySelectorAll(".js-rawmilk-unit-toggle button").forEach(b =>
+        b.classList.toggle("active", b.dataset.unit === unit));
+      renderRawMilkCharts(unit);
+    }));
 
   document.getElementById("milkQualBars").innerHTML = [
     {lbl:"Lbs/Cow/Day",    sub:"MI top quartile: 78",     val:75.2, bench:78,   max:85,  fmt:v=>v.toFixed(1)},
@@ -400,9 +423,23 @@ function initPlant() {
     }
   });
 
+  renderPlantMetricTable("cwt");
+  document.querySelectorAll(".js-plant-unit-toggle button").forEach(btn =>
+    btn.addEventListener("click", () => {
+      const unit = btn.dataset.unit;
+      document.querySelectorAll(".js-plant-unit-toggle button").forEach(b =>
+        b.classList.toggle("active", b.dataset.unit === unit));
+      renderPlantMetricTable(unit);
+    }));
+}
+
+function renderPlantMetricTable(unit) {
+  const volLabel    = unit === "gal" ? "Gallons Processed" : "cwt Processed";
+  const laborLabel  = unit === "gal" ? "Labor Hrs/gal" : "Labor Hrs/cwt";
+  const energyLabel = unit === "gal" ? "Energy $/gal" : "Energy $/cwt";
   document.getElementById("plantMetricTable").innerHTML =
-    `<thead><tr><th>Month</th><th class="n">cwt Processed</th><th class="n">Utilization</th>
-    <th class="n">Labor Hrs/cwt</th><th class="n">Energy $/cwt</th><th class="n">Loss %</th></tr></thead>
+    `<thead><tr><th>Month</th><th class="n">${volLabel}</th><th class="n">Utilization</th>
+    <th class="n">${laborLabel}</th><th class="n">${energyLabel}</th><th class="n">Loss %</th></tr></thead>
     <tbody>${[
       ["Jul","###","###","###","###","###"],
       ["Aug","###","###","###","###","###"],

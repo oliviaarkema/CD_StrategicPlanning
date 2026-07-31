@@ -302,7 +302,10 @@
     <div class="panel">
       <div class="panel-head">
         <h3>Monthly Production: TTM Jul 2025 vs TTM Jul 2026</h3>
-        <span class="hint">cwt</span>
+        <div class="unit-toggle js-rawmilk-unit-toggle" role="group" aria-label="Unit of measurement">
+          <button type="button" data-unit="cwt" class="active">cwt</button>
+          <button type="button" data-unit="gal">gal</button>
+        </div>
       </div>
       <div class="panel-body">
         <div class="chart-box h300"><canvas id="milkProdLineChart"></canvas></div>
@@ -311,7 +314,10 @@
     <div class="panel">
       <div class="panel-head">
         <h3>TTM Jul 2026 Production by Month</h3>
-        <span class="hint">cwt</span>
+        <div class="unit-toggle js-rawmilk-unit-toggle" role="group" aria-label="Unit of measurement">
+          <button type="button" data-unit="cwt" class="active">cwt</button>
+          <button type="button" data-unit="gal">gal</button>
+        </div>
       </div>
       <div class="panel-body">
         <div class="chart-box h300"><canvas id="milkProdBarChart"></canvas></div>
@@ -388,7 +394,13 @@
   </div>
 
   <div class="panel">
-    <div class="panel-head"><h3>Monthly Operating Metrics</h3></div>
+    <div class="panel-head">
+      <h3>Monthly Operating Metrics</h3>
+      <div class="unit-toggle js-plant-unit-toggle" role="group" aria-label="Unit of measurement">
+        <button type="button" data-unit="cwt" class="active">cwt</button>
+        <button type="button" data-unit="gal">gal</button>
+      </div>
+    </div>
     <div class="panel-body">
       <div class="tbl-wrap">
         <table class="dt" id="plantMetricTable"></table>

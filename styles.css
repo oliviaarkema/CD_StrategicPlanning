@@ -150,6 +150,18 @@ nav.topnav button.active{color:var(--kelly);border-bottom-color:var(--kelly);fon
 }
 .panel-head h3{margin:0;font-size:1rem;font-weight:600;color:var(--green-dark)}
 .panel-head .hint{font-size:.8rem;color:var(--muted);margin-left:auto}
+.unit-toggle{
+  display:inline-flex;background:var(--bg);border:1px solid var(--border);
+  border-radius:999px;padding:2px;gap:2px;flex-shrink:0;margin-left:auto;
+}
+.unit-toggle button{
+  border:0;background:transparent;color:var(--muted);
+  font-size:.72rem;font-weight:600;letter-spacing:.3px;
+  padding:4px 11px;border-radius:999px;cursor:pointer;
+  transition:background .15s,color .15s;
+}
+.unit-toggle button:hover{color:var(--ink)}
+.unit-toggle button.active{background:var(--kelly);color:#fff}
 .panel-body{padding:20px}
 .chart-box{position:relative}
 .chart-box.h240{height:240px}
