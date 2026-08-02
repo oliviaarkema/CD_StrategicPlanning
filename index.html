@@ -619,13 +619,25 @@
     </div>
   </div>
 
-  <div class="panel">
-    <div class="panel-head">
-      <h3>Overall Market Penetration by Distance</h3>
-      <span class="hint">radius from distribution center</span>
+  <div class="grid-2">
+    <div class="panel">
+      <div class="panel-head">
+        <h3>Overall Market Penetration by Distance</h3>
+        <span class="hint">distance from Country Dairy</span>
+      </div>
+      <div class="panel-body">
+        <div class="radius-heatmap" id="marketRadiusHeatmap"></div>
+        <p class="panel-note">Note: penetration figures include any customer of any size within each distance band.</p>
+      </div>
     </div>
-    <div class="panel-body">
-      <div class="radius-heatmap" id="marketRadiusHeatmap"></div>
+    <div class="panel">
+      <div class="panel-head">
+        <h3>Customer Revenue by Distance</h3>
+        <span class="hint">distance from Country Dairy</span>
+      </div>
+      <div class="panel-body">
+        <div class="chart-box h320"><canvas id="marketRevenueByDistanceChart"></canvas></div>
+      </div>
     </div>
   </div>
 

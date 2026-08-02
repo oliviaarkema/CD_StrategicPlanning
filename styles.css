@@ -163,6 +163,7 @@ nav.topnav button.active{color:var(--kelly);border-bottom-color:var(--kelly);fon
 .unit-toggle button:hover{color:var(--ink)}
 .unit-toggle button.active{background:var(--kelly);color:#fff}
 .panel-body{padding:20px}
+.panel-note{font-size:.8rem;color:var(--muted);margin:12px 0 0}
 .chart-box{position:relative}
 .chart-box.h240{height:240px}
 .chart-box.h280{height:280px}

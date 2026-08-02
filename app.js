@@ -779,6 +779,53 @@ function initMarket() {
     }
   });
 
+  const REV_BY_DISTANCE = [
+    {label:"Supermarket",       color:C.blue,  data:[{x:5,y:118000},{x:15,y:105000},{x:30,y:96000},{x:45,y:88000},{x:70,y:74000},{x:95,y:61000},{x:130,y:52000},{x:180,y:38000},{x:250,y:29000},{x:340,y:19000},{x:420,y:12000}]},
+    {label:"School",            color:C.kelly, data:[{x:8,y:82000},{x:20,y:75000},{x:35,y:68000},{x:55,y:59000},{x:80,y:49000},{x:110,y:41000},{x:150,y:33000},{x:210,y:24000},{x:290,y:16000},{x:380,y:9000}]},
+    {label:"Convenience Store", color:C.green, data:[{x:3,y:54000},{x:12,y:49000},{x:25,y:44000},{x:40,y:38000},{x:60,y:31000},{x:85,y:25000},{x:120,y:19000},{x:170,y:13000},{x:230,y:8000},{x:310,y:5000}]},
+    {label:"Coffee Shop",       color:C.mid,   data:[{x:6,y:37000},{x:18,y:33000},{x:33,y:28000},{x:50,y:23000},{x:75,y:18000},{x:105,y:14000},{x:145,y:10000},{x:200,y:6500},{x:270,y:4000}]},
+    {label:"Restaurant",        color:C.amber, data:[{x:10,y:41000},{x:22,y:36000},{x:38,y:31000},{x:58,y:26000},{x:82,y:20000},{x:115,y:15000},{x:155,y:11000},{x:215,y:7000},{x:295,y:4500}]},
+  ];
+  const allRevPoints = REV_BY_DISTANCE.flatMap(t => t.data);
+  const revN = allRevPoints.length;
+  const revSumX = allRevPoints.reduce((s,p) => s+p.x, 0);
+  const revSumY = allRevPoints.reduce((s,p) => s+p.y, 0);
+  const revSumXY = allRevPoints.reduce((s,p) => s+p.x*p.y, 0);
+  const revSumXX = allRevPoints.reduce((s,p) => s+p.x*p.x, 0);
+  const revSlope = (revN*revSumXY - revSumX*revSumY) / (revN*revSumXX - revSumX*revSumX);
+  const revIntercept = (revSumY - revSlope*revSumX) / revN;
+  const revMinX = Math.min(...allRevPoints.map(p => p.x));
+  const revMaxX = Math.max(...allRevPoints.map(p => p.x));
+  const revTrendline = [
+    {x:revMinX, y:revSlope*revMinX + revIntercept},
+    {x:revMaxX, y:revSlope*revMaxX + revIntercept}
+  ];
+
+  new Chart(document.getElementById("marketRevenueByDistanceChart"), {
+    type:"scatter",
+    data:{
+      datasets: [
+        ...REV_BY_DISTANCE.map(t => ({
+          label:t.label, data:t.data, backgroundColor:t.color, borderColor:t.color, pointRadius:5, pointHoverRadius:7
+        })),
+        {
+          label:"Trendline", type:"line", data:revTrendline,
+          borderColor:C.red, backgroundColor:"transparent", borderWidth:2, borderDash:[6,4],
+          pointRadius:0, pointHoverRadius:0, hitRadius:0, tension:0, order:0
+        }
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{position:"top"},
+        tooltip:{callbacks:{label: c => c.dataset.label==="Trendline" ? "Trendline: "+fmtK(c.parsed.y) : c.dataset.label + ": " + fmtK(c.parsed.y) + " at " + c.parsed.x + " mi"}} },
+      scales:{
+        x:{grid:{color:gridColor()}, title:{display:true, text:"Distance from Country Dairy (mi)"}},
+        y:{grid:{color:gridColor()}, title:{display:true, text:"Annual Customer Revenue"}, ticks:{callback:v=>fmtK(v)}}
+      }
+    }
+  });
+
   const marketData = [
     ["School / Institutional",  "High",     "+9.4%", "Regional supplier preference, contract stability", "Expand"],
     ["Direct-to-Consumer",      "Moderate", "+14%",  "Local-buying preference, farm store visibility",    "Invest"],
