@@ -343,8 +343,8 @@ function initAnimals() {
 // ═══════════════════════════════════════════════════════════════════════════════
 //  RAW MILK PRODUCTION
 // ═══════════════════════════════════════════════════════════════════════════════
-const PROD_2025 = [7820,7380,8050,8210,8540,7990,7860,7740,7950,8280,8090,8280];
-const PROD_2024 = [7620,7100,7840,7980,8290,7750,7640,7510,7730,8060,7880,8020];
+const PROD_2025 = [3192,3179,4038,3288,3297,3344,3147,3168,4029,3177,3154,3979];
+const PROD_2024 = [3095,3165,3962,3080,3126,3929,3785,3018,3794,3055,3045,3791];
 const MONTHS_SHORT = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 const CWT_TO_GAL = 11.63; // 1 cwt of milk ≈ 11.63 gallons (100 lb / ~8.6 lb per gallon)
 
@@ -375,7 +375,7 @@ function renderRawMilkCharts(unit) {
         tooltip:{callbacks:{label: c => c.dataset.label + ": " + fmt(c.parsed.y) + " " + label}} },
       scales:{
         x:{grid:{color:gridColor()}},
-        y:{grid:{color:gridColor()}, ticks:{callback:v=>fmt(v)}, min:Math.round(6500*factor)}
+        y:{grid:{color:gridColor()}, ticks:{callback:v=>fmt(v)}, min:Math.round(2800*factor)}
       }
     }
   });
