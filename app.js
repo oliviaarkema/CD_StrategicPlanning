@@ -137,8 +137,6 @@ function initHome() {
       ["Milk Quality","SCC (cells/mL)"],
       ["Plant","Utilization Rate"],
       ["Plant","Labor Hrs/cwt"],
-      ["Crops","Corn Silage (t/a)"],
-      ["Crops","Alfalfa (t/a)"],
       ["Financials","Total Revenue", fmtM(rev.slice(-12).reduce((s,v)=>s+v,0)), fmtM(25375643), "+0.3%"],
       ["Financials","Total Costs", fmtM(cost.slice(-12).reduce((s,v)=>s+v,0)), fmtM(24699964), "+0.6%"],
       ["Financials","Operating Margin", "2.4%", "2.7%", "−0.3 pts"],
