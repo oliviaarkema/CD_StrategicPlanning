@@ -138,11 +138,11 @@ function initHome() {
       ["Plant","Utilization Rate"],
       ["Plant","Labor Hrs/cwt"],
       ["Financials","Total Revenue", fmtM(rev.slice(-12).reduce((s,v)=>s+v,0)), fmtM(25375643), "+0.3%"],
-      // Total Costs and Operating Margin hashed out: the cost figures we have include
-      // non-operating items (e.g. bank note interest), so these rows would be misleading
-      // until we get a cost breakdown that separates those out.
-      // ["Financials","Total Costs", fmtM(cost.slice(-12).reduce((s,v)=>s+v,0)), fmtM(24699964), "+0.6%"],
-      // ["Financials","Operating Margin", "2.4%", "2.7%", "−0.3 pts"],
+      // Total Costs and Operating Margin: figures withheld — the cost data we have
+      // includes non-operating items (e.g. bank note interest), so these would be
+      // misleading until we get a cost breakdown that separates those out.
+      ["Financials","Total Costs"],
+      ["Financials","Operating Margin"],
     ].map(([a,m,cur,prior,chg]) =>
       `<tr><td style="color:var(--muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.4px">${a}</td>
        <td>${m}</td><td class="n">${cur ?? "###"}</td><td class="n" style="color:var(--muted)">${prior ?? "###"}</td>
