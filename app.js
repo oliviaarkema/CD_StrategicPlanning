@@ -59,9 +59,24 @@ function initHome() {
   document.getElementById("h-cows-d").textContent= "–### head vs TTM Jul 2025";
   document.getElementById("h-acres").textContent = "2,500";
 
-  const months = ["Jul","Aug","Sep","Oct","Nov","Dec","Jan","Feb","Mar","Apr","May","Jun"];
-  const rev  = [2585013, 2446680, 2244856, 2418070, 1972220, 2411809, 1686045, 1646609, 1861769, 2062624, 2028185, 2099555];
-  const cost = [2572680, 2319274, 2320298, 2643262, 2138672, 2235684, 1557016, 1614992, 1674430, 1997175, 1861458, 1918430];
+  const months = [
+    "Jul '24","Aug '24","Sep '24","Oct '24","Nov '24","Dec '24",
+    "Jan '25","Feb '25","Mar '25","Apr '25","May '25","Jun '25",
+    "Jul '25","Aug '25","Sep '25","Oct '25","Nov '25","Dec '25",
+    "Jan '26","Feb '26","Mar '26","Apr '26","May '26","Jun '26",
+  ];
+  const rev  = [
+    1645545, 2299610, 2055377, 2225430, 2138141, 2086631,
+    2079507, 1772753, 2087068, 2184308, 2277922, 2523351,
+    2585013, 2446680, 2244856, 2418070, 1972220, 2411809,
+    1686045, 1646609, 1861769, 2062624, 2028185, 2099555,
+  ];
+  const cost = [
+    1087512, 2341380, 2149066, 2077783, 2130164, 2175007,
+    2150906, 1836586, 1942402, 2111801, 2241576, 2455781,
+    2572680, 2319274, 2320298, 2643262, 2138672, 2235684,
+    1557016, 1614992, 1674430, 1997175, 1861458, 1918430,
+  ];
   const netIncome = rev.map((r,i) => r - cost[i]);
 
   new Chart(document.getElementById("homeRevChart"), {
@@ -124,8 +139,8 @@ function initHome() {
       ["Plant","Labor Hrs/cwt"],
       ["Crops","Corn Silage (t/a)"],
       ["Crops","Alfalfa (t/a)"],
-      ["Financials","Total Revenue", fmtM(rev.reduce((s,v)=>s+v,0)), fmtM(25375643), "+0.3%"],
-      ["Financials","Total Costs", fmtM(cost.reduce((s,v)=>s+v,0)), fmtM(24699964), "+0.6%"],
+      ["Financials","Total Revenue", fmtM(rev.slice(-12).reduce((s,v)=>s+v,0)), fmtM(25375643), "+0.3%"],
+      ["Financials","Total Costs", fmtM(cost.slice(-12).reduce((s,v)=>s+v,0)), fmtM(24699964), "+0.6%"],
       ["Financials","Operating Margin", "2.4%", "2.7%", "−0.3 pts"],
     ].map(([a,m,cur,prior,chg]) =>
       `<tr><td style="color:var(--muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.4px">${a}</td>
