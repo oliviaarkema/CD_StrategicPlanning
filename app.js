@@ -509,10 +509,10 @@ function initCrops() {
   new Chart(document.getElementById("cropYieldChart"), {
     type:"bar",
     data:{
-      labels:["Corn Silage","Alfalfa Hay","Soybeans"],
+      labels:["Corn Silage","Alfalfa Hay","Wheat/Rye"],
       datasets:[
-        {label:"Country Dairy Actual", data:[22.4,4.9,52], backgroundColor:C.kelly, borderRadius:4},
-        {label:"MI State Average",     data:[19.8,4.2,45], backgroundColor:C.muted, borderRadius:4},
+        {label:"Country Dairy Actual", data:[22.4,4.9,null], backgroundColor:C.kelly, borderRadius:4},
+        {label:"MI State Average",     data:[19.8,4.2,null], backgroundColor:C.muted, borderRadius:4},
       ]
     },
     options:{
