@@ -55,8 +55,7 @@ function initHome() {
   document.getElementById("h-rev-d").textContent = "▲ 88.2% vs TTM Jul 2025";
   document.getElementById("h-cwt").textContent   = "###";
   document.getElementById("h-cwt-d").textContent = "▲ ###% vs TTM Jul 2025";
-  document.getElementById("h-cows").textContent  = "###";
-  document.getElementById("h-cows-d").textContent= "–### head vs TTM Jul 2025";
+  document.getElementById("h-cows").textContent  = "1,226";
   document.getElementById("h-acres").textContent = "2,500";
 
   const months = [
@@ -343,8 +342,8 @@ function initAnimals() {
 // ═══════════════════════════════════════════════════════════════════════════════
 //  RAW MILK PRODUCTION
 // ═══════════════════════════════════════════════════════════════════════════════
-const PROD_2025 = [3192,3179,4038,3288,3297,3344,3147,3168,4029,3177,3154,3979];
-const PROD_2024 = [3095,3165,3962,3080,3126,3929,3785,3018,3794,3055,3045,3791];
+const PROD_2025 = [3534,3179,3577,3523,3650,3583,3484,3508,3453,3518,3379,3524];
+const PROD_2024 = [3426,3165,3509,3300,3461,3367,3352,3342,3252,3383,3262,3358];
 const MONTHS_SHORT = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 const CWT_TO_GAL = 11.63; // 1 cwt of milk ≈ 11.63 gallons (100 lb / ~8.6 lb per gallon)
 
@@ -395,10 +394,10 @@ function initRawMilk() {
   new Chart(document.getElementById("a2StatusChart"), {
     type:"doughnut",
     data:{
-      labels:["A2/A2 (Homozygous)","A1/A2 (Heterozygous)","A1/A1","Untested"],
+      labels:["A2 Only (A2/A2)","Carries A1 Allele","Untested"],
       datasets:[{
-        data:[58, 27, 9, 6],
-        backgroundColor:[C.green, C.kelly, C.amber, C.muted],
+        data:[60, 35, 5],
+        backgroundColor:[C.green, C.kelly, C.muted],
         borderWidth:2,
         borderColor: getComputedStyle(document.documentElement).getPropertyValue("--panel").trim()
       }]

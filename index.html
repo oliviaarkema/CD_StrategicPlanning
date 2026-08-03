@@ -69,8 +69,7 @@
     </div>
     <div class="stat">
       <div class="num" id="h-cows">—</div>
-      <div class="lbl">Milking Herd<span class="sub">average cows in milk</span></div>
-      <div class="delta neu" id="h-cows-d">—</div>
+      <div class="lbl">Milking Herd<span class="sub">headcount, Aug 2026</span></div>
     </div>
     <div class="stat">
       <div class="num" id="h-acres">—</div>
@@ -320,8 +319,8 @@
         </div>
       </div>
       <div class="panel-body">
-        <div class="chart-box h300"><canvas id="milkProdLineChart"></canvas></div>
-        <p class="panel-note">Built from Casey's weekly raw-milk KPI log (actual pounds delivered per week, summed by calendar month). Some months land 5 weekly readings instead of 4, which shows up as a bump &mdash; that's a calendar artifact, not a real production spike.</p>
+        <div class="chart-box h300 connected"><canvas id="milkProdLineChart"></canvas></div>
+        <p class="panel-note">Built from Casey's weekly raw-milk KPI log: each month's weeks are averaged into a pounds-per-day rate, then multiplied by that month's actual day count &mdash; this avoids the bump some months would otherwise show just from catching 5 weekly readings instead of 4.</p>
       </div>
     </div>
     <div class="panel">
@@ -330,7 +329,8 @@
         <span class="hint">by genetic test result</span>
       </div>
       <div class="panel-body">
-        <div class="chart-box h300"><canvas id="a2StatusChart"></canvas></div>
+        <div class="chart-box h300 connected"><canvas id="a2StatusChart"></canvas></div>
+        <p class="panel-note">Aug 2026 genetic test tally: 738 A2/A2, 429 carrying A1, 58 untested (herd total 1,226 per Casey's KPI log). "Carries A1 Allele" combines A1/A2 and A1/A1 &mdash; the source doesn't split those two.</p>
       </div>
     </div>
   </div>
