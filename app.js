@@ -321,18 +321,16 @@ function initAnimals() {
   });
 
   const anData = [
-    {type:"Calves",    head:180, avgP:340, total:61200},
-    {type:"Cull Cows", head: 42, avgP:890, total:37380},
-    {type:"Steers",    head: 24, avgP:1850,total:44400},
+    {type:"Calves",    head:null, avgP:1500, total:null},
+    {type:"Cull Cows", head:null, avgP:null, total:null},
+    {type:"Steers",    head:null, avgP:3500, total:null},
   ];
-  const totalRev = anData.reduce((s,r)=>s+r.total,0);
-  const totalHead= anData.reduce((s,r)=>s+r.head, 0);
   document.getElementById("animalTable").innerHTML =
     `<thead><tr><th>Category</th><th class="n">Head Sold</th>
     <th class="n">Avg $/Head</th><th class="n">Total Revenue</th><th class="n">% of Animal Rev</th></tr></thead>
     <tbody>${anData.map(r =>
-      `<tr><td>${r.type}</td><td class="n">###</td>
-      <td class="n">###</td><td class="n">###</td>
+      `<tr><td>${r.type}</td><td class="n">${r.head ?? "###"}</td>
+      <td class="n">${r.avgP!=null ? fmtD(r.avgP) : "###"}</td><td class="n">${r.total ?? "###"}</td>
       <td class="n">###</td></tr>`
     ).join("")}
     <tr style="font-weight:700;border-top:2px solid var(--border)">
