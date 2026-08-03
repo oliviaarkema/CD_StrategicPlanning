@@ -58,11 +58,11 @@ function initHome() {
   document.getElementById("h-cows").textContent  = "###";
   document.getElementById("h-cows-d").textContent= "–### head vs TTM Jul 2025";
   document.getElementById("h-acres").textContent = "2,500";
-  document.getElementById("h-acres-d").textContent = "0 acres vs TTM Jul 2025";
 
   const months = ["Jul","Aug","Sep","Oct","Nov","Dec","Jan","Feb","Mar","Apr","May","Jun"];
   const rev  = [2585013, 2446680, 2244856, 2418070, 1972220, 2411809, 1686045, 1646609, 1861769, 2062624, 2028185, 2099555];
   const cost = [2572680, 2319274, 2320298, 2643262, 2138672, 2235684, 1557016, 1614992, 1674430, 1997175, 1861458, 1918430];
+  const netIncome = rev.map((r,i) => r - cost[i]);
 
   new Chart(document.getElementById("homeRevChart"), {
     type: "line",
@@ -75,6 +75,9 @@ function initHome() {
         { label:"Costs", data: cost,
           borderColor: C.muted, backgroundColor:"transparent",
           borderDash:[5,4], tension:.35, pointRadius:3, pointHoverRadius:5 },
+        { label:"Net Income", data: netIncome,
+          borderColor: C.blue, backgroundColor:"rgba(37,99,235,0.15)",
+          fill:"origin", tension:.35, pointRadius:3, pointHoverRadius:5 },
       ]
     },
     options: {
@@ -121,13 +124,13 @@ function initHome() {
       ["Plant","Labor Hrs/cwt"],
       ["Crops","Corn Silage (t/a)"],
       ["Crops","Alfalfa (t/a)"],
-      ["Financials","Total Revenue"],
-      ["Financials","Total Costs"],
-      ["Financials","Operating Margin"],
-    ].map(([a,m]) =>
+      ["Financials","Total Revenue", fmtM(rev.reduce((s,v)=>s+v,0)), fmtM(25375643), "+0.3%"],
+      ["Financials","Total Costs", fmtM(cost.reduce((s,v)=>s+v,0)), fmtM(24699964), "+0.6%"],
+      ["Financials","Operating Margin", "2.4%", "2.7%", "−0.3 pts"],
+    ].map(([a,m,cur,prior,chg]) =>
       `<tr><td style="color:var(--muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.4px">${a}</td>
-       <td>${m}</td><td class="n">###</td><td class="n" style="color:var(--muted)">###</td>
-       <td class="n" style="color:var(--muted)">###</td></tr>`
+       <td>${m}</td><td class="n">${cur ?? "###"}</td><td class="n" style="color:var(--muted)">${prior ?? "###"}</td>
+       <td class="n" style="color:var(--muted)">${chg ?? "###"}</td></tr>`
     ).join("")}
     </tbody>`;
 }
