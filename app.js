@@ -51,8 +51,8 @@ function initSection(name) {
 //  HOME
 // ═══════════════════════════════════════════════════════════════════════════════
 function initHome() {
-  document.getElementById("h-rev").textContent   = "$812,574";
-  document.getElementById("h-rev-d").textContent = "▲ 118.0% vs TTM Jul 2025";
+  document.getElementById("h-rev").textContent   = "$610,096";
+  document.getElementById("h-rev-d").textContent = "▲ 88.2% vs TTM Jul 2025";
   document.getElementById("h-cwt").textContent   = "###";
   document.getElementById("h-cwt-d").textContent = "▲ ###% vs TTM Jul 2025";
   document.getElementById("h-cows").textContent  = "###";
@@ -60,9 +60,9 @@ function initHome() {
   document.getElementById("h-acres").textContent = "###";
   document.getElementById("h-acres-d").textContent = "Unchanged";
 
-  const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-  const rev  = [170, 163, 172, 171, 167, 151, 145, 144, 153, 169, 171, 181];
-  const cost = [156, 149, 160, 158, 162, 150, 147, 146, 150, 157, 156, 159];
+  const months = ["Jul","Aug","Sep","Oct","Nov","Dec","Jan","Feb","Mar","Apr","May","Jun"];
+  const rev  = [2585, 2447, 2245, 2418, 1972, 2412, 1686, 1647, 1862, 2063, 2028, 2100];
+  const cost = [2573, 2319, 2320, 2643, 2139, 2236, 1557, 1615, 1674, 1997, 1861, 1918];
 
   new Chart(document.getElementById("homeRevChart"), {
     type: "line",
