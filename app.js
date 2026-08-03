@@ -392,22 +392,24 @@ function initRawMilk() {
     }));
 
   new Chart(document.getElementById("a2StatusChart"), {
-    type:"doughnut",
+    type:"bar",
     data:{
-      labels:["A2 Only (A2/A2)","Carries A1 Allele","Untested"],
-      datasets:[{
-        data:[60, 35, 5],
-        backgroundColor:[C.green, C.kelly, C.muted],
-        borderWidth:2,
-        borderColor: getComputedStyle(document.documentElement).getPropertyValue("--panel").trim()
-      }]
+      labels:["Apr '25","Jun '26","Jul '26","Aug '26"],
+      datasets:[
+        {label:"% A2",      data:[49.0, 61.0, 60.5, 60.2], backgroundColor:C.green},
+        {label:"% A1",      data:[35.0, 36.0, 34.9, 35.0], backgroundColor:C.kelly},
+        {label:"% Unknown", data:[16.0,  3.0,  4.4,  4.7], backgroundColor:C.muted},
+      ]
     },
     options:{
       responsive:true, maintainAspectRatio:false,
-      cutout:"58%",
       plugins:{
-        legend:{position:"right"},
-        tooltip:{callbacks:{label: c => c.label + ": " + c.parsed + "% of herd"}}
+        legend:{position:"top"},
+        tooltip:{callbacks:{label: c => c.dataset.label + ": " + c.parsed.y + "%"}}
+      },
+      scales:{
+        x:{grid:{display:false}, stacked:true},
+        y:{grid:{color:gridColor()}, stacked:true, max:100, ticks:{callback:v=>v+"%"}}
       }
     }
   });
