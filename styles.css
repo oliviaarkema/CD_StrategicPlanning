@@ -178,6 +178,8 @@ nav.topnav button.active{color:var(--kelly);border-bottom-color:var(--kelly);fon
   font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;
   color:#fff;background:rgba(20,30,20,.72);pointer-events:none;
 }
+.chart-box.connected canvas{filter:none;opacity:1}
+.chart-box.connected::after{content:none}
 
 /* ── Grid layouts ── */
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:24px}

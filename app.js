@@ -57,8 +57,8 @@ function initHome() {
   document.getElementById("h-cwt-d").textContent = "▲ ###% vs TTM Jul 2025";
   document.getElementById("h-cows").textContent  = "###";
   document.getElementById("h-cows-d").textContent= "–### head vs TTM Jul 2025";
-  document.getElementById("h-acres").textContent = "###";
-  document.getElementById("h-acres-d").textContent = "Unchanged";
+  document.getElementById("h-acres").textContent = "2,500";
+  document.getElementById("h-acres-d").textContent = "0 acres vs TTM Jul 2025";
 
   const months = ["Jul","Aug","Sep","Oct","Nov","Dec","Jan","Feb","Mar","Apr","May","Jun"];
   const rev  = [2585, 2447, 2245, 2418, 1972, 2412, 1686, 1647, 1862, 2063, 2028, 2100];
