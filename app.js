@@ -527,45 +527,6 @@ function initCrops() {
       }
     }
   });
-
-  new Chart(document.getElementById("cropCostChart"), {
-    type:"bar",
-    data:{
-      labels:["Corn Silage","Alfalfa Hay","Soybeans"],
-      datasets:[
-        {label:"Homegrown Cost",  data:[41,178,9.20], backgroundColor:C.green,  borderRadius:4},
-        {label:"Market Price",    data:[55,225,11.80], backgroundColor:C.muted, borderRadius:4},
-      ]
-    },
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      plugins:{
-        legend:{position:"top"},
-        tooltip:{callbacks:{label: c => c.dataset.label + ": $" + c.parsed.y +
-          (c.dataIndex===2 ? "/bu" : "/ton")}}
-      },
-      scales:{
-        x:{grid:{display:false}},
-        y:{grid:{color:gridColor()}, ticks:{callback:v=>"$"+v}}
-      }
-    }
-  });
-
-  document.getElementById("cropTable").innerHTML =
-    `<thead><tr><th>Crop</th><th class="n">Acres</th><th class="n">Yield</th>
-    <th class="n">MI Avg</th><th class="n">Cost/Unit</th><th class="n">Total Tons/Bu</th>
-    <th class="n">Homegrown Value</th></tr></thead>
-    <tbody>${[
-      ["Corn Silage","###","###","###","###","###","###"],
-      ["Alfalfa Hay","###","###","###","###","###","###"],
-      ["Soybeans","###","###","###","###","###","###"],
-      ["Other/Cover","—","—","—","—","—","—"],
-    ].map(r=>`<tr>${r.map((c,i)=>i>0?`<td class="n">${c}</td>`:`<td>${c}</td>`).join("")}</tr>`).join("")}
-    <tr style="font-weight:700;border-top:2px solid var(--border)">
-      <td>Total / Avg</td><td class="n">###</td><td class="n">—</td>
-      <td class="n">—</td><td class="n">—</td><td class="n">—</td>
-      <td class="n">###</td>
-    </tr></tbody>`;
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
