@@ -69,13 +69,15 @@
     </div>
     <div class="stat">
       <div class="num" id="h-cows">—</div>
-      <div class="lbl">Milking Herd<span class="sub">headcount, Aug 2026</span></div>
+      <div class="lbl">Milking Herd<span class="sub">headcount, Aug 2026<sup>1</sup></span></div>
+      <div class="delta up" id="h-cows-d">—</div>
     </div>
     <div class="stat">
       <div class="num" id="h-acres">—</div>
       <div class="lbl">Cropland<span class="sub">owned &amp; rented acres</span></div>
     </div>
   </div>
+  <p class="panel-note"><sup>1</sup> Per Casey, Aug 2026: Montague 701 milking / 0 dry; New Era 382 milking / 145 dry. Herd growth has topped out at current robot milking capacity &mdash; no more animals can be added without new robots.</p>
 
   <div class="callout">
     <div class="eyebrow">Executive Summary</div>
@@ -286,21 +288,21 @@
       <div class="delta up">▲ 0.4% vs TTM Jul 2025</div>
     </div>
     <div class="stat">
-      <div class="num">83.6</div>
-      <div class="lbl">Lbs / Cow / Day<span class="sub">target: 94.3 (660 lbs/wk)</span></div>
-      <div class="delta dn">▼ 11.3% below target</div>
+      <div class="num">96</div>
+      <div class="lbl">Lbs / Cow / Day<span class="sub">target: 94.3 (660 lbs/wk)<sup>2</sup></span></div>
+      <div class="delta up">▲ 3.2% vs year ago (93)</div>
     </div>
     <div class="stat">
-      <div class="num">###</div>
-      <div class="lbl">Butterfat<span class="sub">annual average</span></div>
-      <div class="delta up">▲ ### pts</div>
+      <div class="num">3.9%</div>
+      <div class="lbl">Butterfat<span class="sub">annual average<sup>2</sup></span></div>
     </div>
     <div class="stat">
-      <div class="num">###</div>
-      <div class="lbl">Somatic Cell Count<span class="sub">cells/mL · premium tier</span></div>
-      <div class="delta up">▼ ### from TTM Jul 2025</div>
+      <div class="num">250,000</div>
+      <div class="lbl">Somatic Cell Count<span class="sub">summer avg · target: &lt;150K<sup>2</sup></span></div>
+      <div class="delta dn">▲ 25% vs year ago (200K)</div>
     </div>
   </div>
+  <p class="panel-note"><sup>2</sup> Per Casey, Aug 2026. Lbs/cow/day and butterfat are measured at the robots (and cross-checked at the plant/outside labs for butterfat); SCC comes from bulk-tank samples sent to outside labs. SCC runs seasonal &mdash; ~175,000 most of the year, creeping toward 250,000 in summer; lofty goal is 100,000, Casey would be satisfied under 150,000. Butterfat has held around 3.9% for the past two years.</p>
 
   <div class="callout">
     <div class="eyebrow">Strategic Finding</div>
@@ -330,7 +332,7 @@
       </div>
       <div class="panel-body">
         <div class="chart-box h300 connected"><canvas id="a2StatusChart"></canvas></div>
-        <p class="panel-note">From Casey's monthly genetic-test KPI log. Reported months only (data isn't collected every month). Aug 2026 head counts: 738 A2, 429 A1, 58 unknown, herd total 1,226.</p>
+        <p class="panel-note">From Casey's monthly genetic-test KPI log. Reported months only (data isn't collected every month). Aug 2026 head counts: 738 A2, 429 A1, 58 unknown, herd total 1,226 &mdash; this figure includes dry cows (1,226 &asymp; 1,085 milking + 145 dry, per Casey's Aug 2026 site breakdown), so it runs higher than the Home page's milking-only headcount.</p>
       </div>
     </div>
   </div>

@@ -55,7 +55,8 @@ function initHome() {
   document.getElementById("h-rev-d").textContent = "▲ 88.2% vs TTM Jul 2025";
   document.getElementById("h-cwt").textContent   = "###";
   document.getElementById("h-cwt-d").textContent = "▲ ###% vs TTM Jul 2025";
-  document.getElementById("h-cows").textContent  = "1,226";
+  document.getElementById("h-cows").textContent  = "1,085";
+  document.getElementById("h-cows-d").textContent= "▲ 7.5% vs year ago (1,009)";
   document.getElementById("h-acres").textContent = "2,500";
 
   const months = [
