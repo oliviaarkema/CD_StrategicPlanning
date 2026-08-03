@@ -374,7 +374,7 @@ function renderRawMilkCharts(unit) {
         tooltip:{callbacks:{label: c => c.dataset.label + ": " + fmt(c.parsed.y) + " " + label}} },
       scales:{
         x:{grid:{color:gridColor()}},
-        y:{grid:{color:gridColor()}, ticks:{callback:v=>fmt(v)}, min:Math.round(25000*factor)}
+        y:{grid:{color:gridColor()}, ticks:{callback:v=>fmt(v)}, min:0}
       }
     }
   });
