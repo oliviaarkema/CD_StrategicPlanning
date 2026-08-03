@@ -342,9 +342,9 @@ function initAnimals() {
 // ═══════════════════════════════════════════════════════════════════════════════
 //  RAW MILK PRODUCTION
 // ═══════════════════════════════════════════════════════════════════════════════
-const PROD_2025 = [30393,27336,30759,30296,31393,30812,29963,30169,29697,30252,29058,30307];
-const PROD_2024 = [29467,27219,30180,28379,29761,28959,28831,28739,27969,29090,28054,28880];
-const MONTHS_SHORT = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const PROD_2025 = [29963,30169,29697,30252,29058,30307,30393,27336,30759,30296,31393,30812];
+const PROD_2024 = [28831,28739,27969,29090,28054,28880,29467,27219,30180,28379,29761,28959];
+const FISCAL_MONTHS = ["Jul","Aug","Sep","Oct","Nov","Dec","Jan","Feb","Mar","Apr","May","Jun"];
 const CWT_TO_GAL = 11.63; // 1 cwt of milk ≈ 11.63 gallons (100 lb / ~8.6 lb per gallon)
 
 let rawMilkLineChart = null;
@@ -360,7 +360,7 @@ function renderRawMilkCharts(unit) {
   rawMilkLineChart = new Chart(document.getElementById("milkProdLineChart"), {
     type:"line",
     data:{
-      labels: MONTHS_SHORT,
+      labels: FISCAL_MONTHS,
       datasets:[
         {label:"TTM Jul 2026", data:data2025, borderColor:C.kelly,
           backgroundColor:"rgba(61,174,43,.1)", fill:true, tension:.35, pointRadius:3},
