@@ -61,8 +61,8 @@ function initHome() {
   document.getElementById("h-acres-d").textContent = "0 acres vs TTM Jul 2025";
 
   const months = ["Jul","Aug","Sep","Oct","Nov","Dec","Jan","Feb","Mar","Apr","May","Jun"];
-  const rev  = [2585, 2447, 2245, 2418, 1972, 2412, 1686, 1647, 1862, 2063, 2028, 2100];
-  const cost = [2573, 2319, 2320, 2643, 2139, 2236, 1557, 1615, 1674, 1997, 1861, 1918];
+  const rev  = [2585013, 2446680, 2244856, 2418070, 1972220, 2411809, 1686045, 1646609, 1861769, 2062624, 2028185, 2099555];
+  const cost = [2572680, 2319274, 2320298, 2643262, 2138672, 2235684, 1557016, 1614992, 1674430, 1997175, 1861458, 1918430];
 
   new Chart(document.getElementById("homeRevChart"), {
     type: "line",
@@ -80,10 +80,10 @@ function initHome() {
     options: {
       responsive:true, maintainAspectRatio:false,
       plugins: { legend:{position:"top"},
-        tooltip:{callbacks:{label: c => "$" + c.parsed.y + "K"}} },
+        tooltip:{callbacks:{label: c => c.dataset.label + ": " + fmtD(c.parsed.y)}} },
       scales: {
         x: { grid:{color:gridColor()} },
-        y: { grid:{color:gridColor()}, ticks:{callback: v => "$"+v+"K"} }
+        y: { grid:{color:gridColor()}, ticks:{callback: v => fmtM(v)} }
       }
     }
   });
