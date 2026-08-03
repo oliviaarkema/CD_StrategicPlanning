@@ -427,19 +427,24 @@
     <h2>Crop Efficiency</h2>
   </div>
 
-  <div class="stats">
+  <div class="stats stats-5">
     <div class="stat">
       <div class="num">2,500</div>
       <div class="lbl">Acres Farmed<span class="sub">owned &amp; rented</span></div>
     </div>
     <div class="stat">
       <div class="num">###</div>
-      <div class="lbl">Corn Silage Yield<span class="sub">tons / acre · MI avg: ###</span></div>
+      <div class="lbl">Corn Silage Yield<span class="sub">tons / acre · MI avg: 20.5</span></div>
       <div class="delta up">▲ ###% above avg</div>
     </div>
     <div class="stat">
       <div class="num">###</div>
-      <div class="lbl">Alfalfa Yield<span class="sub">tons / acre · MI avg: ###</span></div>
+      <div class="lbl">Alfalfa Yield<span class="sub">tons / acre · MI avg: 2.60</span></div>
+      <div class="delta up">▲ ###% above avg</div>
+    </div>
+    <div class="stat">
+      <div class="num">###</div>
+      <div class="lbl">Wheat/Rye Yield<span class="sub">bu / acre · MI avg: 87.0</span></div>
       <div class="delta up">▲ ###% above avg</div>
     </div>
     <div class="stat">
@@ -463,6 +468,17 @@
     </div>
     <div class="panel-body">
       <div class="chart-box h260"><canvas id="cropYieldChart"></canvas></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head"><h3>Appendix: Data Sources</h3></div>
+    <div class="panel-body">
+      <ul class="source-list">
+        <li><a href="https://www.nass.usda.gov/Publications/Todays_Reports/reports/cropan25.pdf" target="_blank" rel="noopener">USDA NASS &mdash; Crop Production 2024 Summary (January 2025)</a> &mdash; source for Michigan corn silage, alfalfa hay, and winter wheat yield-per-acre figures (state-level data, 2022&ndash;2024)</li>
+        <li><a href="https://www.nass.usda.gov/Statistics_by_State/Michigan/Publications/Annual_Statistical_Bulletin/stats24/agstat.pdf" target="_blank" rel="noopener">USDA NASS &mdash; Michigan Annual Statistical Bulletin (December 2024)</a> &mdash; cross-reference for Michigan crop yield history, 2019&ndash;2023</li>
+      </ul>
+      <p class="panel-note">Michigan does not report a separate rye yield &mdash; NASS lumps Michigan's rye acreage into a multi-state "Other States" average, so the Wheat/Rye stat card's MI avg reflects Michigan winter wheat only.</p>
     </div>
   </div>
 </section>

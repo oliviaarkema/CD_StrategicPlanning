@@ -124,6 +124,7 @@ nav.topnav button.active{color:var(--kelly);border-bottom-color:var(--kelly);fon
 
 /* ── Stat cards ── */
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.stats-5{grid-template-columns:repeat(5,1fr)}
 .stat{
   background:var(--panel);border:1px solid var(--border);border-radius:14px;
   padding:16px 18px;box-shadow:var(--shadow);
@@ -164,6 +165,9 @@ nav.topnav button.active{color:var(--kelly);border-bottom-color:var(--kelly);fon
 .unit-toggle button.active{background:var(--kelly);color:#fff}
 .panel-body{padding:20px}
 .panel-note{font-size:.8rem;color:var(--muted);margin:12px 0 0}
+.source-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:.85rem}
+.source-list a{color:var(--kelly);text-decoration:none;font-weight:600}
+.source-list a:hover{text-decoration:underline}
 .chart-box{position:relative}
 .chart-box.h240{height:240px}
 .chart-box.h280{height:280px}
