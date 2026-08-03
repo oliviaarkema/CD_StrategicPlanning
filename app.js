@@ -392,13 +392,13 @@ function initRawMilk() {
     }));
 
   new Chart(document.getElementById("a2StatusChart"), {
-    type:"bar",
+    type:"line",
     data:{
       labels:["Apr '25","Jun '26","Jul '26","Aug '26"],
       datasets:[
-        {label:"% A2",      data:[49.0, 61.0, 60.5, 60.2], backgroundColor:C.green},
-        {label:"% A1",      data:[35.0, 36.0, 34.9, 35.0], backgroundColor:C.kelly},
-        {label:"% Unknown", data:[16.0,  3.0,  4.4,  4.7], backgroundColor:C.muted},
+        {label:"% A2",      data:[49.0, 61.0, 60.5, 60.2], borderColor:C.green, backgroundColor:"transparent", tension:0, pointRadius:5, pointHoverRadius:7},
+        {label:"% A1",      data:[35.0, 36.0, 34.9, 35.0], borderColor:C.kelly, backgroundColor:"transparent", tension:0, pointRadius:5, pointHoverRadius:7},
+        {label:"% Unknown", data:[16.0,  3.0,  4.4,  4.7], borderColor:C.muted, backgroundColor:"transparent", tension:0, pointRadius:5, pointHoverRadius:7},
       ]
     },
     options:{
@@ -408,8 +408,8 @@ function initRawMilk() {
         tooltip:{callbacks:{label: c => c.dataset.label + ": " + c.parsed.y + "%"}}
       },
       scales:{
-        x:{grid:{display:false}, stacked:true},
-        y:{grid:{color:gridColor()}, stacked:true, max:100, ticks:{callback:v=>v+"%"}}
+        x:{grid:{display:false}},
+        y:{grid:{color:gridColor()}, max:70, ticks:{callback:v=>v+"%"}}
       }
     }
   });
