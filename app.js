@@ -385,6 +385,13 @@ function renderRawMilkCharts(unit) {
   const data2026 = GAL_2026.map(toUnit);
   const data2025 = GAL_2025.map(toUnit);
 
+  // Weekly production only moves in a ~16% band, so a 0-based axis flattens it to
+  // near-invisible. Zoom to the data instead, with a little headroom below the min.
+  const allVals = [...data2026, ...data2025];
+  const dataMin = Math.min(...allVals);
+  const dataMax = Math.max(...allVals);
+  const yMin = Math.max(0, dataMin - (dataMax - dataMin) * 0.15);
+
   if (rawMilkLineChart) rawMilkLineChart.destroy();
 
   rawMilkLineChart = new Chart(document.getElementById("milkProdLineChart"), {
@@ -407,7 +414,7 @@ function renderRawMilkCharts(unit) {
         tooltip:{callbacks:{label: c => c.dataset.label + " (" + c.label + "): " + fmt(c.parsed.y) + " " + label}} },
       scales:{
         x:{grid:{color:gridColor()}, ticks:{maxTicksLimit:12, autoSkip:true}},
-        y:{grid:{color:gridColor()}, ticks:{callback:v=>fmt(v)}, min:0}
+        y:{grid:{color:gridColor()}, ticks:{callback:v=>fmt(v)}, min:yMin}
       }
     }
   });
