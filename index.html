@@ -77,7 +77,6 @@
       <div class="lbl">Cropland<span class="sub">owned &amp; rented acres</span></div>
     </div>
   </div>
-  <p class="panel-note"><sup>1</sup> Per Casey, Aug 2026: Montague 701 milking / 0 dry; New Era 382 milking / 145 dry. Herd growth has topped out at current robot milking capacity &mdash; no more animals can be added without new robots.</p>
 
   <div class="callout">
     <div class="eyebrow">Executive Summary</div>
@@ -115,6 +114,8 @@
       </div>
     </div>
   </div>
+
+  <p class="panel-note"><sup>1</sup> Per Casey, Aug 2026: Montague 701 milking / 0 dry; New Era 382 milking / 145 dry. Herd growth has topped out at current robot milking capacity &mdash; no more animals can be added without new robots.</p>
 </section>
 
 
@@ -140,7 +141,7 @@
     </div>
     <div class="stat">
       <div class="num">###</div>
-      <div class="lbl">Top SKU Share<span class="sub">CD Whole Gallons</span></div>
+      <div class="lbl">Top SKU Share<span class="sub">highest-volume product</span></div>
       <div class="delta up">▲ ### pts</div>
     </div>
     <div class="stat">
@@ -165,6 +166,7 @@
       </div>
       <div class="panel-body">
         <div class="chart-box h360"><canvas id="milkProdChart"></canvas></div>
+        <p class="panel-note">Product axis per <em>Products Matrix, 2026.06.24</em>. Case volume by product is not yet entered &mdash; bars will read zero until real per-product sales data is added.</p>
       </div>
     </div>
     <div class="panel">
@@ -185,6 +187,7 @@
     </div>
     <div class="panel-body">
       <div class="chart-box h360"><canvas id="milkMarginChart"></canvas></div>
+      <p class="panel-note">Product axis per <em>Products Matrix, 2026.06.24</em>: all milk flavors rolled into "Class 1 milk"; Sour Cream and Chip Dip combined; "Other" covers eggnog and co-packed products. Revenue and profit margin by product are not yet entered &mdash; bars will read zero until real per-product figures are added.</p>
     </div>
   </div>
 
@@ -283,9 +286,9 @@
 
   <div class="stats">
     <div class="stat">
-      <div class="num">352,527</div>
-      <div class="lbl">Annual Production<span class="sub">hundredweight (cwt)</span></div>
-      <div class="delta up">▲ 0.4% vs TTM Jul 2025</div>
+      <div class="num">4,200,548</div>
+      <div class="lbl">Annual Production<span class="sub">gallons</span></div>
+      <div class="delta up">▲ 4.5% vs TTM Jul 2025 (4,020,672)</div>
     </div>
     <div class="stat">
       <div class="num">96</div>
@@ -314,7 +317,7 @@
   <div class="grid-2">
     <div class="panel">
       <div class="panel-head">
-        <h3>Monthly Production: TTM Jul 2025 vs TTM Jul 2026</h3>
+        <h3>Weekly Production: TTM Jul 2025 vs TTM Jul 2026</h3>
         <div class="unit-toggle js-rawmilk-unit-toggle" role="group" aria-label="Unit of measurement">
           <button type="button" data-unit="cwt" class="active">cwt</button>
           <button type="button" data-unit="gal">gal</button>
@@ -322,7 +325,6 @@
       </div>
       <div class="panel-body">
         <div class="chart-box h300 connected"><canvas id="milkProdLineChart"></canvas></div>
-        <p class="panel-note">Built from Casey's weekly raw-milk KPI log. That sheet's "Actual" column is labeled pounds but is actually gallons (confirmed against the KPI's own 2026 target note: 709,500 lbs &asymp; 82,500 gal, and 82,500 is what's in the sheet) &mdash; converted here at 8.6 lbs/gal. Months are calendar-month sums of the weekly actuals, so a month that happens to catch 5 weekly readings instead of 4 will show a bump &mdash; that's a real artifact of weekly-to-monthly rollup, not a smoothing error: an earlier day-rate-based "fix" for this bump was reverted because it silently overstated year-over-year growth (4.3% vs. the true 0.36%) by extrapolating partial-month samples unevenly across the two years being compared. February's dip is a separate, genuine day-count effect (28 days vs. 31), not a production slowdown.</p>
       </div>
     </div>
     <div class="panel">
@@ -332,7 +334,6 @@
       </div>
       <div class="panel-body">
         <div class="chart-box h300 connected"><canvas id="a2StatusChart"></canvas></div>
-        <p class="panel-note">From Casey's monthly genetic-test KPI log. Reported months only (data isn't collected every month). Aug 2026 head counts: 738 A2, 429 A1, 58 unknown, herd total 1,226 &mdash; this figure includes dry cows (1,226 &asymp; 1,085 milking + 145 dry, per Casey's Aug 2026 site breakdown), so it runs higher than the Home page's milking-only headcount.</p>
       </div>
     </div>
   </div>
@@ -348,6 +349,10 @@
     <div class="panel-head"><h3>Appendix: Data Sources</h3></div>
     <div class="panel-body">
       <p class="panel-note">Annual Production and Monthly Production figures above are built from Casey's internal weekly raw-milk KPI log (<em>Raw Milk Production &ndash; Weekly KPI</em>), not the external sources below &mdash; those cover the industry-benchmark figures cited elsewhere on this page.</p>
+      <p class="source-cat">Weekly Production chart &mdash; methodology</p>
+      <p class="panel-note">Plots the weekly "Actual" readings from Casey's raw-milk KPI log directly, one point per week, with no monthly rollup &mdash; each of the two lines is a straight 52-week trailing-twelve-month window (TTM Jul 2026 = weeks of 8/4/25&ndash;7/31/26; TTM Jul 2025 = weeks of 8/4/24&ndash;7/26/25), aligned week-for-week starting the first week of August. That sheet's "Actual" column is labeled pounds but is actually gallons (confirmed against the KPI's own 2026 target note: 709,500 lbs &asymp; 82,500 gal, and 82,500 is what's in the sheet); cwt is derived from it at 8.6 lbs/gal, matching the sheet's own cwt column. This replaces an earlier version that summed weeks into calendar months, which produced artificial bumps in any month that happened to catch 5 weekly readings instead of 4.</p>
+      <p class="source-cat">A2 Status of Milking Herd chart &mdash; methodology</p>
+      <p class="panel-note">From Casey's monthly genetic-test KPI log. Reported months only (data isn't collected every month). Aug 2026 head counts: 738 A2, 429 A1, 58 unknown, herd total 1,226 &mdash; this figure includes dry cows (1,226 &asymp; 1,085 milking + 145 dry, per Casey's Aug 2026 site breakdown), so it runs higher than the Home page's milking-only headcount.</p>
       <p class="source-cat">Cost of Raising Dairy Cows</p>
       <ul class="source-list">
         <li><a href="https://eauclaire.extension.wisc.edu/files/2018/05/2018-ICPA-Factsheet-Final.pdf" target="_blank" rel="noopener">eauclaire.extension.wisc.edu/.../2018-ICPA-Factsheet-Final.pdf</a></li>

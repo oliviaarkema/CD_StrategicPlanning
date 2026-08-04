@@ -154,22 +154,29 @@ function initHome() {
 // ═══════════════════════════════════════════════════════════════════════════════
 //  MILK PRODUCTS
 // ═══════════════════════════════════════════════════════════════════════════════
+// Product axis per Products Matrix, 2026.06.24.xlsx. Cases pending real per-product
+// sales data — left at 0, not modeled from the old brand/package SKU placeholders.
 const MILK_PRODS = [
-  { name:"CD Whole Gallons",      cases:28400, rev_per:24.20 },
-  { name:"CD Half Pints",         cases:18600, rev_per:14.80 },
-  { name:"WF Gallons",            cases:12800, rev_per:27.40 },
-  { name:"CD Half-Gallons",       cases: 9200, rev_per:21.60 },
-  { name:"Cedar Cr Gallons",      cases: 6700, rev_per:24.00 },
-  { name:"WF Half-Gallons",       cases: 4100, rev_per:24.80 },
-  { name:"CD Quarts",             cases: 3800, rev_per:19.20 },
-  { name:"CD Pints",              cases: 2900, rev_per:16.40 },
-  { name:"5-Gal Foodservice",     cases: 1200, rev_per:48.60 },
-  { name:"Country Dairy Mix",     cases:  890, rev_per:38.20 },
+  { name:"Vitamin D",           cases:0 },
+  { name:"2% Red Fat",          cases:0 },
+  { name:"1% Lowfat",           cases:0 },
+  { name:"Fat Free",            cases:0 },
+  { name:"Chocolate",           cases:0 },
+  { name:"Strawberry",          cases:0 },
+  { name:"Fat Free Chocolate",  cases:0 },
+  { name:"Whipping Cream",      cases:0 },
+  { name:"Ice Cream Mix",       cases:0 },
+  { name:"Soft Serve Mix",      cases:0 },
+  { name:"Butter-Salted",       cases:0 },
+  { name:"Butter-Unsalted",     cases:0 },
+  { name:"Sour Cream & Chip Dip", cases:0 },
+  { name:"Other (eggnog, co-packed)", cases:0 },
 ];
 const MILK_MONTHS = [6620,7280,7910,8440,9020,8190,6940,6610,7180,7840,7950,8610];
 
 function weightedAvg(weights, values) {
   const sumW = weights.reduce((s,w) => s+w, 0);
+  if (sumW === 0) return 0;
   const sumWV = weights.reduce((s,w,i) => s + w*values[i], 0);
   return sumWV / sumW;
 }
@@ -255,9 +262,12 @@ function initMilk() {
     }
   });
 
-  const MARGIN_PRODS = ["Class 1 Milk","Ice Cream","Soft Serve Mix","Sour Cream","Chip Dip","Butter","Other"];
-  const MARGIN_REV    = [18.4, 9.6, 4.2, 3.1, 1.8, 2.6, 1.2];
-  const MARGIN_PCT    = [22, 34, 41, 29, 33, 18, 25];
+  // Product axis per Products Matrix, 2026.06.24.xlsx: all milk flavors rolled into
+  // "Class 1 milk"; Sour Cream + Chip Dip combined; Other = eggnog & co-packed.
+  // Revenue/margin pending real per-product data — left at 0.
+  const MARGIN_PRODS = ["Class 1 milk","Whipping Cream","Ice Cream Mix","Soft Serve Mix","Butter","Sour Cream & Chip Dip","Other (eggnog, co-packed)"];
+  const MARGIN_REV    = [0, 0, 0, 0, 0, 0, 0];
+  const MARGIN_PCT    = [0, 0, 0, 0, 0, 0, 0];
   renderMarginChart("milkMarginChart", MARGIN_PRODS, MARGIN_REV, MARGIN_PCT, 25);
 
   const CUSTOMER_NAMES = ["Cedar Crest","Quality Dairy","Kuster's","Farm Store","Other"];
@@ -343,30 +353,33 @@ function initAnimals() {
 // ═══════════════════════════════════════════════════════════════════════════════
 //  RAW MILK PRODUCTION
 // ═══════════════════════════════════════════════════════════════════════════════
-const PROD_2025 = [27063,27249,34646,27324,27120,34218,27452,27336,34728,28277,28355,28758];
-const PROD_2024 = [32552,25958,32631,26274,26184,32607,26616,27219,34074,26487,26881,33785];
-const FISCAL_MONTHS = ["Jul","Aug","Sep","Oct","Nov","Dec","Jan","Feb","Mar","Apr","May","Jun"];
-const CWT_TO_GAL = 11.63; // 1 cwt of milk ≈ 11.63 gallons (100 lb / ~8.6 lb per gallon)
+// Weekly "Actual (gal)" readings from Casey's Raw Milk Production Weekly KPI log,
+// split into the two trailing-12-month windows and aligned week-for-week (both start
+// the first week of August). Native unit is gallons; cwt is derived, not the reverse.
+const WEEK_LABELS = ["8/4","8/11","8/18","8/25","9/1","9/8","9/15","9/22","9/29","10/6","10/13","10/20","10/27","11/3","11/10","11/17","11/24","12/1","12/8","12/15","12/22","12/29","1/5","1/12","1/19","1/26","2/2","2/9","2/16","2/23","3/2","3/9","3/16","3/23","3/30","4/6","4/13","4/20","4/27","5/8","5/15","5/22","5/29","6/5","6/12","6/19","6/26","7/3","7/10","7/17","7/24","7/31"];
+const GAL_2026 = [79752,77685,79308,80105,80542,81391,80592,80074,80264,79510,79473,79212,79528,79214,79430,78508,78203,78365,78879,79533,80739,80369,81004,80543,78209,79449,79631,78861,79150,80218,80207,79524,80383,81248,82448,81799,82151,81711,83137,82521,81468,82637,83085,84267,83787,83536,82809,82331,81701,83563,83192,85302];
+const GAL_2025 = [75992,76705,75826,73311,75518,75782,75893,76340,75893,75901,76189,76362,77065,76850,77394,75889,74328,75397,74788,75416,75938,77607,77759,77899,76376,77449,78479,79013,79270,79739,79884,80463,79691,78982,77188,76802,76558,77215,77415,77189,78042,78082,79251,77944,80183,79711,76535,78478,79533,78635,79230,77293];
+const GAL_TO_CWT = 8.6 / 100; // 8.6 lbs/gal, 100 lbs/cwt — matches the weekly KPI log's own cwt column exactly
 
 let rawMilkLineChart = null;
 
 function renderRawMilkCharts(unit) {
-  const factor = unit === "gal" ? CWT_TO_GAL : 1;
+  const toUnit = v => unit === "cwt" ? +(v * GAL_TO_CWT).toFixed(1) : v;
   const label  = unit === "gal" ? "gal" : "cwt";
-  const data2025 = PROD_2025.map(v => Math.round(v * factor));
-  const data2024 = PROD_2024.map(v => Math.round(v * factor));
+  const data2026 = GAL_2026.map(toUnit);
+  const data2025 = GAL_2025.map(toUnit);
 
   if (rawMilkLineChart) rawMilkLineChart.destroy();
 
   rawMilkLineChart = new Chart(document.getElementById("milkProdLineChart"), {
     type:"line",
     data:{
-      labels: FISCAL_MONTHS,
+      labels: WEEK_LABELS,
       datasets:[
-        {label:"TTM Jul 2026", data:data2025, borderColor:C.kelly,
-          backgroundColor:"rgba(61,174,43,.1)", fill:true, tension:.35, pointRadius:3},
-        {label:"TTM Jul 2025", data:data2024, borderColor:C.muted,
-          backgroundColor:"transparent", borderDash:[5,4], tension:.35, pointRadius:3},
+        {label:"TTM Jul 2026", data:data2026, borderColor:C.kelly,
+          backgroundColor:"rgba(61,174,43,.1)", fill:true, tension:.35, pointRadius:0},
+        {label:"TTM Jul 2025", data:data2025, borderColor:C.muted,
+          backgroundColor:"transparent", borderDash:[5,4], tension:.35, pointRadius:0},
       ]
     },
     options:{
@@ -374,7 +387,7 @@ function renderRawMilkCharts(unit) {
       plugins:{ legend:{position:"top"},
         tooltip:{callbacks:{label: c => c.dataset.label + ": " + fmt(c.parsed.y) + " " + label}} },
       scales:{
-        x:{grid:{color:gridColor()}},
+        x:{grid:{color:gridColor()}, ticks:{maxTicksLimit:13, autoSkip:true}},
         y:{grid:{color:gridColor()}, ticks:{callback:v=>fmt(v)}, min:0}
       }
     }
