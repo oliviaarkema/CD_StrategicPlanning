@@ -564,14 +564,19 @@ function renderPlantMetricTable(unit) {
 // ═══════════════════════════════════════════════════════════════════════════════
 //  CROP EFFICIENCY
 // ═══════════════════════════════════════════════════════════════════════════════
+// Per Casey, 2025 crop-year averages. MI State Average is the same NASS figure
+// cited on the stat cards (20.5 corn silage, 87.0 wheat) — previously this chart
+// had its own out-of-sync mock benchmark (19.8, 4.2), now corrected to match.
+// Alfalfa's MI average is omitted: Country Dairy's figure is silage tons/acre,
+// not the dry hay tons/acre NASS reports, so the two aren't comparable.
 function initCrops() {
   new Chart(document.getElementById("cropYieldChart"), {
     type:"bar",
     data:{
-      labels:["Corn Silage","Alfalfa Hay","Wheat/Rye"],
+      labels:["Corn Silage","Alfalfa Silage","Wheat"],
       datasets:[
-        {label:"Country Dairy Actual", data:[22.4,4.9,null], backgroundColor:C.kelly, borderRadius:4},
-        {label:"MI State Average",     data:[19.8,4.2,null], backgroundColor:C.muted, borderRadius:4},
+        {label:"Country Dairy Actual", data:[15,9.8,60], backgroundColor:C.kelly, borderRadius:4},
+        {label:"MI State Average",     data:[20.5,null,87.0], backgroundColor:C.muted, borderRadius:4},
       ]
     },
     options:{

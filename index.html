@@ -495,19 +495,18 @@
       <div class="lbl">Acres Farmed<span class="sub">owned &amp; rented</span></div>
     </div>
     <div class="stat">
-      <div class="num">###</div>
-      <div class="lbl">Corn Silage Yield<span class="sub">tons / acre · MI avg: 20.5</span></div>
-      <div class="delta up">▲ ###% above avg</div>
+      <div class="num">15</div>
+      <div class="lbl">Corn Silage Yield<span class="sub">tons / acre · MI avg: 20.5<sup>1</sup></span></div>
+      <div class="delta warn">▼ 26.8% below avg</div>
     </div>
     <div class="stat">
-      <div class="num">###</div>
-      <div class="lbl">Alfalfa Yield<span class="sub">tons / acre · MI avg: 2.60</span></div>
-      <div class="delta up">▲ ###% above avg</div>
+      <div class="num">9.8</div>
+      <div class="lbl">Alfalfa Silage Yield<span class="sub">tons / acre · MI avg not comparable<sup>1</sup></span></div>
     </div>
     <div class="stat">
-      <div class="num">###</div>
-      <div class="lbl">Wheat/Rye Yield<span class="sub">bu / acre · MI avg: 87.0</span></div>
-      <div class="delta up">▲ ###% above avg</div>
+      <div class="num">60</div>
+      <div class="lbl">Wheat/Rye Yield<span class="sub">bu / acre · MI avg: 87.0<sup>1</sup></span></div>
+      <div class="delta warn">▼ 31.0% below avg</div>
     </div>
     <div class="stat">
       <div class="num">###</div>
@@ -525,17 +524,19 @@
 
   <div class="panel">
     <div class="panel-head">
-      <h3>Yield vs Michigan Benchmark</h3>
+      <h3>Yield vs Michigan Benchmark<sup>1</sup></h3>
       <span class="hint">tons / acre</span>
     </div>
     <div class="panel-body">
-      <div class="chart-box h260"><canvas id="cropYieldChart"></canvas></div>
+      <div class="chart-box h260 connected"><canvas id="cropYieldChart"></canvas></div>
     </div>
   </div>
 
   <div class="panel">
     <div class="panel-head"><h3>Appendix: Data Sources</h3></div>
     <div class="panel-body">
+      <p class="source-cat">Yield stat cards &amp; chart<sup>1</sup></p>
+      <p class="panel-note"><sup>1</sup> Per Casey, 2025 crop-year averages. Yield methodology: forage yields (corn silage, alfalfa silage) are supplied by SDG; any crop taken for grain (wheat) is measured with the combine's yield monitor. The alfalfa figure is silage tons/acre (~35&ndash;40% dry matter), not dry hay tons/acre like the Michigan NASS benchmark (~85&ndash;90% dry matter) &mdash; the two aren't directly comparable, so no vs.-MI-avg delta is shown for alfalfa. Rye isn't yield-tracked; it's grown only as a cover-crop seed source, not harvested for grain or forage. Grain corn (a separate crop from corn silage, not currently broken out on this dashboard) runs an estimated 150 bu/ac &mdash; a rough figure Casey flagged as needing more digging to pin down exactly. Strategic context: since taking heifers back, Country Dairy has very little buffer for poor crop years and no extra grain to sell in an average year; a spring-forage-then-corn double-crop trial is planned for next year, aimed at increasing forage tons/acre over the current rotation.</p>
       <ul class="source-list">
         <li><a href="https://www.nass.usda.gov/Publications/Todays_Reports/reports/cropan25.pdf" target="_blank" rel="noopener">USDA NASS &mdash; Crop Production 2024 Summary (January 2025)</a> &mdash; source for Michigan corn silage, alfalfa hay, and winter wheat yield-per-acre figures (state-level data, 2022&ndash;2024)</li>
         <li><a href="https://www.nass.usda.gov/Statistics_by_State/Michigan/Publications/Annual_Statistical_Bulletin/stats24/agstat.pdf" target="_blank" rel="noopener">USDA NASS &mdash; Michigan Annual Statistical Bulletin (December 2024)</a> &mdash; cross-reference for Michigan crop yield history, 2019&ndash;2023</li>
