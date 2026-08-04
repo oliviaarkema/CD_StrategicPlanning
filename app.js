@@ -353,12 +353,14 @@ function initAnimals() {
 // ═══════════════════════════════════════════════════════════════════════════════
 //  RAW MILK PRODUCTION
 // ═══════════════════════════════════════════════════════════════════════════════
-// Weekly "Actual (gal)" readings from Casey's Raw Milk Production Weekly KPI log,
-// split into the two trailing-12-month windows and aligned week-for-week (both start
-// the first week of August). Native unit is gallons; cwt is derived, not the reverse.
-const WEEK_LABELS = ["8/4","8/11","8/18","8/25","9/1","9/8","9/15","9/22","9/29","10/6","10/13","10/20","10/27","11/3","11/10","11/17","11/24","12/1","12/8","12/15","12/22","12/29","1/5","1/12","1/19","1/26","2/2","2/9","2/16","2/23","3/2","3/9","3/16","3/23","3/30","4/6","4/13","4/20","4/27","5/8","5/15","5/22","5/29","6/5","6/12","6/19","6/26","7/3","7/10","7/17","7/24","7/31"];
-const GAL_2026 = [79752,77685,79308,80105,80542,81391,80592,80074,80264,79510,79473,79212,79528,79214,79430,78508,78203,78365,78879,79533,80739,80369,81004,80543,78209,79449,79631,78861,79150,80218,80207,79524,80383,81248,82448,81799,82151,81711,83137,82521,81468,82637,83085,84267,83787,83536,82809,82331,81701,83563,83192,85302];
-const GAL_2025 = [75992,76705,75826,73311,75518,75782,75893,76340,75893,75901,76189,76362,77065,76850,77394,75889,74328,75397,74788,75416,75938,77607,77759,77899,76376,77449,78479,79013,79270,79739,79884,80463,79691,78982,77188,76802,76558,77215,77415,77189,78042,78082,79251,77944,80183,79711,76535,78478,79533,78635,79230,77293];
+// Weekly "Actual (gal)" readings from Casey's Raw Milk Production Weekly KPI log.
+// Both lines start the week containing 7/1 (7/1/25 and 7/1/24 respectively, matching
+// the dashboard's Jul-Jun fiscal year) and run through the latest available week, so
+// they're ~13 months, not a strict trailing-12. Aligned week-for-week by position from
+// that anchor, not by calendar offset, since the weekly cadence isn't perfectly regular.
+const WEEK_LABELS = ["6/30/25","7/7/25","7/14/25","7/21/25","7/28/25","8/4/25","8/11/25","8/18/25","8/25/25","9/1/25","9/8/25","9/15/25","9/22/25","9/29/25","10/6/25","10/13/25","10/20/25","10/27/25","11/3/25","11/10/25","11/17/25","11/24/25","12/1/25","12/8/25","12/15/25","12/22/25","12/29/25","1/5/26","1/12/26","1/19/26","1/26/26","2/2/26","2/9/26","2/16/26","2/23/26","3/2/26","3/9/26","3/16/26","3/23/26","3/30/26","4/6/26","4/13/26","4/20/26","4/27/26","5/8/26","5/15/26","5/22/26","5/29/26","6/5/26","6/12/26","6/19/26","6/26/26","7/3/26","7/10/26","7/17/26","7/24/26","7/31/26"];
+const GAL_2026 = [78478,79533,78635,79230,77293,79752,77685,79308,80105,80542,81391,80592,80074,80264,79510,79473,79212,79528,79214,79430,78508,78203,78365,78879,79533,80739,80369,81004,80543,78209,79449,79631,78861,79150,80218,80207,79524,80383,81248,82448,81799,82151,81711,83137,82521,81468,82637,83085,84267,83787,83536,82809,82331,81701,83563,83192,85302];
+const GAL_2025 = [75861,76596,75375,75896,74778,75992,76705,75826,73311,75518,75782,75893,76340,75893,75901,76189,76362,77065,76850,77394,75889,74328,75397,74788,75416,75938,77607,77759,77899,76376,77449,78479,79013,79270,79739,79884,80463,79691,78982,77188,76802,76558,77215,77415,77189,78042,78082,79251,77944,80183,79711,76535,78478,79533,78635,79230,77293];
 const GAL_TO_CWT = 8.6 / 100; // 8.6 lbs/gal, 100 lbs/cwt — matches the weekly KPI log's own cwt column exactly
 
 let rawMilkLineChart = null;
@@ -377,17 +379,20 @@ function renderRawMilkCharts(unit) {
       labels: WEEK_LABELS,
       datasets:[
         {label:"TTM Jul 2026", data:data2026, borderColor:C.kelly,
-          backgroundColor:"rgba(61,174,43,.1)", fill:true, tension:.35, pointRadius:0},
+          backgroundColor:"rgba(61,174,43,.1)", fill:true, tension:.35,
+          pointRadius:3, pointHoverRadius:5, pointBackgroundColor:C.kelly},
         {label:"TTM Jul 2025", data:data2025, borderColor:C.muted,
-          backgroundColor:"transparent", borderDash:[5,4], tension:.35, pointRadius:0},
+          backgroundColor:"transparent", borderDash:[5,4], tension:.35,
+          pointRadius:3, pointHoverRadius:5, pointBackgroundColor:C.muted},
       ]
     },
     options:{
       responsive:true, maintainAspectRatio:false,
+      interaction:{mode:"nearest", axis:"x", intersect:false},
       plugins:{ legend:{position:"top"},
-        tooltip:{callbacks:{label: c => c.dataset.label + ": " + fmt(c.parsed.y) + " " + label}} },
+        tooltip:{callbacks:{label: c => c.dataset.label + " (" + c.label + "): " + fmt(c.parsed.y) + " " + label}} },
       scales:{
-        x:{grid:{color:gridColor()}, ticks:{maxTicksLimit:13, autoSkip:true}},
+        x:{grid:{color:gridColor()}, ticks:{maxTicksLimit:12, autoSkip:true}},
         y:{grid:{color:gridColor()}, ticks:{callback:v=>fmt(v)}, min:0}
       }
     }
