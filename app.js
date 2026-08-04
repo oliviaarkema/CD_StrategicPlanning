@@ -504,6 +504,26 @@ function initPlant() {
     }));
 }
 
+// Jul '25-Jun '26 (dashboard fiscal year), from Plant_Production_Headcount_MonthlyGallons.xlsx.
+// [month, gallons, cwt, laborHrsPerCwt, laborHrsPerGal]. Utilization/Energy/Loss aren't in
+// that file, so those columns stay "###". The file's "Hourly Labor Cost - Plant" column is
+// excluded here — 6 of 18 months imply a ~$300/hr rate vs. ~$18-22/hr for the rest, a ~15x
+// scale error, so it needs correcting at the source before it's usable anywhere.
+const PLANT_MONTHS = [
+  ["Jul '25", 361960, 31129, 0.175, 0.0150],
+  ["Aug '25", 334329, 28752, 0.173, 0.0149],
+  ["Sep '25", 315038, 27093, 0.187, 0.0160],
+  ["Oct '25", 295694, 25430, 0.187, 0.0161],
+  ["Nov '25", 249362, 21445, 0.202, 0.0173],
+  ["Dec '25", 322759, 27757, 0.187, 0.0161],
+  ["Jan '26", 297599, 25594, 0.197, 0.0170],
+  ["Feb '26", 295571, 25419, 0.191, 0.0165],
+  ["Mar '26", 329191, 28310, 0.185, 0.0159],
+  ["Apr '26", 325483, 27992, 0.222, 0.0191],
+  ["May '26", 340226, 29259, 0.212, 0.0182],
+  ["Jun '26", 373172, 32093, 0.184, 0.0158],
+];
+
 function renderPlantMetricTable(unit) {
   const volLabel    = unit === "gal" ? "Gallons Processed" : "cwt Processed";
   const laborLabel  = unit === "gal" ? "Labor Hrs/gal" : "Labor Hrs/cwt";
@@ -511,14 +531,12 @@ function renderPlantMetricTable(unit) {
   document.getElementById("plantMetricTable").innerHTML =
     `<thead><tr><th>Month</th><th class="n">${volLabel}</th><th class="n">Utilization</th>
     <th class="n">${laborLabel}</th><th class="n">${energyLabel}</th><th class="n">Loss %</th></tr></thead>
-    <tbody>${[
-      ["Jul","###","###","###","###","###"],
-      ["Aug","###","###","###","###","###"],
-      ["Sep","###","###","###","###","###"],
-      ["Oct","###","###","###","###","###"],
-      ["Nov","###","###","###","###","###"],
-      ["Dec","###","###","###","###","###"],
-    ].map(([m,...v])=>`<tr><td>${m}</td>${v.map(x=>`<td class="n">${x}</td>`).join("")}</tr>`).join("")}
+    <tbody>${PLANT_MONTHS.map(([m, gal, cwt, hrsPerCwt, hrsPerGal]) => {
+      const vol   = unit === "gal" ? fmt(gal) : fmt(cwt);
+      const labor = unit === "gal" ? hrsPerGal : hrsPerCwt;
+      return `<tr><td>${m}</td><td class="n">${vol}</td><td class="n">###</td>
+      <td class="n">${labor}</td><td class="n">###</td><td class="n">###</td></tr>`;
+    }).join("")}
     </tbody>`;
 }
 
