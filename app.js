@@ -53,8 +53,10 @@ function initSection(name) {
 function initHome() {
   document.getElementById("h-rev").textContent   = "$610,096";
   document.getElementById("h-rev-d").textContent = "▲ 88.2% vs TTM Jul 2025";
-  document.getElementById("h-cwt").textContent   = "###";
-  document.getElementById("h-cwt-d").textContent = "▲ ###% vs TTM Jul 2025";
+  // Milk Sold = Raw Milk Production page's Annual Production, converted to cwt
+  // (4,200,548 / 4,020,672 gal at 8.6 lbs/gal, same TTM windows).
+  document.getElementById("h-cwt").textContent   = "361,247";
+  document.getElementById("h-cwt-d").textContent = "▲ 4.5% vs TTM Jul 2025 (345,778)";
   document.getElementById("h-cows").textContent  = "1,085";
   document.getElementById("h-cows-d").textContent= "▲ 7.5% vs year ago (1,009)";
   document.getElementById("h-acres").textContent = "2,500";
@@ -131,12 +133,17 @@ function initHome() {
     `<thead><tr><th>Area</th><th>Metric</th><th class="n">TTM Jul 2026</th><th class="n">TTM Jul 2025</th><th class="n">Change</th></tr></thead>
     <tbody>
     ${[
-      ["Milk Production","Annual cwt"],
-      ["Milk Production","Lbs/Cow/Day"],
-      ["Milk Quality","Butterfat %"],
-      ["Milk Quality","SCC (cells/mL)"],
+      // Milk Production/Quality: from the Raw Milk Production page's own stat cards.
+      ["Milk Production","Annual cwt", "361,247", "345,778", "+4.5%"],
+      ["Milk Production","Lbs/Cow/Day", "96", "93", "+3.2%"],
+      ["Milk Quality","Butterfat %", "3.9%", "3.9%", "flat"],
+      ["Milk Quality","SCC (cells/mL)", "250,000", "200,000", "+25%"],
+      // Plant: Utilization Rate isn't tracked anywhere yet. Labor Hrs/cwt is a real
+      // weighted average from Monthly Operating Metrics (Jul '25-Jun '26), but that
+      // source only goes back to Jan '25, not a full prior fiscal year, so there's
+      // no reliable TTM Jul 2025 comparison to show yet.
       ["Plant","Utilization Rate"],
-      ["Plant","Labor Hrs/cwt"],
+      ["Plant","Labor Hrs/cwt", "0.191"],
       ["Financials","Total Revenue", fmtM(rev.slice(-12).reduce((s,v)=>s+v,0)), fmtM(25375643), "+0.3%"],
       // Total Costs and Operating Margin: figures withheld — the cost data we have
       // includes non-operating items (e.g. bank note interest), so these would be
