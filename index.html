@@ -36,7 +36,7 @@
   <nav class="topnav" role="navigation" aria-label="Dashboard sections">
     <button data-section="home"    class="active">Home</button>
     <button data-section="crops">Crop Efficiency</button>
-    <button data-section="animals">Calf / Cow / Steer Sales</button>
+    <button data-section="animals">Animal Sales</button>
     <button data-section="rawmilk">Raw Milk Production</button>
     <button data-section="plant">Plant Efficiency</button>
     <button data-section="milk">Milk Products</button>
@@ -210,20 +210,20 @@
 ══════════════════════════════════════════════ -->
 <section id="sec-animals" class="page-section">
   <div class="sec-head">
-    <h2>Calf / Cow / Steer Sales</h2>
+    <h2>Animal Sales</h2>
     <p>Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
   </div>
 
   <div class="stats">
     <div class="stat">
-      <div class="num">###</div>
-      <div class="lbl">Total Head Sold<span class="sub">calves, cull cows, steers</span></div>
-      <div class="delta up">▲ ### head vs TTM Jul 2025</div>
+      <div class="num">880</div>
+      <div class="lbl">Total Head Sold<span class="sub">cows under 5 mos, over 2 yrs, 5-24 mos</span></div>
+      <div class="delta up">▲ 16.7% vs TTM Jul 2025 (754)</div>
     </div>
     <div class="stat">
-      <div class="num">###</div>
+      <div class="num">$1,341,581</div>
       <div class="lbl">Animal Revenue<span class="sub">all categories</span></div>
-      <div class="delta up">▲ ###% vs TTM Jul 2025</div>
+      <div class="delta up">▲ 58.7% vs TTM Jul 2025 ($845,256.84)</div>
     </div>
   </div>
 
@@ -237,30 +237,36 @@
   <div class="grid-2">
     <div class="panel">
       <div class="panel-head">
-        <h3>Head Sold by Category &amp; Quarter</h3>
+        <h3>Head Sold by Category &amp; Quarter<sup>1</sup></h3>
       </div>
       <div class="panel-body">
-        <div class="chart-box h300"><canvas id="animalBarChart"></canvas></div>
+        <div class="chart-box h300 connected"><canvas id="animalBarChart"></canvas></div>
       </div>
     </div>
     <div class="panel">
       <div class="panel-head">
-        <h3>Average Price Per Head by Quarter</h3>
+        <h3>Average Price Per Head by Quarter<sup>1</sup></h3>
         <span class="hint">$/head</span>
       </div>
       <div class="panel-body">
-        <div class="chart-box h300"><canvas id="animalPriceChart"></canvas></div>
+        <div class="chart-box h300 connected"><canvas id="animalPriceChart"></canvas></div>
       </div>
     </div>
   </div>
 
   <div class="panel">
-    <div class="panel-head"><h3>Annual Summary by Category</h3></div>
+    <div class="panel-head"><h3>Annual Summary by Category<sup>1</sup></h3></div>
     <div class="panel-body">
       <div class="tbl-wrap">
         <table class="dt" id="animalTable"></table>
       </div>
-      <p class="panel-note">Avg $/Head sourced from Casey's Animal Scenarios &amp; Costs file: Steers = Beef-Finish market value ($2.50/lb &times; ~1,400 lb finished weight = $3,500/hd); Calves = the file's "Calf Value" input ($1,500), used consistently across its dairy-springer and beef-finish cost models.</p>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head"><h3>Appendix: Data Sources</h3></div>
+    <div class="panel-body">
+      <p class="panel-note"><sup>1</sup> From actual sales, Jul '25&ndash;Jun '26 (<em>Items_Sold_TTM_July2026.xlsx</em>, AnimalCounts sheet). Category labels match the QuickBooks item names as-is, except "Cows 5-24 MOS" (short for "Cows 5 mos to under 24 mos of age") and "Cows Under 5 MOS," which also absorbs the two dairy breeding-stock categories ("Animals sold Dairy, not beef/cull" and "Animals Under 2 yrs, for Dairy") &mdash; 37 head / $113,808.50 of that total is actually breeding stock sold to other dairies, not young stock sold for beef.</p>
     </div>
   </div>
 </section>

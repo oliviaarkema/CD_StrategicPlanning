@@ -286,20 +286,25 @@ function initMilk() {
 // ═══════════════════════════════════════════════════════════════════════════════
 //  ANIMALS
 // ═══════════════════════════════════════════════════════════════════════════════
+// From Items_Sold_TTM_July2026.xlsx (AnimalCounts sheet), Jul '25-Jun '26. Category
+// labels match the QuickBooks item names. "Cows 5-24 MOS" is short for "Cows 5 mos
+// to under 24 mos of age". The "Cows Under 5 MOS" bucket also absorbs both "...for
+// Dairy" breeding-stock categories (37 head / $113,808.50) — see the panel note on
+// the Annual Summary table for the full breakdown.
 function initAnimals() {
-  const quarters = ["Q1","Q2","Q3","Q4"];
-  const calves   = [38, 52, 44, 46];
-  const culls    = [ 8, 12,  9, 13];
-  const steers   = [ 4,  6,  8,  6];
+  const quarters = ["Jul-Sep '25","Oct-Dec '25","Jan-Mar '26","Apr-Jun '26"];
+  const calves   = [144, 111, 130, 130];
+  const culls    = [ 46,  70,  90,  75];
+  const steers   = [  5,  27,  43,   9];
 
   new Chart(document.getElementById("animalBarChart"), {
     type:"bar",
     data:{
       labels: quarters,
       datasets:[
-        {label:"Calves",    data:calves, backgroundColor:C.kelly,  borderRadius:4},
-        {label:"Cull Cows", data:culls,  backgroundColor:C.green,  borderRadius:4},
-        {label:"Steers",    data:steers, backgroundColor:C.muted,  borderRadius:4},
+        {label:"Cows Under 5 MOS", data:calves, backgroundColor:C.kelly,  borderRadius:4},
+        {label:"Cows Over 2 Years", data:culls,  backgroundColor:C.green,  borderRadius:4},
+        {label:"Cows 5-24 MOS",    data:steers, backgroundColor:C.muted,  borderRadius:4},
       ]
     },
     options:{
@@ -313,18 +318,18 @@ function initAnimals() {
     }
   });
 
-  const calfPrice  = [315, 358, 342, 344];
-  const cullPrice  = [820, 880, 940, 920];
-  const steerPrice = [1740,1940,1820,1800];
+  const calfPrice  = [1109.14, 1161.00, 1774.17, 1573.42];
+  const cullPrice  = [1470.96, 1520.04, 1748.54, 1886.73];
+  const steerPrice = [2210.92, 1755.97, 1593.34, 1987.46];
 
   new Chart(document.getElementById("animalPriceChart"), {
     type:"line",
     data:{
       labels: quarters,
       datasets:[
-        {label:"Calves",    data:calfPrice,  borderColor:C.kelly, backgroundColor:"transparent", tension:.3, pointRadius:5},
-        {label:"Cull Cows", data:cullPrice,  borderColor:C.green, backgroundColor:"transparent", tension:.3, pointRadius:5},
-        {label:"Steers",    data:steerPrice, borderColor:C.muted, backgroundColor:"transparent", tension:.3, pointRadius:5},
+        {label:"Cows Under 5 MOS", data:calfPrice,  borderColor:C.kelly, backgroundColor:"transparent", tension:.3, pointRadius:5},
+        {label:"Cows Over 2 Years", data:cullPrice,  borderColor:C.green, backgroundColor:"transparent", tension:.3, pointRadius:5},
+        {label:"Cows 5-24 MOS",    data:steerPrice, borderColor:C.muted, backgroundColor:"transparent", tension:.3, pointRadius:5},
       ]
     },
     options:{
@@ -339,21 +344,23 @@ function initAnimals() {
   });
 
   const anData = [
-    {type:"Calves",    head:null, avgP:1500, total:null},
-    {type:"Cull Cows", head:null, avgP:null, total:null},
-    {type:"Steers",    head:null, avgP:3500, total:null},
+    {type:"Cows Under 5 MOS",  head:515, avgP:1405.39, total:723774},
+    {type:"Cows Over 2 Years", head:281, avgP:1683.06, total:472941},
+    {type:"Cows 5-24 MOS",     head: 84, avgP:1724.60, total:144866},
   ];
+  const grandHead = anData.reduce((s,r)=>s+r.head,0);
+  const grandTotal = anData.reduce((s,r)=>s+r.total,0);
   document.getElementById("animalTable").innerHTML =
     `<thead><tr><th>Category</th><th class="n">Head Sold</th>
     <th class="n">Avg $/Head</th><th class="n">Total Revenue</th><th class="n">% of Animal Rev</th></tr></thead>
     <tbody>${anData.map(r =>
-      `<tr><td>${r.type}</td><td class="n">${r.head ?? "###"}</td>
-      <td class="n">${r.avgP!=null ? fmtD(r.avgP) : "###"}</td><td class="n">${r.total ?? "###"}</td>
-      <td class="n">###</td></tr>`
+      `<tr><td>${r.type}</td><td class="n">${fmt(r.head)}</td>
+      <td class="n">${fmtD(r.avgP.toFixed(2))}</td><td class="n">${fmtD(r.total)}</td>
+      <td class="n">${(r.total/grandTotal*100).toFixed(1)}%</td></tr>`
     ).join("")}
     <tr style="font-weight:700;border-top:2px solid var(--border)">
-      <td>Total</td><td class="n">###</td><td class="n">###</td>
-      <td class="n">###</td><td class="n">###</td>
+      <td>Total</td><td class="n">${fmt(grandHead)}</td><td class="n">${fmtD((grandTotal/grandHead).toFixed(2))}</td>
+      <td class="n">${fmtD(grandTotal)}</td><td class="n">100.0%</td>
     </tr></tbody>`;
 }
 
