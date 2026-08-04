@@ -165,7 +165,7 @@ const MILK_PRODS = [
   { name:"Strawberry",          cases:0 },
   { name:"Fat Free Chocolate",  cases:0 },
   { name:"Whipping Cream",      cases:0 },
-  { name:"Ice Cream Mix",       cases:0 },
+  { name:"Ice Cream",           cases:0 },
   { name:"Soft Serve Mix",      cases:0 },
   { name:"Butter-Salted",       cases:0 },
   { name:"Butter-Unsalted",     cases:0 },
@@ -262,12 +262,12 @@ function initMilk() {
     }
   });
 
-  // Product axis per Products Matrix, 2026.06.24.xlsx: all milk flavors rolled into
-  // "Class 1 milk"; Sour Cream + Chip Dip combined; Other = eggnog & co-packed.
-  // Revenue/margin pending real per-product data — left at 0.
-  const MARGIN_PRODS = ["Class 1 milk","Whipping Cream","Ice Cream Mix","Soft Serve Mix","Butter","Sour Cream & Chip Dip","Other (eggnog, co-packed)"];
-  const MARGIN_REV    = [0, 0, 0, 0, 0, 0, 0];
-  const MARGIN_PCT    = [0, 0, 0, 0, 0, 0, 0];
+  // Product axis per Products Matrix, 2026.06.24.xlsx: all milk flavors (and Whipping
+  // Cream) rolled into "Class 1 milk"; Sour Cream + Chip Dip combined; Other = eggnog
+  // & co-packed. Revenue/margin pending real per-product data — left at 0.
+  const MARGIN_PRODS = ["Class 1 milk","Ice Cream","Soft Serve Mix","Butter","Sour Cream & Chip Dip","Other (eggnog, co-packed)"];
+  const MARGIN_REV    = [0, 0, 0, 0, 0, 0];
+  const MARGIN_PCT    = [0, 0, 0, 0, 0, 0];
   renderMarginChart("milkMarginChart", MARGIN_PRODS, MARGIN_REV, MARGIN_PCT, 25);
 
   const CUSTOMER_NAMES = ["Cedar Crest","Quality Dairy","Kuster's","Farm Store","Other"];
