@@ -693,27 +693,6 @@ function initMarket() {
     }
   });
 
-  new Chart(document.getElementById("marketDriverChart"), {
-    type:"doughnut",
-    data:{
-      labels:["Local/Regional Identity","Health & Wellness","Price","Convenience","Sustainability"],
-      datasets:[{
-        data:[32,26,20,14,8],
-        backgroundColor:[C.green, C.kelly, C.mid, C.muted, C.amber],
-        borderWidth:2,
-        borderColor: getComputedStyle(document.documentElement).getPropertyValue("--panel").trim()
-      }]
-    },
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      cutout:"58%",
-      plugins:{
-        legend:{position:"right"},
-        tooltip:{callbacks:{label: c => c.label + ": " + c.parsed + "%"}}
-      }
-    }
-  });
-
   const RADIUS_BANDS = [
     {label:"0–24 mi",    pen:82},
     {label:"25–49 mi",   pen:61},
