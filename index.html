@@ -131,24 +131,20 @@
 
   <div class="stats">
     <div class="stat">
-      <div class="num">###</div>
-      <div class="lbl">Total Cases Sold<span class="sub">all SKUs</span></div>
-      <div class="delta up">▲ ###% vs TTM Jul 2025</div>
+      <div class="num">12,406,278</div>
+      <div class="lbl">Total Units Sold<span class="sub">all SKUs, excl. bulk/commodity<sup>1</sup></span></div>
     </div>
     <div class="stat">
-      <div class="num">###</div>
-      <div class="lbl">Est. Product Revenue<span class="sub">at avg $###/case</span></div>
-      <div class="delta up">▲ ###% vs TTM Jul 2025</div>
+      <div class="num">$18,960,891</div>
+      <div class="lbl">Product Revenue<span class="sub">all SKUs, TTM Jul 2026<sup>1</sup></span></div>
     </div>
     <div class="stat">
-      <div class="num">###</div>
-      <div class="lbl">Top SKU Share<span class="sub">highest-volume product</span></div>
-      <div class="delta up">▲ ### pts</div>
+      <div class="num">26.4%</div>
+      <div class="lbl">Top SKU Share<span class="sub">64 CD CHOC FF HALF PINT<sup>1</sup></span></div>
     </div>
     <div class="stat">
-      <div class="num">###</div>
-      <div class="lbl">School Half-Pints<span class="sub">###% of total mix</span></div>
-      <div class="delta up">▲ ###%</div>
+      <div class="num">7.8%</div>
+      <div class="lbl">Half-Pint Revenue Share<span class="sub">1% LF + Choc FF half-pints<sup>1</sup></span></div>
     </div>
   </div>
 
@@ -159,46 +155,59 @@
     <p>Sed posuere consectetur est at lobortis. Nulla vitae elit libero, a pharetra augue. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh.</p>
   </div>
 
-  <div class="grid-2">
-    <div class="panel">
-      <div class="panel-head">
-        <h3>Cases by Product</h3>
-        <span class="hint">TTM Jul 2026 total</span>
-      </div>
-      <div class="panel-body">
-        <div class="chart-box h360"><canvas id="milkProdChart"></canvas></div>
-        <p class="panel-note">Product axis per <em>Products Matrix, 2026.06.24</em>. Case volume by product is not yet entered &mdash; bars will read zero until real per-product sales data is added.</p>
+  <div class="panel">
+    <div class="panel-head">
+      <h3>Quantity by Product<sup>1</sup></h3>
+      <div class="unit-toggle js-milkprod-rank-toggle" role="group" aria-label="Rank by">
+        <button type="button" data-rank="qty" class="active">Units</button>
+        <button type="button" data-rank="rev">Overall Revenue</button>
+        <button type="button" data-rank="ppu">Price per Unit</button>
       </div>
     </div>
-    <div class="panel">
-      <div class="panel-head">
-        <h3>Monthly Case Volume</h3>
-        <span class="hint">all products combined</span>
+    <div class="panel-body">
+      <div class="chart-box chart-scroll h420 connected">
+        <div class="chart-inner" id="milkProdChartInner"><canvas id="milkProdChart"></canvas></div>
       </div>
-      <div class="panel-body">
-        <div class="chart-box h360"><canvas id="milkTrendChart"></canvas></div>
-      </div>
+      <p class="panel-note">Milk products only, ranked high to low; scroll for the full list.</p>
     </div>
   </div>
 
   <div class="panel">
     <div class="panel-head">
-      <h3>Revenue &amp; Profit Margin by Product</h3>
-      <span class="hint">TTM Jul 2026</span>
+      <h3>Monthly Revenue of Milk Products<sup>1</sup></h3>
+      <span class="hint">fluid milk only</span>
     </div>
     <div class="panel-body">
-      <div class="chart-box h360"><canvas id="milkMarginChart"></canvas></div>
-      <p class="panel-note">Product axis per <em>Products Matrix, 2026.06.24</em>: all milk flavors and Whipping Cream rolled into "Class 1 milk"; Sour Cream and Chip Dip combined; "Other" covers eggnog and co-packed products. Revenue and profit margin by product are not yet entered &mdash; bars will read zero until real per-product figures are added.</p>
+      <div class="chart-box h360 connected"><canvas id="milkTrendChart"></canvas></div>
     </div>
   </div>
 
   <div class="panel">
     <div class="panel-head">
-      <h3>Revenue &amp; Profit Margin by Customer</h3>
+      <h3>Revenue &amp; Profit Margin by Product<sup>1,2</sup></h3>
       <span class="hint">TTM Jul 2026</span>
     </div>
     <div class="panel-body">
-      <div class="chart-box h360"><canvas id="customerMarginChart"></canvas></div>
+      <div class="chart-box h360 connected"><canvas id="milkMarginChart"></canvas></div>
+      <p class="panel-note">Product axis per <em>Products Matrix, 2026.06.24</em>: all milk flavors and Whipping Cream rolled into "Class 1 milk"; Sour Cream and Chip Dip combined; "Other" covers eggnog, cheese, and co-packed products. Revenue is real (see<sup>1</sup>); profit margin by product isn't available &mdash; this file has no per-SKU cost data, so margin bars read zero until a cost source is added.</p>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head">
+      <h3>Revenue &amp; Profit Margin by Customer<sup>1,2</sup></h3>
+      <span class="hint">TTM Jul 2026 &middot; hover a bar for % of revenue</span>
+    </div>
+    <div class="panel-body">
+      <div class="chart-box h360 connected"><canvas id="customerMarginChart"></canvas></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head"><h3>Appendix: Data Sources</h3></div>
+    <div class="panel-body">
+      <p class="panel-note"><sup>1</sup> From actual sales, Jul '25&ndash;Jun '26 (<em>Items_Sold_TTM_July2026.xlsx</em>). Quantity by Product uses every SKU on the MilkProducts sheet (fluid milk only, its own item descriptions, unmodified), ranked descending by units sold; reconciles exactly to that sheet's total (11,810,180 units / $15,275,744.97). Monthly Revenue of Milk Products is summed directly from the underlying invoice-line detail (Sheet1), restricted to line items matching a SKU name in the MilkProducts sheet, and also reconciles exactly to that sheet's total. By-customer figures are summed the same way from Sheet1, matched across all 7 category sheets (Milk Products, Ice Cream, Soft Serve Mix, Sour Cream / Chip Dip, Butter, Other Products, Co-Packing Products), and reconcile exactly to the Summary sheet's grand total ($18,960,891.43 / 12,406,277.96 units, excl. Bulk-Commodity and Animal sales, which are covered elsewhere on this dashboard). Half-Pint Revenue Share and Top SKU Share are measured against that same grand total. Qty figures are each SKU's native sales unit (gallon/half-gallon/quart/pint) &mdash; there's no case-pack conversion in the source, so quantities are mixed units and not strictly additive across rows.</p>
+      <p class="panel-note"><sup>2</sup> This workbook has revenue and quantity by product/customer, but no cost or COGS data, so profit margin can't be computed from it alone &mdash; margin bars are placeholders (0%) pending a cost source.</p>
     </div>
   </div>
 
@@ -416,14 +425,14 @@
 
   <div class="stats">
     <div class="stat">
-      <div class="num">###</div>
-      <div class="lbl">Utilization Rate<span class="sub">target: ###%</span></div>
-      <div class="delta warn">▲ ### pts · below target</div>
+      <div class="num">66.7%</div>
+      <div class="lbl">Utilization Rate<span class="sub">current schedule: 108 hrs/wk avail.<sup>1</sup></span></div>
+      <div class="delta neu">36 hrs/wk open capacity</div>
     </div>
     <div class="stat">
-      <div class="num">###</div>
-      <div class="lbl">Product Loss / Shrink<span class="sub">industry avg: ###%</span></div>
-      <div class="delta up">best in class</div>
+      <div class="num">3.06%</div>
+      <div class="lbl">Shrinkage Rate<span class="sub">week of 7/28 &middot; industry avg: 2.1%<sup>1</sup></span></div>
+      <div class="delta dn">▲ 0.96 pts above industry avg</div>
     </div>
     <div class="stat">
       <div class="num">###</div>
@@ -444,23 +453,12 @@
     <p>Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
   </div>
 
-  <div class="grid-2">
-    <div class="panel">
-      <div class="panel-head">
-        <h3>KPI vs Industry Benchmark</h3>
-      </div>
-      <div class="panel-body">
-        <div class="hbars" id="plantKpiBars"></div>
-      </div>
+  <div class="panel">
+    <div class="panel-head">
+      <h3>Key Metrics<sup>1</sup></h3>
     </div>
-    <div class="panel">
-      <div class="panel-head">
-        <h3>Annual Downtime by Cause</h3>
-        <span class="hint">hours</span>
-      </div>
-      <div class="panel-body">
-        <div class="chart-box h280"><canvas id="plantDowntimeChart"></canvas></div>
-      </div>
+    <div class="panel-body">
+      <div class="hbars" id="plantKpiBars"></div>
     </div>
   </div>
 
@@ -476,6 +474,13 @@
       <div class="tbl-wrap">
         <table class="dt" id="plantMetricTable"></table>
       </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head"><h3>Appendix: Data Sources</h3></div>
+    <div class="panel-body">
+      <p class="panel-note"><sup>1</sup> Per Nate (Plant Manager), Aug 2026. Utilization Rate = Actual Operating Hours &divide; Potential Hours Available &times; 100. Current schedule (Mon 5am&ndash;Fri 5pm) = 108 hrs/wk available; average 72 hrs/wk actually run = 66.7% utilization. Possibility schedule (Mon 5am&ndash;Sun 5am, 7 days) = 144 hrs/wk available; same formula, applied to the average hours needed to complete orders &mdash; modeled here at the same 72 hrs/wk, since that reflects today's order volume, giving 50.0% utilization and 72 hrs/wk open capacity. Shrinkage Rate = (Milk Input &minus; Saleable Output) &divide; Input &times; 100. Week of 7/28: Milk Input 83,247 gal, Milk Sales 80,697 gal, shrink &divide; input = 3.06%. Nate's note states the input/output difference as 2,250 gal, but 83,247 &minus; 80,697 = 2,550 gal &mdash; it's 2,550 gal that reconciles to the stated 3.06% (2,550 / 83,247 = 3.063%), so 2,550 is used here; flagged for Nate to confirm which figure (the 2,250 or the 83,247/80,697 inputs) is the typo.</p>
     </div>
   </div>
 </section>

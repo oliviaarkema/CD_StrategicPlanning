@@ -176,6 +176,9 @@ nav.topnav button.active{color:var(--kelly);border-bottom-color:var(--kelly);fon
 .chart-box.h280{height:280px}
 .chart-box.h320{height:320px}
 .chart-box.h360{height:360px}
+.chart-box.h420{height:420px}
+.chart-box.chart-scroll{overflow-y:auto;overflow-x:hidden}
+.chart-inner{position:relative;width:100%}
 .chart-box canvas{filter:grayscale(1);opacity:.35}
 .chart-box::after{
   content:"Pending Data Connection";
@@ -232,11 +235,13 @@ table.dt tr:hover td{background:var(--bg)}
 .hbar-fill.good{background:#16a34a}
 .hbar-fill.warn{background:#d97706}
 .hbar-fill.bench{background:#9aa79a}
+.hbar-fill.pending{background:#c3ccc3}
+.hbar-row.pending{opacity:.5;filter:grayscale(1)}
 .hbar-val{text-align:right;font-variant-numeric:tabular-nums;font-weight:600;color:var(--green)}
 
-#milkQualBars,#plantKpiBars,#marketRadiusHeatmap{position:relative;min-height:80px}
-#milkQualBars>*,#plantKpiBars>*,#marketRadiusHeatmap>*{filter:grayscale(1);opacity:.35}
-#milkQualBars::after,#plantKpiBars::after,#marketRadiusHeatmap::after{
+#milkQualBars,#marketRadiusHeatmap{position:relative;min-height:80px}
+#milkQualBars>*,#marketRadiusHeatmap>*{filter:grayscale(1);opacity:.35}
+#milkQualBars::after,#marketRadiusHeatmap::after{
   content:"Pending Data Connection";
   position:absolute;inset:0;margin:auto;height:28px;width:max-content;max-width:90%;
   display:flex;align-items:center;justify-content:center;

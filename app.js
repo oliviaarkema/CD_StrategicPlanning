@@ -161,25 +161,72 @@ function initHome() {
 // ═══════════════════════════════════════════════════════════════════════════════
 //  MILK PRODUCTS
 // ═══════════════════════════════════════════════════════════════════════════════
-// Product axis per Products Matrix, 2026.06.24.xlsx. Cases pending real per-product
-// sales data — left at 0, not modeled from the old brand/package SKU placeholders.
-const MILK_PRODS = [
-  { name:"Vitamin D",           cases:0 },
-  { name:"2% Red Fat",          cases:0 },
-  { name:"1% Lowfat",           cases:0 },
-  { name:"Fat Free",            cases:0 },
-  { name:"Chocolate",           cases:0 },
-  { name:"Strawberry",          cases:0 },
-  { name:"Fat Free Chocolate",  cases:0 },
-  { name:"Whipping Cream",      cases:0 },
-  { name:"Ice Cream",           cases:0 },
-  { name:"Soft Serve Mix",      cases:0 },
-  { name:"Butter-Salted",       cases:0 },
-  { name:"Butter-Unsalted",     cases:0 },
-  { name:"Sour Cream & Chip Dip", cases:0 },
-  { name:"Other (eggnog, co-packed)", cases:0 },
+// TTM Jul '25-Jun '26, from Items_Sold_TTM_July2026.xlsx's MilkProducts sheet (fluid
+// milk only — not Ice Cream/Soft Serve/etc.). Every SKU on that sheet (its own item
+// descriptions, unmodified), sorted descending by quantity. Qty is each SKU's own
+// sales unit (gallon/half-gallon/quart/pint) as sold.
+const MILK_SKUS = [
+  { name:"64 CD CHOC FF HALF PINT",              qty:3273358, rev:1246863.06 },
+  { name:"26 CD CHOC MILK Pint",                 qty:2219715, rev:1783732.32 },
+  { name:"63 CD 1% LF HALF PINT",                qty: 672569, rev: 240215.94 },
+  { name:"25 CD CHOC MILK Quart",                qty: 512866, rev: 675719.94 },
+  { name:"13 CD 2% RF Pint",                     qty: 417829, rev: 282155.05 },
+  { name:"56 WF HVD HALF GALLON",                qty: 416988, rev: 844031.98 },
+  { name:"57 WF 2% HALF GALLON",                 qty: 352188, rev: 687793.86 },
+  { name:"05 CD HVD Gallon",                     qty: 339155, rev:1151279.38 },
+  { name:"52 WF HVD GALLON",                     qty: 336240, rev:1294029.20 },
+  { name:"24 CD CHOC MILK 1/2 Gallon",            qty: 325287, rev: 735296.91 },
+  { name:"11 CD 2% RF Gallon",                   qty: 298077, rev: 937165.06 },
+  { name:"27 CD STRAW MILK Pint",                 qty: 253594, rev: 203722.53 },
+  { name:"12 CD 2% RF 1/2 Gallon",                qty: 221364, rev: 385118.24 },
+  { name:"08 CD HVD Pint",                        qty: 219495, rev: 151867.61 },
+  { name:"53 WF 2% GALLON",                      qty: 210090, rev: 777794.27 },
+  { name:"06 CD HVD 1/2 Gallon",                  qty: 193179, rev: 350440.73 },
+  { name:"89 QD CHOC PINT",                       qty: 176107, rev: 128807.23 },
+  { name:"59 WF FAT FREE HALF GALLON",            qty: 143748, rev: 259870.10 },
+  { name:"58 WF 1% HALF GALLON",                  qty: 130464, rev: 243542.33 },
+  { name:"W33 CD WHP CRM HGL",                    qty: 114210, rev: 641389.56 },
+  { name:"23 CD CHOC MILK Gallon",                qty: 103601, rev: 444031.24 },
+  { name:"07 CD HVD Quart",                       qty:  97768, rev: 107456.86 },
+  { name:"44 CD 2% QUART",                        qty:  90124, rev:  95532.46 },
+  { name:"70 QD HVD GALLON",                      qty:  83759, rev: 282431.99 },
+  { name:"88 QD CHOC QUART",                      qty:  75883, rev:  96378.28 },
+  { name:"71 QD 2% RF GALLON",                    qty:  73032, rev: 235359.41 },
+  { name:"15 CD 1% LF GALLON",                    qty:  50123, rev: 151347.13 },
+  { name:"87 QD CHOC HALF GALLON",                qty:  46541, rev:  98278.46 },
+  { name:"83 QD 2% PINT",                         qty:  42712, rev:  26588.60 },
+  { name:"82 QD HVD PINT",                        qty:  37462, rev:  24292.15 },
+  { name:"74 QD HVD HALF GALLON",                 qty:  35573, rev:  63222.36 },
+  { name:"75 QD 2% RF HALF GALLON",               qty:  35235, rev:  58929.28 },
+  { name:"18 CD FAT FREE Gallon",                 qty:  33524, rev:  97248.04 },
+  { name:"86 QD CHOC GALLON",                     qty:  26711, rev: 107910.96 },
+  { name:"62 CD 1% LF HALF GALLON",               qty:  22962, rev:  37155.42 },
+  { name:"79 QD 2% QUART",                        qty:  19876, rev:  20864.17 },
+  { name:"78 QD HVD QUART",                       qty:  19777, rev:  21784.28 },
+  { name:"33 CD HVY WHIP CRM 1/2 Gallon",          qty:  18887, rev: 102939.95 },
+  { name:"19 CD FAT FREE 1/2 Gallon",              qty:  17301, rev:  27703.18 },
+  { name:"72 QD 1% LF GALLON",                    qty:  11434, rev:  34853.22 },
+  { name:"76 QD 1% HALF GALLON",                  qty:  11366, rev:  18143.91 },
+  { name:"77 QD FAT FREE HALF GALLON",             qty:  10833, rev:  16602.96 },
+  { name:"73 QD FAT FREE Gallon",                 qty:   9250, rev:  27137.49 },
+  { name:"10 CC 2% RF Gallon",                    qty:   4852, rev:  13537.08 },
+  { name:"04 CC HVD Gallon",                      qty:   1935, rev:   5957.78 },
+  { name:"CD 2.5 GAL DISP WHOLE CHOCOLATE",       qty:   1347, rev:  13554.33 },
+  { name:"09 CD 2% RF 5 Gal Disp",                qty:    983, rev:  15216.50 },
+  { name:"22FF CD FF CHOCOLATE 5 GAL DISP",       qty:    532, rev:   8830.91 },
+  { name:"29 CD STRAW MILK 1/2 Gallon",           qty:    216, rev:    470.66 },
+  { name:"22 CD CHOC 5 Gal Disp",                 qty:     58, rev:   1150.61 },
 ];
-const MILK_MONTHS = [6620,7280,7910,8440,9020,8190,6940,6610,7180,7840,7950,8610];
+
+// Monthly Revenue of milk products only (the "Milk Products" category above, i.e.
+// fluid milk — not Ice Cream/Soft Serve/etc.), Jul '25-Jun '26 (dashboard fiscal
+// year). Summed directly from Sheet1's invoice-line Amount (signed, not abs — some
+// categories mix positive and negative lines e.g. returns/credits, so each line must
+// be summed with its own sign before negating the total) for every line item matching
+// a SKU name in the MilkProducts sheet. Reconciles exactly to that sheet's total
+// ($15,275,744.97).
+const mLabels = ["Jul '25","Aug '25","Sep '25","Oct '25","Nov '25","Dec '25","Jan '26","Feb '26","Mar '26","Apr '26","May '26","Jun '26"];
+const MILK_MONTHS_REV = [1227847,1166802,1135167,1209551,1019044,1321061,1300901,1290564,1434068,1463859,1407425,1299456];
 
 function weightedAvg(weights, values) {
   const sumW = weights.reduce((s,w) => s+w, 0);
@@ -188,8 +235,9 @@ function weightedAvg(weights, values) {
   return sumWV / sumW;
 }
 
-function renderMarginChart(canvasId, labels, revData, pctData, revMax) {
+function renderMarginChart(canvasId, labels, revData, pctData, revMax, showSharePct) {
   const overallMargin = weightedAvg(revData, pctData);
+  const revTotal = revData.reduce((s,v) => s+v, 0);
   new Chart(document.getElementById(canvasId), {
     type:"bar",
     data:{
@@ -197,7 +245,7 @@ function renderMarginChart(canvasId, labels, revData, pctData, revMax) {
       datasets:[
         {label:"Revenue ($M)", data:revData, backgroundColor:C.green, borderRadius:4, yAxisID:"y"},
         {label:"Profit Margin (%)", data:pctData, backgroundColor:C.kelly, borderRadius:4, yAxisID:"y1"},
-        {label:"Overall Margin (wtd avg)", type:"line", data:labels.map(()=>overallMargin),
+        {label:"Overall Margin", type:"line", data:labels.map(()=>overallMargin),
           yAxisID:"y1", borderColor:C.red, borderDash:[6,4], borderWidth:2,
           pointRadius:0, tension:0, fill:false},
       ]
@@ -205,8 +253,11 @@ function renderMarginChart(canvasId, labels, revData, pctData, revMax) {
     options:{
       responsive:true, maintainAspectRatio:false,
       plugins:{ legend:{position:"top"},
-        tooltip:{callbacks:{label: c => c.dataset.label + ": " +
-          (c.dataset.yAxisID==="y1" ? c.parsed.y.toFixed(1)+"%" : "$"+c.parsed.y+"M")}} },
+        tooltip:{callbacks:{label: c => {
+          if (c.dataset.yAxisID==="y1") return c.dataset.label + ": " + c.parsed.y.toFixed(1) + "%";
+          const share = showSharePct ? ` (${(c.parsed.y/revTotal*100).toFixed(1)}% of revenue)` : "";
+          return c.dataset.label + ": $" + c.parsed.y + "M" + share;
+        }}} },
       scales:{
         x:{grid:{display:false}},
         y:{
@@ -224,63 +275,99 @@ function renderMarginChart(canvasId, labels, revData, pctData, revMax) {
   });
 }
 
-function initMilk() {
-  const totalCases = MILK_PRODS.reduce((s,p) => s+p.cases, 0);
-  const labels = MILK_PRODS.map(p => p.name);
-  const cases  = MILK_PRODS.map(p => p.cases);
+// rankBy: "qty" (Units), "rev" (Overall Revenue), or "ppu" (Price per Unit = rev/qty).
+function milkProdValue(sku, rankBy) {
+  if (rankBy === "rev") return sku.rev;
+  if (rankBy === "ppu") return sku.rev / sku.qty;
+  return sku.qty;
+}
 
-  new Chart(document.getElementById("milkProdChart"), {
+let milkProdChartInstance = null;
+function renderMilkProdChart(rankBy) {
+  const sorted = [...MILK_SKUS].sort((a,b) => milkProdValue(b,rankBy) - milkProdValue(a,rankBy));
+  const labels = sorted.map(p => p.name);
+  const data   = sorted.map(p => milkProdValue(p, rankBy));
+
+  // Inner container is taller than its scrolling wrapper so all 50 SKUs stay
+  // legible; the wrapper (h420, overflow-y:auto) turns that into a scrollable window.
+  document.getElementById("milkProdChartInner").style.height = (sorted.length * 26) + "px";
+
+  const datasetLabel = {qty:"Units Sold", rev:"Overall Revenue", ppu:"Price per Unit"}[rankBy];
+
+  if (milkProdChartInstance) milkProdChartInstance.destroy();
+  milkProdChartInstance = new Chart(document.getElementById("milkProdChart"), {
     type:"bar",
     data:{
       labels, datasets:[{
-        data: cases, backgroundColor: C.green, borderRadius:5,
-        label:"Cases"
+        data, backgroundColor: C.green, borderRadius:5,
+        label: datasetLabel
       }]
     },
     options:{
       indexAxis:"y", responsive:true, maintainAspectRatio:false,
       plugins:{ legend:{display:false},
-        tooltip:{callbacks:{label: c => fmt(c.parsed.x) + " cases"}} },
+        tooltip:{callbacks:{
+          label: c => {
+            const sku = sorted[c.dataIndex];
+            return [`Units: ${fmt(sku.qty)}`, `Overall Revenue: $${fmt(Math.round(sku.rev))}`,
+              `Price/Unit: $${(sku.rev/sku.qty).toFixed(2)}`];
+          }
+        }} },
       scales:{
-        x:{grid:{color:gridColor()}, ticks:{callback:v=>fmt(v)}},
-        y:{grid:{display:false}, ticks:{font:{size:11}}}
+        x:{grid:{color:gridColor()}, ticks:{callback: v => rankBy === "ppu" ? "$"+v.toFixed(2) : rankBy === "rev" ? "$"+fmt(v) : fmt(v)}},
+        y:{grid:{display:false}, ticks:{font:{size:9}}}
       }
     }
   });
+}
 
-  const mLabels = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+function initMilk() {
+  renderMilkProdChart("qty");
+  document.querySelectorAll(".js-milkprod-rank-toggle button").forEach(btn =>
+    btn.addEventListener("click", () => {
+      const rank = btn.dataset.rank;
+      document.querySelectorAll(".js-milkprod-rank-toggle button").forEach(b =>
+        b.classList.toggle("active", b.dataset.rank === rank));
+      renderMilkProdChart(rank);
+    }));
+
   new Chart(document.getElementById("milkTrendChart"), {
     type:"bar",
     data:{
       labels:mLabels,
       datasets:[{
-        data: MILK_MONTHS, backgroundColor: C.kelly, borderRadius:4,
-        label:"Cases"
+        data: MILK_MONTHS_REV, backgroundColor: C.kelly, borderRadius:4,
+        label:"Revenue"
       }]
     },
     options:{
       responsive:true, maintainAspectRatio:false,
       plugins:{ legend:{display:false},
-        tooltip:{callbacks:{label: c => fmt(c.parsed.y) + " cases"}} },
+        tooltip:{callbacks:{label: c => "$" + fmt(Math.round(c.parsed.y))}} },
       scales:{
         x:{grid:{display:false}},
-        y:{grid:{color:gridColor()}, ticks:{callback:v=>fmt(v)}}
+        y:{grid:{color:gridColor()}, ticks:{callback:v=>"$"+fmt(v)}}
       }
     }
   });
 
   // Product axis per Products Matrix, 2026.06.24.xlsx: all milk flavors (and Whipping
-  // Cream) rolled into "Class 1 milk"; Sour Cream + Chip Dip combined; Other = eggnog
-  // & co-packed. Revenue/margin pending real per-product data — left at 0.
+  // Cream) rolled into "Class 1 milk"; Sour Cream + Chip Dip combined; Other = eggnog,
+  // cheese, & co-packed. Revenue is real (Summary sheet, TTM Jul 2026); per-product
+  // profit margin isn't in this file (no COGS by SKU) — left at 0/pending.
   const MARGIN_PRODS = ["Class 1 milk","Ice Cream","Soft Serve Mix","Butter","Sour Cream & Chip Dip","Other (eggnog, co-packed)"];
-  const MARGIN_REV    = [0, 0, 0, 0, 0, 0];
+  const MARGIN_REV    = [15.28, 0.54, 1.67, 0.33, 0.11, 1.03];
   const MARGIN_PCT    = [0, 0, 0, 0, 0, 0];
-  renderMarginChart("milkMarginChart", MARGIN_PRODS, MARGIN_REV, MARGIN_PCT, 25);
+  renderMarginChart("milkMarginChart", MARGIN_PRODS, MARGIN_REV, MARGIN_PCT, 18);
 
-  const CUSTOMER_NAMES = ["Cedar Crest","Quality Dairy","Kuster's","Farm Store","Other"];
-  const CUSTOMER_REV   = [14.5, 11.2, 8.6, 4.1, 2.9];
-  const CUSTOMER_PCT   = [24, 31, 27, 38, 19];
-  renderMarginChart("customerMarginChart", CUSTOMER_NAMES, CUSTOMER_REV, CUSTOMER_PCT, 20);
+  // Customer names per Sheet1's "Name" column; Cedar Crest's milk and ice-cream
+  // invoices ("2803-Cedar Crest Dairy" / "2802-Cedar Crest (ICE CREAM)") are combined
+  // as one account. Revenue is real; profit margin isn't in this file — pending.
+  // showSharePct (last arg): hover a bar to see that customer's % of total revenue.
+  const CUSTOMER_NAMES = ["Cedar Crest","Quality Dairy (QD)","Kuster's Dairy","Country Dairy Farm Store","Other"];
+  const CUSTOMER_REV   = [15.44, 1.66, 1.10, 0.17, 0.60];
+  const CUSTOMER_PCT   = [0, 0, 0, 0, 0];
+  renderMarginChart("customerMarginChart", CUSTOMER_NAMES, CUSTOMER_REV, CUSTOMER_PCT, 18, true);
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -476,16 +563,22 @@ function initRawMilk() {
 // ═══════════════════════════════════════════════════════════════════════════════
 //  PLANT EFFICIENCY
 // ═══════════════════════════════════════════════════════════════════════════════
+// Utilization Rate, Shrinkage Rate, and Open Capacity are real, per Nate (Plant
+// Manager, Aug 2026) — see the page appendix for formulas and citations. Labor
+// Hrs/cwt and Energy $/cwt remain placeholders (greyed out below; Energy $/cwt has
+// no reliable source yet — see the PLANT_MONTHS comment below on the ~15x labor cost
+// scale error in the source file) and are excluded from the pct/bench math since
+// they're not driven by real benchmarks.
 function initPlant() {
   document.getElementById("plantKpiBars").innerHTML = [
-    {lbl:"Utilization Rate",   sub:"Target: 85%",         val:78,   bench:85,   max:100, fmt:v=>v+"%",     cls:"warn"},
-    {lbl:"Product Loss/Shrink",sub:"Industry avg: 2.1%",  val:1.8,  bench:2.1,  max:5,   fmt:v=>v+"%",     cls:"good", invert:true},
-    {lbl:"Labor Hrs / cwt",    sub:"Industry avg: 0.48",  val:0.42, bench:0.48, max:0.8, fmt:v=>v+" hrs",  cls:"good", invert:true},
-    {lbl:"Energy $ / cwt",     sub:"Industry avg: $1.38", val:1.24, bench:1.38, max:2.2, fmt:v=>"$"+v,     cls:"good", invert:true},
+    {lbl:"Utilization Rate",   sub:"Current schedule: 108 hrs/wk avail.", val:66.7, bench:85,   max:100, fmt:v=>v+"%",     cls:"warn"},
+    {lbl:"Shrinkage Rate",     sub:"Week of 7/28 &middot; industry avg: 2.1%",  val:3.06, bench:2.1,  max:5,   fmt:v=>v+"%",     cls:"warn", invert:true},
+    {lbl:"Open Capacity",      sub:"Current schedule: 108 hrs/wk avail.", val:36,   bench:null, max:108, fmt:v=>v+" hrs/wk", cls:"primary"},
+    {lbl:"Labor Hrs / cwt",    sub:"Industry avg: 0.48 (placeholder)", val:0.42, bench:0.48, max:0.8, fmt:v=>v+" hrs",  cls:"pending", pending:true},
+    {lbl:"Energy $ / cwt",     sub:"Industry avg: $1.38 (placeholder)", val:1.24, bench:1.38, max:2.2, fmt:v=>"$"+v,     cls:"pending", pending:true},
   ].map(r=>{
     const pct  = (r.val  / r.max * 100).toFixed(1);
-    const bpct = (r.bench/ r.max * 100).toFixed(1);
-    return `<div class="hbar-row">
+    return `<div class="hbar-row${r.pending ? " pending" : ""}">
       <div class="hbar-label">${r.lbl}<i>${r.sub}</i></div>
       <div class="hbar-track">
         <div class="hbar-fill ${r.cls}" style="width:${pct}%"></div>
@@ -493,27 +586,6 @@ function initPlant() {
       <div class="hbar-val">${r.fmt(r.val)}</div>
     </div>`;
   }).join("");
-
-  new Chart(document.getElementById("plantDowntimeChart"), {
-    type:"bar",
-    data:{
-      labels:["CIP Cleaning","Preventive Maint.","Product Changeovers","Unplanned"],
-      datasets:[{
-        data:[48,32,24,19],
-        backgroundColor:[C.green, C.kelly, C.mid, C.amber],
-        borderRadius:5, label:"Hours"
-      }]
-    },
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      plugins:{ legend:{display:false},
-        tooltip:{callbacks:{label: c => c.parsed.y + " hrs"}} },
-      scales:{
-        x:{grid:{display:false}},
-        y:{grid:{color:gridColor()}, ticks:{callback:v=>v+" h"}}
-      }
-    }
-  });
 
   renderPlantMetricTable("cwt");
   document.querySelectorAll(".js-plant-unit-toggle button").forEach(btn =>
