@@ -793,59 +793,84 @@ function initCosts() {
 //  MARKET — DEMAND-SIDE SCAN
 // ═══════════════════════════════════════════════════════════════════════════════
 function initMarket() {
+  // Cedar Crest Weekly Sales Database - April2025-March2026.xlsx, 'Summary - All Weeks' tab,
+  // customers with Weeks Ordered >= 3, summed Total Cases per category (same name-based categories
+  // as 'Customer Cases by Distance'). Unlike that scatter, totals here include all customers --
+  // 'Other' includes the 3 United Natural Foods distributor accounts (209,328 of its 270,063 cases).
+  const CASES_BY_CHANNEL = [
+    {label:"Other", cases:270063, color:C.muted},
+    {label:"Convenience Store / Gas", cases:226221, color:C.amber},
+    {label:"Supermarket / Grocery", cases:62206, color:C.blue},
+    {label:"Ice Cream / Dessert Shop", cases:52832, color:C.green},
+    {label:"School / Institutional", cases:47833, color:C.kelly},
+    {label:"Coffee Shop", cases:15882, color:C.mid},
+    {label:"Restaurant / Food Service", cases:4008, color:C.red},
+  ];
   new Chart(document.getElementById("marketDemandChart"), {
     type:"bar",
     data:{
-      labels:["School / Institutional","Direct-to-Consumer","Local/Premium Retail","Category Average","Distributor / Wholesale"],
+      labels: CASES_BY_CHANNEL.map(c => c.label),
       datasets:[{
-        data:[9.4, 14, 6.8, 2.1, -0.6],
-        backgroundColor:[C.green, C.kelly, C.mid, C.muted, C.amber],
-        borderRadius:5, label:"YoY %"
+        data: CASES_BY_CHANNEL.map(c => c.cases),
+        backgroundColor: CASES_BY_CHANNEL.map(c => c.color),
+        borderRadius:5, label:"Total Cases"
       }]
     },
     options:{
       indexAxis:"y", responsive:true, maintainAspectRatio:false,
       plugins:{ legend:{display:false},
-        tooltip:{callbacks:{label: c => (c.parsed.x>=0?"+":"") + c.parsed.x + "% YoY"}} },
+        tooltip:{callbacks:{label: c => fmt(c.parsed.x) + " cases"}} },
       scales:{
-        x:{grid:{color:gridColor()}, ticks:{callback:v=>(v>0?"+":"")+v+"%"}},
+        x:{grid:{color:gridColor()}, ticks:{callback:v=>fmt(v)}},
         y:{grid:{display:false}, ticks:{font:{size:11}}}
       }
     }
   });
 
-  const RADIUS_BANDS = [
-    {label:"0–24 mi",    pen:82},
-    {label:"25–49 mi",   pen:61},
-    {label:"50–99 mi",   pen:43},
-    {label:"100–199 mi", pen:24},
-    {label:"200–499 mi", pen:9},
+  // Cedar Crest Weekly Sales Database - April2025-March2026.xlsx, 'Summary - All Weeks' tab,
+  // filtered to customers with Weeks Ordered >= 3 (1,523 of 1,730 total). % is of the 1,502 of
+  // those with a mapped ZIP/distance ('Miles to Country Dairy' column); 21 unmapped customers
+  // excluded. Even 50-mile bands; the lone customer beyond 300 mi (a distributor, ~684 mi) falls
+  // in the open-ended 300+ mi band.
+  const PEN_BY_DISTANCE = [
+    {label:"0-49 mi", count:293, pct:19.5},
+    {label:"50-99 mi", count:558, pct:37.2},
+    {label:"100-149 mi", count:490, pct:32.6},
+    {label:"150-199 mi", count:146, pct:9.7},
+    {label:"200-249 mi", count:8, pct:0.5},
+    {label:"250-299 mi", count:6, pct:0.4},
+    {label:"300+ mi", count:1, pct:0.1},
   ];
   const heatLow = [216,227,218], heatHigh = [7,77,26];
   const heatColor = pct => {
-    const t = pct/100;
+    const t = pct/40;
     return "rgb(" + heatLow.map((l,i) => Math.round(l + (heatHigh[i]-l)*t)).join(",") + ")";
   };
-  const ringCx = 150, ringCy = 150, ringMaxR = 140, ringCount = RADIUS_BANDS.length;
-  let ringsSvg = "";
-  for (let i = ringCount - 1; i >= 0; i--) {
-    const r = ringMaxR * (i+1) / ringCount;
-    ringsSvg += `<circle cx="${ringCx}" cy="${ringCy}" r="${r}" fill="${heatColor(RADIUS_BANDS[i].pen)}"/>`;
-  }
-  ringsSvg += `<circle cx="${ringCx}" cy="${ringCy}" r="4" fill="#fff" stroke="${C.green}" stroke-width="2"/>`;
+  new Chart(document.getElementById("marketPenetrationByDistanceChart"), {
+    type:"bar",
+    data:{
+      labels: PEN_BY_DISTANCE.map(b => b.label),
+      datasets:[{
+        data: PEN_BY_DISTANCE.map(b => b.pct),
+        backgroundColor: PEN_BY_DISTANCE.map(b => heatColor(b.pct)),
+        borderRadius:5, label:"% of Customers"
+      }]
+    },
+    options:{
+      indexAxis:"y", responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false},
+        tooltip:{callbacks:{label: c => {
+          const b = PEN_BY_DISTANCE[c.dataIndex];
+          return `${b.pct}% of customers (${fmt(b.count)})`;
+        }}} },
+      scales:{
+        x:{grid:{color:gridColor()}, ticks:{callback:v=>v+"%"}, max:40},
+        y:{grid:{display:false}, ticks:{font:{size:11}}}
+      }
+    }
+  });
 
-  document.getElementById("marketRadiusHeatmap").innerHTML = `
-    <svg class="radius-heatmap-svg" viewBox="0 0 300 300" role="img" aria-label="Market penetration by radius from distribution center">${ringsSvg}</svg>
-    <div class="radius-legend">
-      ${RADIUS_BANDS.map(b => `
-        <div class="radius-legend-row">
-          <span class="radius-swatch" style="background:${heatColor(b.pen)}"></span>
-          <span class="radius-legend-label">${b.label}</span>
-          <span class="radius-legend-val">${b.pen}%</span>
-        </div>`).join("")}
-    </div>`;
-
-  const PEN_RANGES = RADIUS_BANDS.map(b => b.label);
+  const PEN_RANGES = ["0-24 mi","25-49 mi","50-99 mi","100-199 mi","200-499 mi"];
   const PEN_BY_TYPE = [
     {label:"Convenience Store", data:[88,74,55,31,12], color:C.green},
     {label:"School",            data:[76,68,52,29,14], color:C.kelly},
@@ -872,37 +897,42 @@ function initMarket() {
     }
   });
 
-  const REV_BY_DISTANCE = [
-    {label:"Supermarket",       color:C.blue,  data:[{x:5,y:118000},{x:15,y:105000},{x:30,y:96000},{x:45,y:88000},{x:70,y:74000},{x:95,y:61000},{x:130,y:52000},{x:180,y:38000},{x:250,y:29000},{x:340,y:19000},{x:420,y:12000}]},
-    {label:"School",            color:C.kelly, data:[{x:8,y:82000},{x:20,y:75000},{x:35,y:68000},{x:55,y:59000},{x:80,y:49000},{x:110,y:41000},{x:150,y:33000},{x:210,y:24000},{x:290,y:16000},{x:380,y:9000}]},
-    {label:"Convenience Store", color:C.green, data:[{x:3,y:54000},{x:12,y:49000},{x:25,y:44000},{x:40,y:38000},{x:60,y:31000},{x:85,y:25000},{x:120,y:19000},{x:170,y:13000},{x:230,y:8000},{x:310,y:5000}]},
-    {label:"Coffee Shop",       color:C.mid,   data:[{x:6,y:37000},{x:18,y:33000},{x:33,y:28000},{x:50,y:23000},{x:75,y:18000},{x:105,y:14000},{x:145,y:10000},{x:200,y:6500},{x:270,y:4000}]},
-    {label:"Restaurant",        color:C.amber, data:[{x:10,y:41000},{x:22,y:36000},{x:38,y:31000},{x:58,y:26000},{x:82,y:20000},{x:115,y:15000},{x:155,y:11000},{x:215,y:7000},{x:295,y:4500}]},
-  ];
-  const allRevPoints = REV_BY_DISTANCE.flatMap(t => t.data);
-  const revN = allRevPoints.length;
-  const revSumX = allRevPoints.reduce((s,p) => s+p.x, 0);
-  const revSumY = allRevPoints.reduce((s,p) => s+p.y, 0);
-  const revSumXY = allRevPoints.reduce((s,p) => s+p.x*p.y, 0);
-  const revSumXX = allRevPoints.reduce((s,p) => s+p.x*p.x, 0);
-  const revSlope = (revN*revSumXY - revSumX*revSumY) / (revN*revSumXX - revSumX*revSumX);
-  const revIntercept = (revSumY - revSlope*revSumX) / revN;
-  const revMinX = Math.min(...allRevPoints.map(p => p.x));
-  const revMaxX = Math.max(...allRevPoints.map(p => p.x));
-  const revTrendline = [
-    {x:revMinX, y:revSlope*revMinX + revIntercept},
-    {x:revMaxX, y:revSlope*revMaxX + revIntercept}
+  // Cedar Crest Weekly Sales Database - April2025-March2026.xlsx, 'Summary - All Weeks' tab,
+  // customers with Weeks Ordered >= 3 with a mapped ZIP/distance (n=1,502, minus 3 outliers
+  // excluded below = 1,499 plotted). y = each customer's Total Cases summed across the period
+  // (revenue is not tracked in this data table). Category is inferred from customer name (keyword
+  // match, no explicit type field in the source) -- directional, not exact. 'Other' rolls up
+  // Farm/Agriculture, Church/Community Org, Campground/Recreation, Distributor/Wholesale, and
+  // unclassified names. The 3 largest accounts (all United Natural Foods distributor locations:
+  // 119,928 / 54,864 / 34,536 cases) are excluded from this scatter so the scale stays readable
+  // for typical customers -- see the panel note and 'Case Volume by Channel' for full totals.
+  const CASES_BY_DISTANCE = [
+  {label:"Convenience Store / Gas", color:C.amber, data:[{x:131.5,y:173},{x:141.2,y:342},{x:68.0,y:130},{x:78.7,y:538},{x:180.8,y:148},{x:43.1,y:453},{x:152.6,y:140},{x:86.6,y:374},{x:79.4,y:515},{x:46.1,y:507},{x:152.7,y:71},{x:102.2,y:236},{x:57.3,y:67},{x:56.2,y:301},{x:74.1,y:968},{x:120.1,y:273},{x:117.6,y:60},{x:160.8,y:113},{x:140.7,y:982},{x:60.1,y:1044},{x:52.9,y:574},{x:79.4,y:247},{x:149.4,y:18},{x:65.8,y:696},{x:140.7,y:490},{x:58.8,y:282},{x:61.5,y:348},{x:51.9,y:5},{x:57.3,y:454},{x:75.6,y:194},{x:4.9,y:993},{x:140.7,y:120},{x:132.4,y:125},{x:129.0,y:251},{x:59.9,y:690},{x:65.7,y:283},{x:129.0,y:359},{x:168.3,y:364},{x:30.6,y:424},{x:126.6,y:110},{x:6.4,y:1229},{x:25.3,y:1551},{x:152.0,y:130},{x:99.8,y:336},{x:56.2,y:460},{x:95.7,y:47},{x:86.7,y:873},{x:138.4,y:100},{x:84.8,y:1118},{x:104.8,y:100},{x:102.2,y:223},{x:50.8,y:541},{x:129.0,y:230},{x:110.1,y:36},{x:61.7,y:384},{x:136.8,y:196},{x:98.6,y:381},{x:132.8,y:638},{x:53.0,y:224},{x:65.8,y:198},{x:182.4,y:247},{x:184.7,y:36},{x:51.9,y:455},{x:77.0,y:505},{x:80.3,y:491},{x:135.3,y:144},{x:112.6,y:111},{x:57.2,y:1091},{x:28.5,y:1104},{x:101.0,y:218},{x:135.3,y:148},{x:51.9,y:792},{x:83.0,y:269},{x:92.7,y:91},{x:0.0,y:1232},{x:120.1,y:413},{x:111.5,y:414},{x:95.7,y:5921},{x:26.6,y:529},{x:104.0,y:197},{x:30.6,y:38},{x:149.4,y:354},{x:117.8,y:117},{x:148.9,y:296},{x:143.7,y:224},{x:78.7,y:657},{x:16.0,y:269},{x:23.9,y:1057},{x:53.9,y:729},{x:177.0,y:152},{x:75.6,y:136},{x:97.7,y:103},{x:119.4,y:106},{x:55.5,y:53},{x:74.4,y:293},{x:147.9,y:608},{x:89.3,y:432},{x:66.3,y:434},{x:51.1,y:6},{x:98.8,y:146},{x:78.7,y:496},{x:111.5,y:157},{x:59.6,y:396},{x:129.7,y:22},{x:69.0,y:144},{x:80.6,y:540},{x:127.1,y:139},{x:44.2,y:609},{x:101.0,y:110},{x:121.9,y:595},{x:78.8,y:612},{x:59.6,y:99},{x:86.1,y:296},{x:92.9,y:139},{x:149.8,y:327},{x:30.0,y:359},{x:30.0,y:1146},{x:95.3,y:27},{x:60.1,y:274},{x:133.8,y:30},{x:56.2,y:34},{x:50.8,y:192},{x:48.7,y:684},{x:51.9,y:489},{x:34.0,y:1251},{x:45.2,y:523},{x:30.6,y:847},{x:102.7,y:394},{x:38.4,y:277},{x:29.3,y:404},{x:46.1,y:264},{x:130.9,y:566},{x:73.3,y:1087},{x:47.8,y:445},{x:114.3,y:108},{x:86.1,y:30},{x:108.8,y:744},{x:160.6,y:1842},{x:61.4,y:112},{x:47.6,y:540},{x:102.7,y:6},{x:52.9,y:1506},{x:61.6,y:74},{x:23.9,y:184},{x:130.4,y:442},{x:102.7,y:247},{x:47.6,y:489},{x:34.0,y:1754},{x:52.9,y:188},{x:52.0,y:696},{x:111.9,y:136},{x:52.9,y:469},{x:106.9,y:39},{x:131.8,y:213},{x:61.4,y:480},{x:48.8,y:882},{x:92.2,y:21},{x:45.2,y:488},{x:102.3,y:146},{x:138.5,y:646},{x:107.3,y:176},{x:65.7,y:70},{x:116.2,y:1154},{x:62.9,y:633},{x:53.0,y:265},{x:43.5,y:828},{x:146.0,y:124},{x:26.6,y:205},{x:132.8,y:12},{x:99.8,y:335},{x:48.7,y:180},{x:32.2,y:20},{x:118.1,y:134},{x:132.4,y:542},{x:144.1,y:138},{x:64.0,y:1200},{x:50.4,y:5793},{x:61.7,y:5},{x:64.8,y:1448},{x:66.3,y:214},{x:55.1,y:242},{x:148.4,y:1330},{x:5.3,y:1451},{x:119.0,y:115},{x:152.7,y:133},{x:17.5,y:20},{x:187.9,y:196},{x:101.3,y:197},{x:104.9,y:80},{x:129.0,y:39},{x:6.4,y:295},{x:64.0,y:679},{x:76.7,y:44},{x:121.4,y:114},{x:116.6,y:241},{x:117.8,y:50},{x:65.7,y:494},{x:68.2,y:231},{x:76.7,y:46},{x:101.7,y:688},{x:90.4,y:231},{x:34.0,y:625},{x:119.6,y:246},{x:106.6,y:151},{x:52.9,y:384},{x:50.4,y:756},{x:95.6,y:167},{x:183.3,y:130},{x:50.4,y:583},{x:70.6,y:783},{x:19.6,y:226},{x:53.0,y:147},{x:23.9,y:185},{x:23.9,y:1536},{x:183.3,y:38},{x:13.3,y:378},{x:95.8,y:212},{x:119.6,y:166},{x:125.5,y:308},{x:59.6,y:414},{x:65.7,y:422},{x:31.6,y:1866},{x:130.3,y:492},{x:95.3,y:781},{x:137.8,y:752},{x:102.7,y:147},{x:110.6,y:218},{x:106.6,y:51},{x:120.8,y:15},{x:116.9,y:223},{x:55.1,y:489},{x:114.3,y:2628},{x:96.3,y:413},{x:56.8,y:586},{x:52.0,y:464},{x:86.1,y:37},{x:121.4,y:7},{x:86.1,y:88},{x:102.7,y:30},{x:116.3,y:221},{x:43.1,y:855},{x:97.7,y:503},{x:13.3,y:404},{x:27.1,y:14},{x:50.4,y:96},{x:116.2,y:36},{x:129.0,y:269},{x:26.6,y:1456},{x:92.1,y:368},{x:119.4,y:70},{x:63.7,y:305},{x:32.2,y:826},{x:97.3,y:505},{x:52.9,y:269},{x:97.7,y:24},{x:163.1,y:516},{x:129.0,y:202},{x:68.2,y:387},{x:29.4,y:1331},{x:130.8,y:953},{x:183.3,y:118},{x:99.2,y:577},{x:132.8,y:68},{x:147.9,y:106},{x:116.2,y:641},{x:71.0,y:52},{x:63.4,y:96},{x:102.2,y:178},{x:50.4,y:468},{x:136.8,y:242},{x:59.6,y:26},{x:51.1,y:171},{x:149.3,y:394},{x:17.5,y:653},{x:74.1,y:24},{x:79.4,y:459},{x:60.1,y:234},{x:76.7,y:202},{x:11.2,y:57},{x:64.8,y:327},{x:17.6,y:368},{x:107.3,y:62},{x:74.2,y:439},{x:99.7,y:15},{x:121.4,y:51},{x:137.8,y:294},{x:70.5,y:262},{x:138.4,y:175},{x:102.7,y:23},{x:38.4,y:1195},{x:65.8,y:189},{x:57.3,y:548},{x:53.0,y:591},{x:104.8,y:170},{x:130.3,y:72},{x:107.3,y:525},{x:156.9,y:234},{x:109.0,y:316},{x:17.5,y:98},{x:138.4,y:198},{x:116.9,y:158},{x:131.5,y:316},{x:143.6,y:410},{x:56.2,y:318},{x:110.1,y:102},{x:11.5,y:430},{x:121.2,y:207},{x:157.1,y:101},{x:14.8,y:187},{x:118.1,y:359},{x:97.8,y:346},{x:160.8,y:7},{x:157.1,y:26},{x:53.0,y:540},{x:95.7,y:377},{x:78.7,y:188},{x:148.9,y:25},{x:57.3,y:184},{x:55.1,y:344},{x:30.6,y:1111},{x:145.8,y:235},{x:128.5,y:187},{x:29.4,y:440},{x:105.2,y:157},{x:191.6,y:59},{x:74.1,y:20},{x:38.4,y:968},{x:98.6,y:600},{x:92.9,y:172},{x:76.7,y:22},{x:13.3,y:585},{x:49.6,y:863},{x:22.2,y:232},{x:132.5,y:171},{x:45.9,y:1010},{x:68.2,y:645},{x:61.7,y:94},{x:63.4,y:257},{x:90.4,y:213},{x:39.3,y:625},{x:35.8,y:868},{x:85.7,y:292},{x:60.1,y:255},{x:17.6,y:124},{x:111.5,y:78},{x:101.2,y:40},{x:131.5,y:258},{x:61.4,y:674},{x:23.9,y:1017},{x:102.7,y:174},{x:30.6,y:405},{x:110.7,y:22},{x:32.2,y:1496},{x:28.5,y:32},{x:53.3,y:144},{x:47.3,y:341},{x:25.3,y:265},{x:74.1,y:238},{x:98.6,y:89},{x:115.6,y:91},{x:34.0,y:3},{x:121.1,y:66},{x:59.6,y:545},{x:52.9,y:448},{x:139.0,y:9},{x:48.7,y:1125},{x:16.0,y:1340},{x:102.2,y:30},{x:133.8,y:250},{x:62.9,y:167},{x:132.8,y:77},{x:31.6,y:238},{x:95.6,y:123},{x:86.1,y:14},{x:104.1,y:85},{x:149.7,y:1410},{x:52.9,y:309},{x:121.4,y:133},{x:47.3,y:304},{x:110.6,y:143},{x:125.2,y:148},{x:75.6,y:199},{x:106.6,y:339},{x:101.3,y:66},{x:51.1,y:391},{x:17.6,y:436},{x:26.6,y:1764},{x:94.2,y:361},{x:23.9,y:1759},{x:53.0,y:216},{x:152.0,y:229},{x:5.3,y:388},{x:116.2,y:517},{x:98.6,y:185},{x:106.3,y:541},{x:78.7,y:14},{x:101.0,y:37},{x:136.8,y:150},{x:92.9,y:413},{x:120.1,y:293},{x:125.5,y:432},{x:157.1,y:13},{x:107.8,y:11},{x:105.2,y:188},{x:62.7,y:36},{x:79.4,y:10},{x:106.9,y:140},{x:153.0,y:83},{x:132.4,y:430},{x:192.3,y:61},{x:117.1,y:23},{x:126.6,y:115},{x:55.5,y:514},{x:11.2,y:119},{x:173.2,y:506},{x:172.1,y:368},{x:65.8,y:59},{x:59.6,y:181},{x:31.6,y:209},{x:148.4,y:285},{x:35.8,y:102},{x:127.4,y:383},{x:11.5,y:850},{x:17.5,y:422},{x:86.1,y:49},{x:17.6,y:1729},{x:53.0,y:961},{x:61.6,y:1045},{x:92.1,y:230},{x:79.4,y:822},{x:144.8,y:15},{x:68.2,y:644},{x:121.4,y:79},{x:130.4,y:518},{x:46.1,y:694},{x:51.1,y:642},{x:156.5,y:483},{x:71.0,y:455},{x:78.7,y:286},{x:86.5,y:24},{x:140.7,y:784},{x:135.3,y:33},{x:78.2,y:117},{x:30.6,y:48},{x:98.6,y:344},{x:80.6,y:522},{x:11.5,y:1500},{x:11.5,y:863},{x:143.7,y:25},{x:45.2,y:739},{x:57.2,y:573},{x:45.2,y:406},{x:110.6,y:146},{x:131.5,y:397},{x:63.1,y:311},{x:131.5,y:176},{x:120.8,y:149},{x:56.2,y:1239},{x:133.7,y:102},{x:52.9,y:918},{x:139.5,y:124},{x:53.0,y:679},{x:59.6,y:255},{x:104.8,y:40},{x:129.0,y:36},{x:25.3,y:230},{x:48.8,y:719},{x:51.1,y:639},{x:123.0,y:329},{x:92.4,y:962},{x:92.3,y:143},{x:152.0,y:301},{x:94.2,y:33},{x:56.2,y:16},{x:55.1,y:405},{x:92.4,y:140},{x:145.8,y:200},{x:157.1,y:1852},{x:59.6,y:394},{x:52.9,y:135},{x:61.5,y:611},{x:49.2,y:180},{x:89.3,y:133},{x:102.7,y:542},{x:127.5,y:186},{x:92.1,y:356},{x:107.8,y:132},{x:47.6,y:296},{x:0.0,y:299},{x:118.2,y:299},{x:173.8,y:101},{x:56.3,y:249},{x:46.5,y:474},{x:52.9,y:328},{x:145.8,y:163},{x:120.0,y:220},{x:91.4,y:650},{x:116.3,y:167},{x:125.8,y:212},{x:136.8,y:952},{x:119.0,y:65},{x:56.2,y:213},{x:104.2,y:178},{x:17.5,y:1354},{x:17.5,y:815},{x:22.2,y:1702},{x:50.8,y:337},{x:131.8,y:554},{x:53.0,y:147},{x:61.4,y:589},{x:48.8,y:1020},{x:138.5,y:410},{x:102.2,y:232},{x:57.3,y:471},{x:110.4,y:99},{x:70.5,y:866},{x:70.6,y:613},{x:118.1,y:4},{x:177.5,y:86},{x:99.8,y:270},{x:133.8,y:479},{x:145.9,y:281},{x:101.3,y:303},{x:84.8,y:513},{x:17.6,y:1214},{x:119.0,y:68},{x:79.4,y:491},{x:168.4,y:35},{x:25.3,y:1520},{x:74.1,y:272},{x:184.7,y:14},{x:138.4,y:2103},{x:28.5,y:538},{x:104.0,y:51},{x:85.1,y:409},{x:22.2,y:1468},{x:70.6,y:380},{x:55.6,y:215},{x:57.3,y:536},{x:39.3,y:1229},{x:117.8,y:101},{x:140.7,y:118},{x:129.5,y:357},{x:65.8,y:842},{x:132.3,y:146},{x:30.6,y:369},{x:132.0,y:153},{x:104.8,y:147}]},
+  {label:"Supermarket / Grocery", color:C.blue, data:[{x:98.6,y:933},{x:44.2,y:789},{x:86.7,y:2158},{x:111.0,y:71},{x:86.1,y:72},{x:58.8,y:1481},{x:59.6,y:260},{x:104.0,y:150},{x:49.6,y:1373},{x:76.1,y:345},{x:99.7,y:989},{x:91.2,y:467},{x:64.0,y:648},{x:35.8,y:28},{x:191.4,y:173},{x:45.2,y:203},{x:64.0,y:1299},{x:105.4,y:140},{x:150.2,y:467},{x:48.7,y:583},{x:29.4,y:172},{x:35.6,y:695},{x:146.0,y:156},{x:47.6,y:410},{x:51.1,y:761},{x:160.2,y:220},{x:96.3,y:76},{x:120.1,y:352},{x:106.6,y:808},{x:51.1,y:482},{x:82.2,y:187},{x:123.7,y:562},{x:102.3,y:132},{x:33.0,y:365},{x:35.8,y:11},{x:31.6,y:235},{x:28.5,y:221},{x:58.8,y:819},{x:25.3,y:2082},{x:11.5,y:10},{x:142.9,y:37},{x:4.9,y:991},{x:119.0,y:170},{x:34.0,y:109},{x:55.6,y:928},{x:107.8,y:24},{x:17.6,y:2824},{x:4.9,y:85},{x:29.4,y:1758},{x:106.9,y:313},{x:86.7,y:793},{x:148.1,y:254},{x:26.6,y:2166},{x:80.8,y:189},{x:142.9,y:1569},{x:132.4,y:67},{x:102.2,y:342},{x:156.5,y:224},{x:91.2,y:912},{x:116.2,y:454},{x:108.6,y:90},{x:86.2,y:433},{x:54.2,y:524},{x:78.7,y:1068},{x:52.9,y:342},{x:106.3,y:21},{x:61.4,y:321},{x:26.6,y:133},{x:80.6,y:424},{x:17.5,y:58},{x:108.4,y:1912},{x:22.2,y:13},{x:138.7,y:209},{x:38.4,y:1914},{x:129.0,y:1873},{x:55.5,y:280},{x:125.5,y:126},{x:98.8,y:537},{x:139.6,y:163},{x:102.3,y:732},{x:29.4,y:12},{x:53.9,y:2429},{x:167.9,y:157},{x:125.5,y:218},{x:154.3,y:7},{x:22.2,y:1919},{x:50.4,y:1580},{x:38.4,y:194},{x:25.3,y:177},{x:57.3,y:556},{x:23.9,y:22},{x:51.9,y:250},{x:166.4,y:330},{x:99.7,y:1407},{x:102.7,y:47},{x:57.3,y:1494},{x:63.1,y:484},{x:99.7,y:154},{x:95.3,y:317},{x:143.7,y:546},{x:55.6,y:1403},{x:29.4,y:498},{x:119.0,y:144},{x:85.7,y:163},{x:94.2,y:67},{x:44.2,y:541},{x:150.2,y:170},{x:164.3,y:153}]},
+  {label:"School / Institutional", color:C.kelly, data:[{x:138.5,y:19},{x:179.2,y:503},{x:127.1,y:155},{x:52.9,y:340},{x:50.8,y:290},{x:50.8,y:262},{x:34.0,y:508},{x:80.6,y:234},{x:111.4,y:612},{x:75.6,y:177},{x:135.5,y:70},{x:170.2,y:168},{x:34.0,y:636},{x:159.4,y:366},{x:80.6,y:213},{x:132.8,y:249},{x:179.2,y:143},{x:6.4,y:186},{x:50.8,y:153},{x:111.4,y:67},{x:50.8,y:218},{x:97.7,y:6},{x:57.3,y:343},{x:52.9,y:198},{x:52.9,y:119},{x:104.8,y:97},{x:179.2,y:156},{x:50.4,y:17},{x:46.1,y:212},{x:57.3,y:49},{x:180.8,y:141},{x:74.4,y:1020},{x:130.4,y:314},{x:114.1,y:19},{x:52.9,y:272},{x:52.9,y:300},{x:104.9,y:71},{x:38.0,y:20},{x:124.0,y:115},{x:52.9,y:235},{x:65.7,y:176},{x:31.6,y:389},{x:123.0,y:302},{x:116.9,y:205},{x:104.8,y:341},{x:104.8,y:649},{x:46.1,y:260},{x:135.3,y:4},{x:130.3,y:617},{x:47.8,y:307},{x:52.9,y:487},{x:104.8,y:255},{x:124.0,y:50},{x:19.6,y:858},{x:104.1,y:189},{x:22.2,y:44},{x:51.9,y:300},{x:105.4,y:108},{x:46.1,y:507},{x:95.3,y:136},{x:34.0,y:197},{x:102.8,y:78},{x:52.9,y:156},{x:22.2,y:478},{x:127.1,y:217},{x:163.5,y:55},{x:52.9,y:281},{x:123.7,y:59},{x:135.3,y:28},{x:104.9,y:78},{x:51.9,y:207},{x:51.9,y:99},{x:52.9,y:239},{x:70.2,y:376},{x:179.2,y:327},{x:56.3,y:44},{x:51.9,y:237},{x:117.1,y:85},{x:75.6,y:307},{x:50.8,y:280},{x:104.8,y:818},{x:11.5,y:352},{x:0.0,y:73},{x:121.4,y:251},{x:22.2,y:417},{x:46.1,y:43},{x:77.7,y:533},{x:86.5,y:331},{x:74.9,y:9},{x:74.2,y:251},{x:130.4,y:332},{x:47.8,y:130},{x:80.6,y:201},{x:130.4,y:466},{x:143.6,y:52},{x:23.9,y:400},{x:50.8,y:30},{x:50.8,y:156},{x:105.4,y:100},{x:104.1,y:35},{x:68.2,y:43},{x:110.6,y:105},{x:57.2,y:241},{x:22.2,y:320},{x:44.2,y:97},{x:47.8,y:316},{x:39.3,y:38},{x:102.2,y:144},{x:86.6,y:442},{x:57.3,y:117},{x:130.4,y:293},{x:107.9,y:8},{x:167.9,y:203},{x:5.3,y:208},{x:51.9,y:279},{x:106.6,y:10},{x:106.6,y:24},{x:104.8,y:138},{x:97.7,y:25},{x:128.8,y:332},{x:114.9,y:4},{x:51.1,y:3},{x:92.1,y:150},{x:52.9,y:18},{x:156.5,y:987},{x:5.3,y:166},{x:50.8,y:483},{x:138.1,y:320},{x:114.9,y:787},{x:104.8,y:282},{x:30.6,y:264},{x:173.8,y:38},{x:179.2,y:529},{x:129.0,y:584},{x:111.4,y:216},{x:57.3,y:153},{x:46.1,y:314},{x:123.7,y:21},{x:63.1,y:177},{x:130.4,y:441},{x:181.7,y:96},{x:52.9,y:178},{x:38.2,y:33},{x:102.2,y:386},{x:50.4,y:318},{x:4.9,y:9},{x:118.2,y:105},{x:130.4,y:396},{x:117.8,y:10},{x:74.1,y:286},{x:179.2,y:510},{x:65.7,y:201},{x:52.9,y:218},{x:65.7,y:207},{x:22.2,y:338},{x:17.5,y:36},{x:60.1,y:392},{x:104.1,y:335},{x:30.6,y:188},{x:116.9,y:1262},{x:47.8,y:383},{x:51.9,y:547},{x:50.4,y:202},{x:75.6,y:754},{x:5.3,y:236},{x:114.1,y:31},{x:121.2,y:59},{x:60.1,y:70},{x:114.1,y:22},{x:73.2,y:205},{x:80.3,y:20},{x:29.4,y:265},{x:180.8,y:228},{x:29.4,y:553},{x:63.7,y:173},{x:92.9,y:421},{x:152.0,y:5},{x:0.0,y:19},{x:51.9,y:231},{x:62.7,y:13},{x:5.3,y:310},{x:50.8,y:14},{x:30.6,y:199},{x:13.3,y:143},{x:171.8,y:24},{x:144.1,y:11},{x:52.9,y:327},{x:168.7,y:38},{x:102.8,y:19},{x:85.4,y:8},{x:106.6,y:247},{x:100.6,y:15},{x:130.4,y:289},{x:50.8,y:242},{x:30.6,y:239},{x:80.6,y:183},{x:52.9,y:16},{x:107.3,y:160},{x:106.6,y:103},{x:51.9,y:227},{x:29.4,y:53},{x:44.2,y:14},{x:22.2,y:467},{x:51.9,y:209},{x:49.6,y:69},{x:60.1,y:25},{x:17.6,y:656}]},
+  {label:"Ice Cream / Dessert Shop", color:C.green, data:[{x:173.2,y:126},{x:85.1,y:317},{x:91.2,y:66},{x:86.9,y:395},{x:25.3,y:162},{x:57.3,y:75},{x:117.6,y:25},{x:95.3,y:141},{x:181.9,y:31},{x:143.7,y:196},{x:25.3,y:691},{x:207.7,y:69},{x:43.1,y:285},{x:86.9,y:81},{x:64.0,y:16},{x:241.6,y:35},{x:52.9,y:2212},{x:70.0,y:426},{x:59.9,y:141},{x:179.0,y:15},{x:182.6,y:18},{x:137.2,y:33},{x:137.5,y:17},{x:112.4,y:424},{x:143.7,y:4},{x:121.6,y:513},{x:148.1,y:4},{x:120.1,y:523},{x:51.9,y:42},{x:297.8,y:418},{x:59.6,y:491},{x:185.2,y:379},{x:80.3,y:334},{x:70.0,y:48},{x:112.4,y:12},{x:119.5,y:89},{x:70.6,y:397},{x:44.2,y:279},{x:31.6,y:12},{x:56.2,y:158},{x:51.1,y:140},{x:80.7,y:187},{x:53.0,y:159},{x:85.7,y:25},{x:190.7,y:56},{x:102.2,y:64},{x:144.8,y:240},{x:56.3,y:163},{x:86.2,y:99},{x:113.7,y:1212},{x:111.5,y:11},{x:130.6,y:11},{x:166.9,y:86},{x:259.7,y:154},{x:82.8,y:76},{x:214.9,y:2286},{x:58.8,y:10},{x:172.1,y:3},{x:224.3,y:213},{x:131.5,y:1225},{x:180.1,y:117},{x:132.5,y:116},{x:143.6,y:98},{x:108.6,y:4},{x:53.9,y:409},{x:17.6,y:499},{x:85.4,y:31},{x:75.6,y:184},{x:101.3,y:129},{x:44.2,y:294},{x:47.6,y:287},{x:161.0,y:131},{x:135.3,y:900},{x:63.4,y:813},{x:179.3,y:30},{x:189.6,y:261},{x:58.8,y:137},{x:45.7,y:38},{x:35.8,y:22},{x:53.9,y:175},{x:145.8,y:635},{x:132.8,y:442},{x:178.9,y:52},{x:143.6,y:292},{x:11.2,y:447},{x:179.6,y:225},{x:47.0,y:833},{x:110.6,y:148},{x:181.6,y:60},{x:49.6,y:36},{x:23.9,y:10},{x:185.7,y:6},{x:166.3,y:5},{x:137.0,y:28},{x:74.1,y:8},{x:243.5,y:43},{x:57.3,y:31},{x:79.4,y:568},{x:107.8,y:1290},{x:21.8,y:171},{x:107.6,y:617},{x:60.1,y:847},{x:55.1,y:700},{x:180.1,y:68},{x:69.0,y:26},{x:52.9,y:125},{x:0.0,y:26},{x:144.9,y:32},{x:66.3,y:112},{x:86.9,y:37},{x:53.0,y:21},{x:179.0,y:7},{x:148.4,y:7381},{x:86.1,y:471},{x:32.2,y:79},{x:162.0,y:387},{x:17.6,y:31},{x:97.7,y:564},{x:72.5,y:20},{x:66.3,y:460},{x:131.5,y:8},{x:117.6,y:452},{x:243.7,y:930},{x:138.7,y:7},{x:254.1,y:85},{x:193.7,y:246},{x:79.4,y:126},{x:213.8,y:28},{x:59.6,y:33},{x:65.7,y:215},{x:131.5,y:29},{x:175.1,y:129},{x:190.2,y:64},{x:76.6,y:237},{x:104.2,y:791},{x:92.1,y:510},{x:52.9,y:722},{x:165.2,y:65},{x:123.0,y:4},{x:57.3,y:96},{x:68.2,y:370},{x:85.2,y:113},{x:143.6,y:2030},{x:132.5,y:81},{x:114.2,y:5},{x:185.3,y:31},{x:106.4,y:19},{x:92.3,y:251},{x:148.1,y:4},{x:52.9,y:478},{x:52.9,y:336},{x:116.2,y:99},{x:30.6,y:602},{x:38.4,y:20},{x:39.3,y:236},{x:59.6,y:977},{x:94.0,y:105},{x:75.6,y:3},{x:115.6,y:8},{x:60.1,y:9},{x:56.8,y:61},{x:57.3,y:72},{x:17.5,y:102},{x:53.0,y:309},{x:173.8,y:223},{x:11.5,y:186},{x:11.5,y:283},{x:90.4,y:238},{x:55.5,y:330},{x:107.0,y:67},{x:65.8,y:137},{x:51.1,y:361},{x:61.7,y:181},{x:38.4,y:207},{x:157.3,y:317},{x:121.1,y:588},{x:191.4,y:7},{x:102.3,y:309},{x:22.2,y:127},{x:125.1,y:37}]},
+  {label:"Coffee Shop", color:C.mid, data:[{x:53.3,y:69},{x:57.3,y:117},{x:136.8,y:214},{x:26.6,y:94},{x:57.3,y:73},{x:78.7,y:138},{x:130.4,y:77},{x:92.3,y:68},{x:59.6,y:49},{x:135.3,y:75},{x:117.1,y:93},{x:84.6,y:79},{x:52.9,y:143},{x:99.5,y:99},{x:194.2,y:97},{x:125.2,y:70},{x:114.3,y:5},{x:61.4,y:175},{x:132.8,y:66},{x:187.0,y:74},{x:156.5,y:92},{x:61.5,y:114},{x:32.2,y:80},{x:29.4,y:65},{x:110.6,y:47},{x:108.6,y:44},{x:199.5,y:69},{x:130.6,y:74},{x:45.2,y:92},{x:66.3,y:146},{x:138.5,y:46},{x:120.0,y:110},{x:104.2,y:98},{x:70.6,y:175},{x:46.1,y:167},{x:129.0,y:104},{x:51.9,y:100},{x:43.1,y:88},{x:97.8,y:59},{x:39.3,y:111},{x:139.2,y:61},{x:115.6,y:39},{x:116.2,y:108},{x:92.4,y:12},{x:104.0,y:74},{x:104.2,y:163},{x:111.9,y:156},{x:110.1,y:134},{x:65.8,y:156},{x:142.4,y:279},{x:62.7,y:217},{x:199.4,y:140},{x:109.0,y:146},{x:113.7,y:123},{x:50.4,y:122},{x:121.6,y:380},{x:114.1,y:129},{x:144.8,y:99},{x:25.3,y:64},{x:110.1,y:114},{x:23.9,y:163},{x:108.6,y:102},{x:74.1,y:110},{x:64.0,y:9},{x:86.9,y:100},{x:53.0,y:431},{x:106.6,y:106},{x:104.2,y:140},{x:59.6,y:137},{x:110.1,y:132},{x:64.0,y:64},{x:120.1,y:118},{x:59.6,y:52},{x:85.7,y:104},{x:92.1,y:59},{x:110.6,y:95},{x:78.2,y:34},{x:104.8,y:127},{x:108.6,y:95},{x:102.7,y:5},{x:165.0,y:199},{x:118.2,y:59},{x:99.5,y:85},{x:110.6,y:31},{x:22.2,y:78},{x:116.2,y:143},{x:111.0,y:98},{x:193.6,y:60},{x:11.5,y:116},{x:84.8,y:114},{x:187.0,y:157},{x:159.1,y:197},{x:132.8,y:94},{x:106.9,y:61},{x:46.1,y:172},{x:59.6,y:83},{x:128.1,y:73},{x:48.7,y:54},{x:129.0,y:52},{x:135.3,y:83},{x:167.2,y:4},{x:110.6,y:45},{x:149.3,y:60},{x:139.6,y:140},{x:125.0,y:70},{x:104.0,y:778},{x:17.5,y:166},{x:129.0,y:59},{x:102.2,y:66},{x:57.3,y:25},{x:135.3,y:65},{x:101.3,y:274},{x:129.0,y:108},{x:110.6,y:67},{x:68.2,y:8},{x:131.8,y:25},{x:98.6,y:102},{x:101.3,y:154},{x:137.5,y:126},{x:185.7,y:113},{x:38.4,y:97},{x:184.8,y:138},{x:149.4,y:198},{x:135.3,y:131},{x:21.8,y:47},{x:150.0,y:39},{x:25.3,y:136},{x:188.0,y:103},{x:64.8,y:201},{x:105.2,y:80},{x:130.4,y:97},{x:162.0,y:68},{x:186.5,y:82},{x:34.0,y:91},{x:112.2,y:95},{x:104.2,y:115},{x:188.0,y:217},{x:124.0,y:23},{x:86.7,y:58},{x:64.0,y:84},{x:53.0,y:145},{x:148.1,y:99},{x:159.6,y:101},{x:160.8,y:75},{x:17.6,y:116},{x:47.8,y:127}]},
+  {label:"Restaurant / Food Service", color:C.red, data:[{x:143.6,y:226},{x:178.9,y:73},{x:185.1,y:156},{x:144.1,y:312},{x:104.2,y:193},{x:144.8,y:413},{x:74.4,y:15},{x:156.2,y:10},{x:104.9,y:21},{x:104.2,y:161},{x:172.8,y:20},{x:53.0,y:124},{x:104.2,y:95},{x:56.2,y:227},{x:172.6,y:18},{x:136.6,y:188},{x:130.3,y:381},{x:52.9,y:163},{x:59.6,y:243},{x:44.2,y:53},{x:38.4,y:75},{x:64.0,y:22},{x:92.4,y:54},{x:58.8,y:13},{x:138.1,y:173},{x:139.6,y:273},{x:187.1,y:15},{x:52.9,y:91},{x:102.2,y:82},{x:161.8,y:87},{x:95.3,y:6},{x:133.7,y:25}]},
+  {label:"Other", color:C.muted, data:[{x:123.7,y:65},{x:169.5,y:87},{x:58.8,y:1423},{x:114.3,y:38},{x:11.2,y:25},{x:46.1,y:56},{x:78.7,y:345},{x:59.9,y:62},{x:75.6,y:239},{x:68.2,y:173},{x:52.9,y:83},{x:14.8,y:64},{x:30.6,y:20},{x:171.8,y:53},{x:44.2,y:237},{x:32.2,y:10},{x:135.3,y:43},{x:187.9,y:31},{x:17.6,y:176},{x:102.3,y:21},{x:133.7,y:4},{x:11.2,y:33},{x:132.4,y:96},{x:74.2,y:404},{x:62.9,y:171},{x:99.5,y:620},{x:127.3,y:5},{x:40.2,y:197},{x:70.5,y:267},{x:132.4,y:240},{x:150.0,y:402},{x:78.7,y:19},{x:38.2,y:193},{x:59.6,y:8},{x:5.3,y:31},{x:53.3,y:16},{x:185.5,y:148},{x:61.7,y:40},{x:35.8,y:26},{x:102.2,y:486},{x:114.3,y:58},{x:94.8,y:206},{x:121.4,y:12},{x:38.4,y:338},{x:104.8,y:371},{x:157.1,y:191},{x:45.7,y:199},{x:51.9,y:282},{x:44.2,y:24},{x:30.0,y:306},{x:205.2,y:84},{x:59.6,y:188},{x:180.1,y:1112},{x:61.4,y:271},{x:17.5,y:28},{x:113.7,y:11},{x:130.4,y:11},{x:82.8,y:18},{x:171.9,y:51},{x:13.3,y:34},{x:125.5,y:28},{x:64.0,y:339},{x:29.4,y:53},{x:187.9,y:254},{x:179.2,y:40},{x:97.7,y:213},{x:4.9,y:210},{x:52.9,y:261},{x:53.9,y:27},{x:117.8,y:265},{x:56.2,y:215},{x:277.1,y:794},{x:86.7,y:241},{x:95.8,y:17},{x:53.3,y:289},{x:46.1,y:240},{x:17.5,y:6},{x:69.9,y:233},{x:53.9,y:21},{x:52.9,y:421},{x:107.3,y:254},{x:144.5,y:102},{x:17.6,y:28},{x:114.2,y:518},{x:130.4,y:35},{x:62.7,y:25},{x:80.3,y:375},{x:140.6,y:283},{x:55.6,y:398},{x:95.9,y:318},{x:139.5,y:12},{x:70.6,y:10},{x:104.2,y:398},{x:52.9,y:44},{x:51.9,y:4},{x:132.0,y:13},{x:184.4,y:6},{x:132.5,y:27},{x:95.8,y:99},{x:26.6,y:226},{x:50.4,y:112},{x:52.9,y:21},{x:171.9,y:372},{x:160.2,y:79},{x:26.6,y:6},{x:104.8,y:47},{x:135.0,y:12},{x:69.0,y:65},{x:126.6,y:89},{x:119.4,y:302},{x:50.4,y:52},{x:138.4,y:75},{x:53.9,y:484},{x:52.9,y:36},{x:154.3,y:105},{x:57.3,y:772},{x:110.4,y:3},{x:121.6,y:11},{x:13.3,y:4915},{x:22.2,y:137},{x:43.1,y:115},{x:127.4,y:7},{x:82.8,y:84},{x:182.9,y:159},{x:56.3,y:104},{x:31.1,y:246},{x:148.1,y:46},{x:180.1,y:8},{x:47.8,y:374},{x:57.2,y:13},{x:138.1,y:364},{x:99.5,y:415},{x:78.7,y:24},{x:49.6,y:740},{x:196.3,y:34},{x:32.2,y:404},{x:17.5,y:144},{x:53.1,y:176},{x:90.4,y:34},{x:102.7,y:26},{x:110.6,y:46},{x:97.7,y:66},{x:55.5,y:368},{x:91.9,y:188},{x:121.4,y:377},{x:182.9,y:416},{x:67.3,y:13},{x:91.2,y:178},{x:30.6,y:67},{x:121.4,y:15},{x:34.0,y:50},{x:11.2,y:305},{x:182.6,y:223},{x:254.6,y:48},{x:17.5,y:448},{x:175.6,y:16},{x:11.2,y:118},{x:52.9,y:31},{x:132.4,y:12},{x:91.4,y:50},{x:55.1,y:9},{x:29.4,y:223},{x:55.6,y:238},{x:97.8,y:213},{x:98.8,y:220},{x:50.4,y:119},{x:5.3,y:4203},{x:130.4,y:28},{x:111.4,y:73},{x:52.9,y:186},{x:143.0,y:136},{x:129.0,y:153},{x:11.2,y:16},{x:139.5,y:385},{x:160.8,y:446},{x:34.0,y:30},{x:65.7,y:42},{x:79.4,y:4},{x:50.4,y:183},{x:11.2,y:6},{x:108.6,y:735},{x:80.8,y:77},{x:124.0,y:15},{x:104.1,y:81},{x:51.1,y:85},{x:50.4,y:9},{x:117.6,y:336},{x:86.4,y:179},{x:61.9,y:177},{x:105.4,y:161},{x:126.6,y:13},{x:50.4,y:158},{x:107.8,y:24},{x:121.4,y:115},{x:66.3,y:407},{x:82.8,y:160},{x:74.1,y:4},{x:105.4,y:6},{x:105.2,y:42},{x:51.9,y:79},{x:60.1,y:67},{x:104.8,y:73},{x:23.9,y:95},{x:77.4,y:66},{x:84.6,y:47},{x:53.9,y:528},{x:29.3,y:13},{x:138.1,y:313},{x:122.8,y:12},{x:171.9,y:535},{x:47.6,y:337},{x:0.0,y:278},{x:65.7,y:217},{x:78.7,y:110},{x:171.9,y:177},{x:11.2,y:44},{x:43.5,y:27},{x:102.2,y:103},{x:89.6,y:194},{x:73.3,y:396},{x:170.8,y:134},{x:65.7,y:21},{x:130.8,y:226},{x:70.0,y:78},{x:130.4,y:200},{x:45.9,y:621},{x:50.4,y:696},{x:130.3,y:308},{x:46.1,y:379},{x:120.1,y:620},{x:125.5,y:4},{x:0.0,y:18},{x:45.2,y:290},{x:59.6,y:230},{x:52.9,y:158},{x:97.3,y:229},{x:51.9,y:221},{x:55.6,y:495},{x:55.5,y:107},{x:171.9,y:1218},{x:78.7,y:53},{x:157.1,y:75},{x:184.0,y:72},{x:92.1,y:10},{x:114.9,y:511},{x:127.1,y:95},{x:114.3,y:9},{x:83.5,y:87},{x:171.9,y:483},{x:5.3,y:170},{x:50.8,y:195},{x:146.0,y:8},{x:90.4,y:615},{x:171.9,y:2363},{x:47.8,y:300},{x:131.5,y:16},{x:29.4,y:101},{x:102.3,y:8},{x:11.2,y:36},{x:121.6,y:9},{x:97.8,y:386},{x:157.1,y:16},{x:140.7,y:30},{x:91.2,y:344},{x:124.9,y:45},{x:95.3,y:87},{x:11.2,y:151},{x:171.9,y:747},{x:47.3,y:181},{x:51.1,y:61},{x:59.6,y:234},{x:91.4,y:225},{x:140.6,y:26},{x:50.4,y:121},{x:55.6,y:607},{x:11.5,y:386},{x:148.1,y:13},{x:52.9,y:157}]},
+];
+
+  const CASES_TREND_A = -0.002197, CASES_TREND_B = 2.3646;
+  const casesMinX = Math.min(...CASES_BY_DISTANCE.flatMap(t => t.data.map(p => p.x)));
+  const casesMaxX = Math.max(...CASES_BY_DISTANCE.flatMap(t => t.data.map(p => p.x)));
+  const casesTrendline = [
+    {x:casesMinX, y:Math.pow(10, CASES_TREND_A*casesMinX + CASES_TREND_B)},
+    {x:casesMaxX, y:Math.pow(10, CASES_TREND_A*casesMaxX + CASES_TREND_B)}
   ];
 
-  new Chart(document.getElementById("marketRevenueByDistanceChart"), {
+  new Chart(document.getElementById("marketCasesByDistanceChart"), {
     type:"scatter",
     data:{
       datasets: [
-        ...REV_BY_DISTANCE.map(t => ({
-          label:t.label, data:t.data, backgroundColor:t.color, borderColor:t.color, pointRadius:5, pointHoverRadius:7
+        ...CASES_BY_DISTANCE.map(t => ({
+          label:t.label, data:t.data, backgroundColor:t.color, borderColor:t.color, pointRadius:4, pointHoverRadius:6
         })),
         {
-          label:"Trendline", type:"line", data:revTrendline,
+          label:"Trendline", type:"line", data:casesTrendline,
           borderColor:C.red, backgroundColor:"transparent", borderWidth:2, borderDash:[6,4],
           pointRadius:0, pointHoverRadius:0, hitRadius:0, tension:0, order:0
         }
@@ -911,27 +941,36 @@ function initMarket() {
     options:{
       responsive:true, maintainAspectRatio:false,
       plugins:{ legend:{position:"top"},
-        tooltip:{callbacks:{label: c => c.dataset.label==="Trendline" ? "Trendline: "+fmtK(c.parsed.y) : c.dataset.label + ": " + fmtK(c.parsed.y) + " at " + c.parsed.x + " mi"}} },
+        tooltip:{callbacks:{label: c => c.dataset.label==="Trendline" ? "Trend: "+fmt(Math.round(c.parsed.y))+" cases" : c.dataset.label + ": " + fmt(c.parsed.y) + " cases at " + c.parsed.x + " mi"}} },
       scales:{
         x:{grid:{color:gridColor()}, title:{display:true, text:"Distance from Country Dairy (mi)"}},
-        y:{grid:{color:gridColor()}, title:{display:true, text:"Annual Customer Revenue"}, ticks:{callback:v=>fmtK(v)}}
+        y:{type:"logarithmic", grid:{color:gridColor()}, title:{display:true, text:"Annual Customer Cases (log scale)"}, ticks:{callback:v=>{
+          const l = Math.log10(v);
+          return Number.isInteger(l) ? fmt(v) : "";
+        }}}
       }
     }
   });
 
+  // Cedar Crest Weekly Sales Database - April2025-March2026.xlsx, 'Summary - All Weeks' tab,
+  // customers with Weeks Ordered >= 3 (37,496 order-rows across 1,523 customers). % of Orders =
+  // each category's share of total order-rows (one row = one customer's order in one week).
+  // Same name-based categories as 'Customer Cases by Distance' / 'Case Volume by Channel'.
   const marketData = [
-    ["School / Institutional",  "High",     "+9.4%", "Regional supplier preference, contract stability", "Expand"],
-    ["Direct-to-Consumer",      "Moderate", "+14%",  "Local-buying preference, farm store visibility",    "Invest"],
-    ["Local/Premium Retail",    "High",     "+6.8%", "Health & wellness, provenance",                     "Expand"],
-    ["Category Average",        "Moderate", "+2.1%", "General household consumption",                     "Maintain"],
-    ["Distributor / Wholesale", "Low",      "−0.6%", "Price competition from national brands",             "Defend"],
+    ["Convenience Store / Gas",  "High",     48.6, "Route density -- largest customer count (557) and highest order frequency (~33 orders/yr avg)", "Maintain"],
+    ["Other",                    "Moderate", 15.5, "Farms, churches, campgrounds, and 3 large wholesale/distributor accounts",                       "Defend"],
+    ["Supermarket / Grocery",    "Moderate", 9.7,  "Large-format accounts -- fewest locations (110) but highest cases per account",                  "Expand"],
+    ["Ice Cream / Dessert Shop", "Moderate", 9.7,  "Seasonal scoop-shop demand, longest average haul (105 mi)",                                       "Expand"],
+    ["School / Institutional",   "Moderate", 7.6,  "Academic-calendar driven, K-12 milk program contracts",                                           "Invest"],
+    ["Coffee Shop",              "Moderate", 6.8,  "High-frequency, small-batch reorders (Biggby, Scooters, independents)",                           "Maintain"],
+    ["Restaurant / Food Service","Low",      2.1,  "Smallest, most dispersed segment (avg 112 mi) -- lowest order share",                             "Monitor"],
   ];
   document.getElementById("marketTable").innerHTML =
-    `<thead><tr><th>Segment</th><th>Demand Level</th><th class="n">YoY Growth</th>
+    `<thead><tr><th>Segment</th><th>Demand Level</th><th class="n">% of Orders</th>
     <th>Primary Driver</th><th>Recommended Posture</th></tr></thead>
-    <tbody>${marketData.map(([seg,lvl,gr,drv,pos]) =>
+    <tbody>${marketData.map(([seg,lvl,pct,drv,pos]) =>
       `<tr><td>${seg}</td><td>${lvl}</td>
-      <td class="n" style="color:var(--muted)">###</td>
+      <td class="n">${pct.toFixed(1)}%</td>
       <td>${drv}</td><td>${pos}</td></tr>`
     ).join("")}
     </tbody>`;

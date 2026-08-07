@@ -177,6 +177,7 @@ nav.topnav button.active{color:var(--kelly);border-bottom-color:var(--kelly);fon
 .chart-box.h320{height:320px}
 .chart-box.h360{height:360px}
 .chart-box.h420{height:420px}
+.chart-box.h480{height:480px}
 .chart-box.chart-scroll{overflow-y:auto;overflow-x:hidden}
 .chart-inner{position:relative;width:100%}
 .chart-box canvas{filter:grayscale(1);opacity:.35}
