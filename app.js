@@ -916,32 +916,53 @@ function initMarket() {
   {label:"Other", color:C.muted, data:[{x:123.7,y:65},{x:169.5,y:87},{x:58.8,y:1423},{x:114.3,y:38},{x:11.2,y:25},{x:46.1,y:56},{x:78.7,y:345},{x:59.9,y:62},{x:75.6,y:239},{x:68.2,y:173},{x:52.9,y:83},{x:14.8,y:64},{x:30.6,y:20},{x:171.8,y:53},{x:44.2,y:237},{x:32.2,y:10},{x:135.3,y:43},{x:187.9,y:31},{x:17.6,y:176},{x:102.3,y:21},{x:133.7,y:4},{x:11.2,y:33},{x:132.4,y:96},{x:74.2,y:404},{x:62.9,y:171},{x:99.5,y:620},{x:127.3,y:5},{x:40.2,y:197},{x:70.5,y:267},{x:132.4,y:240},{x:150.0,y:402},{x:78.7,y:19},{x:38.2,y:193},{x:59.6,y:8},{x:5.3,y:31},{x:53.3,y:16},{x:185.5,y:148},{x:61.7,y:40},{x:35.8,y:26},{x:102.2,y:486},{x:114.3,y:58},{x:94.8,y:206},{x:121.4,y:12},{x:38.4,y:338},{x:104.8,y:371},{x:157.1,y:191},{x:45.7,y:199},{x:51.9,y:282},{x:44.2,y:24},{x:30.0,y:306},{x:205.2,y:84},{x:59.6,y:188},{x:180.1,y:1112},{x:61.4,y:271},{x:17.5,y:28},{x:113.7,y:11},{x:130.4,y:11},{x:82.8,y:18},{x:171.9,y:51},{x:13.3,y:34},{x:125.5,y:28},{x:64.0,y:339},{x:29.4,y:53},{x:187.9,y:254},{x:179.2,y:40},{x:97.7,y:213},{x:4.9,y:210},{x:52.9,y:261},{x:53.9,y:27},{x:117.8,y:265},{x:56.2,y:215},{x:277.1,y:794},{x:86.7,y:241},{x:95.8,y:17},{x:53.3,y:289},{x:46.1,y:240},{x:17.5,y:6},{x:69.9,y:233},{x:53.9,y:21},{x:52.9,y:421},{x:107.3,y:254},{x:144.5,y:102},{x:17.6,y:28},{x:114.2,y:518},{x:130.4,y:35},{x:62.7,y:25},{x:80.3,y:375},{x:140.6,y:283},{x:55.6,y:398},{x:95.9,y:318},{x:139.5,y:12},{x:70.6,y:10},{x:104.2,y:398},{x:52.9,y:44},{x:51.9,y:4},{x:132.0,y:13},{x:184.4,y:6},{x:132.5,y:27},{x:95.8,y:99},{x:26.6,y:226},{x:50.4,y:112},{x:52.9,y:21},{x:171.9,y:372},{x:160.2,y:79},{x:26.6,y:6},{x:104.8,y:47},{x:135.0,y:12},{x:69.0,y:65},{x:126.6,y:89},{x:119.4,y:302},{x:50.4,y:52},{x:138.4,y:75},{x:53.9,y:484},{x:52.9,y:36},{x:154.3,y:105},{x:57.3,y:772},{x:110.4,y:3},{x:121.6,y:11},{x:13.3,y:4915},{x:22.2,y:137},{x:43.1,y:115},{x:127.4,y:7},{x:82.8,y:84},{x:182.9,y:159},{x:56.3,y:104},{x:31.1,y:246},{x:148.1,y:46},{x:180.1,y:8},{x:47.8,y:374},{x:57.2,y:13},{x:138.1,y:364},{x:99.5,y:415},{x:78.7,y:24},{x:49.6,y:740},{x:196.3,y:34},{x:32.2,y:404},{x:17.5,y:144},{x:53.1,y:176},{x:90.4,y:34},{x:102.7,y:26},{x:110.6,y:46},{x:97.7,y:66},{x:55.5,y:368},{x:91.9,y:188},{x:121.4,y:377},{x:182.9,y:416},{x:67.3,y:13},{x:91.2,y:178},{x:30.6,y:67},{x:121.4,y:15},{x:34.0,y:50},{x:11.2,y:305},{x:182.6,y:223},{x:254.6,y:48},{x:17.5,y:448},{x:175.6,y:16},{x:11.2,y:118},{x:52.9,y:31},{x:132.4,y:12},{x:91.4,y:50},{x:55.1,y:9},{x:29.4,y:223},{x:55.6,y:238},{x:97.8,y:213},{x:98.8,y:220},{x:50.4,y:119},{x:5.3,y:4203},{x:130.4,y:28},{x:111.4,y:73},{x:52.9,y:186},{x:143.0,y:136},{x:129.0,y:153},{x:11.2,y:16},{x:139.5,y:385},{x:160.8,y:446},{x:34.0,y:30},{x:65.7,y:42},{x:79.4,y:4},{x:50.4,y:183},{x:11.2,y:6},{x:108.6,y:735},{x:80.8,y:77},{x:124.0,y:15},{x:104.1,y:81},{x:51.1,y:85},{x:50.4,y:9},{x:117.6,y:336},{x:86.4,y:179},{x:61.9,y:177},{x:105.4,y:161},{x:126.6,y:13},{x:50.4,y:158},{x:107.8,y:24},{x:121.4,y:115},{x:66.3,y:407},{x:82.8,y:160},{x:74.1,y:4},{x:105.4,y:6},{x:105.2,y:42},{x:51.9,y:79},{x:60.1,y:67},{x:104.8,y:73},{x:23.9,y:95},{x:77.4,y:66},{x:84.6,y:47},{x:53.9,y:528},{x:29.3,y:13},{x:138.1,y:313},{x:122.8,y:12},{x:171.9,y:535},{x:47.6,y:337},{x:0.0,y:278},{x:65.7,y:217},{x:78.7,y:110},{x:171.9,y:177},{x:11.2,y:44},{x:43.5,y:27},{x:102.2,y:103},{x:89.6,y:194},{x:73.3,y:396},{x:170.8,y:134},{x:65.7,y:21},{x:130.8,y:226},{x:70.0,y:78},{x:130.4,y:200},{x:45.9,y:621},{x:50.4,y:696},{x:130.3,y:308},{x:46.1,y:379},{x:120.1,y:620},{x:125.5,y:4},{x:0.0,y:18},{x:45.2,y:290},{x:59.6,y:230},{x:52.9,y:158},{x:97.3,y:229},{x:51.9,y:221},{x:55.6,y:495},{x:55.5,y:107},{x:171.9,y:1218},{x:78.7,y:53},{x:157.1,y:75},{x:184.0,y:72},{x:92.1,y:10},{x:114.9,y:511},{x:127.1,y:95},{x:114.3,y:9},{x:83.5,y:87},{x:171.9,y:483},{x:5.3,y:170},{x:50.8,y:195},{x:146.0,y:8},{x:90.4,y:615},{x:171.9,y:2363},{x:47.8,y:300},{x:131.5,y:16},{x:29.4,y:101},{x:102.3,y:8},{x:11.2,y:36},{x:121.6,y:9},{x:97.8,y:386},{x:157.1,y:16},{x:140.7,y:30},{x:91.2,y:344},{x:124.9,y:45},{x:95.3,y:87},{x:11.2,y:151},{x:171.9,y:747},{x:47.3,y:181},{x:51.1,y:61},{x:59.6,y:234},{x:91.4,y:225},{x:140.6,y:26},{x:50.4,y:121},{x:55.6,y:607},{x:11.5,y:386},{x:148.1,y:13},{x:52.9,y:157}]},
 ];
 
-  const CASES_TREND_A = -0.002197, CASES_TREND_B = 2.3646;
-  const casesMinX = Math.min(...CASES_BY_DISTANCE.flatMap(t => t.data.map(p => p.x)));
-  const casesMaxX = Math.max(...CASES_BY_DISTANCE.flatMap(t => t.data.map(p => p.x)));
-  const casesTrendline = [
-    {x:casesMinX, y:Math.pow(10, CASES_TREND_A*casesMinX + CASES_TREND_B)},
-    {x:casesMaxX, y:Math.pow(10, CASES_TREND_A*casesMaxX + CASES_TREND_B)}
-  ];
+  // Vertical reference line at the average distance of whichever category legend items are
+  // currently visible/selected. Drawn as a canvas overlay (not a real dataset) so it recomputes
+  // on every legend toggle without dragging the y-axis auto-scale along with it.
+  const avgDistanceOfVisible = chart => {
+    let sum = 0, n = 0;
+    chart.data.datasets.forEach((ds, i) => {
+      if (chart.getDatasetMeta(i).hidden) return;
+      ds.data.forEach(p => { sum += p.x; n++; });
+    });
+    return n ? sum / n : null;
+  };
+  const avgDistanceLinePlugin = {
+    id: "avgDistanceLine",
+    afterDraw(chart) {
+      const avg = avgDistanceOfVisible(chart);
+      if (avg === null) return;
+      const {ctx, chartArea:{top, bottom}, scales:{x}} = chart;
+      const xPix = x.getPixelForValue(avg);
+      ctx.save();
+      ctx.beginPath();
+      ctx.setLineDash([6,4]);
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = C.red;
+      ctx.moveTo(xPix, top);
+      ctx.lineTo(xPix, bottom);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = C.red;
+      ctx.font = "600 11px -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText(`Avg: ${avg.toFixed(1)} mi`, xPix, top + 12);
+      ctx.restore();
+    }
+  };
 
   new Chart(document.getElementById("marketCasesByDistanceChart"), {
     type:"scatter",
     data:{
-      datasets: [
-        ...CASES_BY_DISTANCE.map(t => ({
-          label:t.label, data:t.data, backgroundColor:t.color, borderColor:t.color, pointRadius:4, pointHoverRadius:6
-        })),
-        {
-          label:"Trendline", type:"line", data:casesTrendline,
-          borderColor:C.red, backgroundColor:"transparent", borderWidth:2, borderDash:[6,4],
-          pointRadius:0, pointHoverRadius:0, hitRadius:0, tension:0, order:0
-        }
-      ]
+      datasets: CASES_BY_DISTANCE.map(t => ({
+        label:t.label, data:t.data, backgroundColor:t.color, borderColor:t.color, pointRadius:4, pointHoverRadius:6
+      }))
     },
+    plugins:[avgDistanceLinePlugin],
     options:{
       responsive:true, maintainAspectRatio:false,
       plugins:{ legend:{position:"top"},
-        tooltip:{callbacks:{label: c => c.dataset.label==="Trendline" ? "Trend: "+fmt(Math.round(c.parsed.y))+" cases" : c.dataset.label + ": " + fmt(c.parsed.y) + " cases at " + c.parsed.x + " mi"}} },
+        tooltip:{callbacks:{label: c => c.dataset.label + ": " + fmt(c.parsed.y) + " cases at " + c.parsed.x + " mi"}} },
       scales:{
         x:{grid:{color:gridColor()}, title:{display:true, text:"Distance from Country Dairy (mi)"}},
         y:{type:"logarithmic", grid:{color:gridColor()}, title:{display:true, text:"Annual Customer Cases (log scale)"}, ticks:{callback:v=>{
