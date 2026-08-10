@@ -108,12 +108,13 @@ function initHome() {
     }
   });
 
+  // Revenue by Source.xlsx — Data sheet, % of Revenue column, TTM Jul 2026.
   new Chart(document.getElementById("homeRevMixChart"), {
     type:"doughnut",
     data:{
-      labels:["Milk Products","Animal Sales","Custom Work & Other"],
+      labels:["Milk Products","Animal Sales","Custom Work/Other"],
       datasets:[{
-        data:[89,5,6],
+        data:[92.66197708828053, 6.69640721300549, 0.8449368990905188],
         backgroundColor:[C.green, C.kelly, C.muted],
         borderWidth:2,
         borderColor: getComputedStyle(document.documentElement).getPropertyValue("--panel").trim()
@@ -124,10 +125,13 @@ function initHome() {
       cutout:"58%",
       plugins:{
         legend:{position:"right"},
-        tooltip:{callbacks:{label: c => c.label + ": " + c.parsed + "%"}}
+        tooltip:{callbacks:{label: c => c.label + ": " + c.parsed.toFixed(1) + "%"}}
       }
     }
   });
+
+  const ttmRevenue = rev.slice(-12).reduce((s,v)=>s+v,0);
+  const cogs = 4341828, totalExpenses = 20387243;
 
   document.getElementById("homeMetricTable").innerHTML =
     `<thead><tr><th>Area</th><th>Metric</th><th class="n">TTM Jul 2026</th><th class="n">TTM Jul 2025</th><th class="n">Change</th></tr></thead>
@@ -138,18 +142,19 @@ function initHome() {
       ["Milk Production","Lbs/Cow/Day", "96", "93", "+3.2%"],
       ["Milk Quality","Butterfat %", "3.9%", "3.9%", "flat"],
       ["Milk Quality","SCC (cells/mL)", "250,000", "200,000", "+25%"],
-      // Plant: Utilization Rate isn't tracked anywhere yet. Labor Hrs/cwt is a real
-      // weighted average from Monthly Operating Metrics (Jul '25-Jun '26), but that
-      // source only goes back to Jan '25, not a full prior fiscal year, so there's
-      // no reliable TTM Jul 2025 comparison to show yet.
-      ["Plant","Utilization Rate"],
+      // Plant: Utilization Rate is the current-schedule figure from the Plant
+      // Efficiency page (66.7%, per Nate, Aug 2026) — it reflects today's schedule,
+      // not a full prior fiscal year, so there's no TTM Jul 2025 comparison to show.
+      // Labor Hrs/cwt has the same limitation (source only goes back to Jan '25).
+      ["Plant","Utilization Rate", "66.7%"],
       ["Plant","Labor Hrs/cwt", "0.191"],
-      ["Financials","Total Revenue", fmtM(rev.slice(-12).reduce((s,v)=>s+v,0)), fmtM(25375643), "+0.3%"],
-      // Total Costs and Operating Margin: figures withheld — the cost data we have
-      // includes non-operating items (e.g. bank note interest), so these would be
-      // misleading until we get a cost breakdown that separates those out.
-      ["Financials","Total Costs"],
-      ["Financials","Operating Margin"],
+      ["Financials","Total Revenue", fmtM(ttmRevenue), fmtM(25375643), "+0.3%"],
+      // COGS and Total Expenses (TTM Jul 2026), per Casey. No prior-year figures
+      // yet, so TTM Jul 2025 and Change are left blank.
+      ["Financials","COGS", fmtM(cogs)],
+      ["Financials","Gross Margin", ((ttmRevenue-cogs)/ttmRevenue*100).toFixed(1)+"%"],
+      ["Financials","Total Costs", fmtM(totalExpenses)],
+      ["Financials","Operating Margin", ((ttmRevenue-totalExpenses)/ttmRevenue*100).toFixed(1)+"%"],
     ].map(([a,m,cur,prior,chg]) =>
       `<tr><td style="color:var(--muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.4px">${a}</td>
        <td>${m}</td><td class="n">${cur ?? "###"}</td><td class="n" style="color:var(--muted)">${prior ?? "###"}</td>
