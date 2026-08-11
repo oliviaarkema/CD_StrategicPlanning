@@ -450,24 +450,35 @@ function initAnimals() {
     }
   });
 
+  // Benchmark $/Head, per footnote 2: Cows Over 2 Years vs. USDA NASS's national
+  // cull-cow price ($164.00/cwt, Mar 2026, applied to an assumed 1,450-lb cow).
+  // Cows Under 5 MOS and Cows 5-24 MOS reference the closest available USDA figures
+  // (0-14-day calves; bred replacement heifers) but aren't age-matched, so no
+  // vs.-benchmark % is shown for those two.
   const anData = [
-    {type:"Cows Under 5 MOS",  head:515, avgP:1405.39, total:723774},
-    {type:"Cows Over 2 Years", head:281, avgP:1683.06, total:472941},
-    {type:"Cows 5-24 MOS",     head: 84, avgP:1724.60, total:144866},
+    {type:"Cows Under 5 MOS",  head:515, avgP:1405.39, total:723774, bench: 871,  benchCmp:false},
+    {type:"Cows Over 2 Years", head:281, avgP:1683.06, total:472941, bench:2378,  benchCmp:true},
+    {type:"Cows 5-24 MOS",     head: 84, avgP:1724.60, total:144866, bench:3130,  benchCmp:false},
   ];
   const grandHead = anData.reduce((s,r)=>s+r.head,0);
   const grandTotal = anData.reduce((s,r)=>s+r.total,0);
   document.getElementById("animalTable").innerHTML =
     `<thead><tr><th>Category</th><th class="n">Head Sold</th>
-    <th class="n">Avg $/Head</th><th class="n">Total Revenue</th><th class="n">% of Animal Rev</th></tr></thead>
-    <tbody>${anData.map(r =>
-      `<tr><td>${r.type}</td><td class="n">${fmt(r.head)}</td>
+    <th class="n">Avg $/Head</th><th class="n">Total Revenue</th><th class="n">% of Animal Rev</th>
+    <th class="n">Benchmark $/Head<sup>2</sup></th><th class="n">vs. Benchmark</th></tr></thead>
+    <tbody>${anData.map(r => {
+      const vsBench = r.benchCmp
+        ? ((r.avgP-r.bench)/r.bench*100).toFixed(1) + "%"
+        : "n/c";
+      return `<tr><td>${r.type}</td><td class="n">${fmt(r.head)}</td>
       <td class="n">${fmtD(r.avgP.toFixed(2))}</td><td class="n">${fmtD(r.total)}</td>
-      <td class="n">${(r.total/grandTotal*100).toFixed(1)}%</td></tr>`
-    ).join("")}
+      <td class="n">${(r.total/grandTotal*100).toFixed(1)}%</td>
+      <td class="n" style="color:var(--muted)">${fmtD(r.bench)}</td>
+      <td class="n" style="color:var(--muted)">${vsBench}</td></tr>`;
+    }).join("")}
     <tr style="font-weight:700;border-top:2px solid var(--border)">
       <td>Total</td><td class="n">${fmt(grandHead)}</td><td class="n">${fmtD((grandTotal/grandHead).toFixed(2))}</td>
-      <td class="n">${fmtD(grandTotal)}</td><td class="n">100.0%</td>
+      <td class="n">${fmtD(grandTotal)}</td><td class="n">100.0%</td><td class="n">###</td><td class="n">###</td>
     </tr></tbody>`;
 }
 
@@ -493,11 +504,13 @@ function renderRawMilkCharts(unit) {
   const data2025 = GAL_2025.map(toUnit);
 
   // Weekly production only moves in a ~16% band, so a 0-based axis flattens it to
-  // near-invisible. Zoom to the data instead, with a little headroom below the min.
+  // near-invisible. Zoom to the data instead, with a little headroom below the min,
+  // rounded down to a clean multiple of 50 so the axis doesn't show a stray decimal
+  // (e.g. 6150.005) as its bottom tick.
   const allVals = [...data2026, ...data2025];
   const dataMin = Math.min(...allVals);
   const dataMax = Math.max(...allVals);
-  const yMin = Math.max(0, dataMin - (dataMax - dataMin) * 0.15);
+  const yMin = Math.floor(Math.max(0, dataMin - (dataMax - dataMin) * 0.15) / 50) * 50;
 
   if (rawMilkLineChart) rawMilkLineChart.destroy();
 
@@ -521,7 +534,7 @@ function renderRawMilkCharts(unit) {
         tooltip:{callbacks:{label: c => c.dataset.label + " (" + c.label + "): " + fmt(c.parsed.y) + " " + label}} },
       scales:{
         x:{grid:{color:gridColor()}, ticks:{maxTicksLimit:12, autoSkip:true}},
-        y:{grid:{color:gridColor()}, ticks:{callback:v=>fmt(v)}, min:yMin}
+        y:{grid:{color:gridColor()}, ticks:{callback:v=>fmt(Math.round(v))}, min:yMin}
       }
     }
   });
@@ -561,11 +574,12 @@ function initRawMilk() {
     }
   });
 
+  // Pulled from this page's own stat cards (per Casey, Aug 2026) rather than an
+  // external benchmark — Butterfat and Herd Size don't have a real target on file,
+  // so they're left off rather than shown against a made-up one.
   document.getElementById("milkQualBars").innerHTML = [
-    {lbl:"Lbs/Cow/Day",    sub:"MI top quartile: 78",     val:75.2, bench:78,   max:85,  fmt:v=>v.toFixed(1)},
-    {lbl:"Butterfat %",    sub:"Component base: 3.50%",   val:3.86, bench:3.50, max:4.5, fmt:v=>v.toFixed(2)+"%"},
-    {lbl:"SCC (K cells/mL)",sub:"Premium threshold: 200K",val:187,  bench:200,  max:400, fmt:v=>v+"K", invert:true},
-    {lbl:"Herd Size",      sub:"Target: 320 cows",        val:312,  bench:320,  max:360, fmt:v=>v+" cows"},
+    {lbl:"Lbs/Cow/Day",     sub:"Target: 94.3 (660 lbs/wk)", val:96,  bench:94.3, max:110, fmt:v=>v.toFixed(1)},
+    {lbl:"SCC (K cells/mL)",sub:"Target: <150K",             val:250, bench:150,  max:400, fmt:v=>v+"K", invert:true},
   ].map(r=>{
     const pct = Math.min(100, r.val / r.max * 100).toFixed(1);
     const bpct= Math.min(100, r.bench / r.max * 100).toFixed(1);

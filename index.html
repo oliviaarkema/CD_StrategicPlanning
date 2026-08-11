@@ -242,9 +242,9 @@
 
   <div class="callout">
     <div class="eyebrow">Strategic Finding</div>
-    <h4>Ut enim ad minim veniam quis nostrud exercitation</h4>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+    <h4>Rising prices, not just more head sold, are driving animal revenue growth</h4>
+    <p>Animal revenue grew 58.7% to $1.34M while head sold grew only 16.7% (754 to 880), so most of the gain is price, not volume. Cull cows (Cows Over 2 Years) show the clearest trend: both head sold (46 to 75 per quarter, up 63%) and price ($1,471 to $1,887/head, up 28%) rose every quarter this year, tracking the national cull-cow market's run to record highs. Calves under 5 months, the largest category by volume (515 head), saw prices jump sharply in Jan-Mar '26 to $1,774/head before easing to $1,573, still up 42% from a year ago. Cows 5-24 MOS is the outlier: only 84 head all year, swinging from 5 to 43 head per quarter with no consistent price trend ($2,211 down to $1,593, then back up to $1,987), too small and erratic to read as a signal either way.</p>
+    <p>Even with that growth, animal sales remain a secondary business line, at roughly 6.7% of total company revenue. But it's growing meaningfully faster than the core milk business, and worth watching as a real, if modest, driver of this year's stronger bottom line.</p>
   </div>
 
   <div class="grid-2">
@@ -280,6 +280,12 @@
     <div class="panel-head"><h3>Appendix: Data Sources</h3></div>
     <div class="panel-body">
       <p class="panel-note"><sup>1</sup> From actual sales, Jul '25&ndash;Jun '26 (<em>Items_Sold_TTM_July2026.xlsx</em>, AnimalCounts sheet). Category labels match the QuickBooks item names as-is, except "Cows 5-24 MOS" (short for "Cows 5 mos to under 24 mos of age") and "Cows Under 5 MOS," which also absorbs the two dairy breeding-stock categories ("Animals sold Dairy, not beef/cull" and "Animals Under 2 yrs, for Dairy") &mdash; 37 head / $113,808.50 of that total is actually breeding stock sold to other dairies, not young stock sold for beef.</p>
+      <p class="source-cat">Benchmark $/Head<sup>2</sup></p>
+      <p class="panel-note"><sup>2</sup> Cows Over 2 Years vs. USDA's national cull-cow price ($164.00/cwt, Mar 2026), estimated at $2,378/head assuming a 1,450-lb cow. Cows Under 5 MOS and Cows 5-24 MOS reference the closest available USDA figures (newborn calves; bred replacement heifers), but aren't age-matched to Country Dairy's brackets, so no vs.-benchmark % is shown for those two.</p>
+      <ul class="source-list">
+        <li><a href="https://esmis.nal.usda.gov/sites/default/release-files/795882/agpr0426.pdf" target="_blank" rel="noopener">USDA NASS: Agricultural Prices (April 2026)</a>, source for the national cull-cow price ("Cows" row, Prices Received for Vegetables and Livestock table, footnoted there as "beef cows and cull dairy cows sold for slaughter") and the Michigan/US dairy replacement cow price (Prices Received for Milk Cows table)</li>
+        <li><a href="https://www.ams.usda.gov/mnreports/lsmdairycomp.pdf" target="_blank" rel="noopener">USDA AMS: National Dairy Comprehensive Report</a>, report for month ending July 31, 2026, source for calf prices (0-14 days old, by sex and grade)</li>
+      </ul>
     </div>
   </div>
 </section>
@@ -291,7 +297,6 @@
 <section id="sec-rawmilk" class="page-section">
   <div class="sec-head">
     <h2>Raw Milk Production</h2>
-    <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Curabitur pretium tincidunt lacus, nulla gravida orci a odio.</p>
   </div>
 
   <div class="stats">
@@ -318,9 +323,9 @@
 
   <div class="callout">
     <div class="eyebrow">Strategic Finding</div>
-    <h4>Duis aute irure dolor in reprehenderit in voluptate</h4>
-    <p>Nullam quis risus eget urna mollis ornare vel eu leo. Cras mattis consectetur purus sit amet fermentum. Donec ullamcorper nulla non metus auctor fringilla.</p>
-    <p>Vestibulum id ligula porta felis euismod semper. Maecenas faucibus mollis interdum. Etiam porta sem malesuada magna mollis euismod.</p>
+    <h4>Production is strong, but summer SCC is now a real problem against target</h4>
+    <p>Annual production is up 4.5% to 4.2M gallons, and per-cow output (96 lbs/day) is now running above the internal target of 94.3. But somatic cell count, the clearest milk-quality signal, is moving the wrong way: up 25% year over year to 250,000 in summer, well past the under-150,000 goal Casey's aiming for, and now the one metric flagged in the Herd Quality Benchmarks panel below.</p>
+    <p>The herd's genetic makeup has also shifted meaningfully toward A2 over the past year and a half, from 49% in Apr '25 to about 60% by Aug '26, with the untested/unknown share dropping from 16% to under 5% as more of the herd gets tested. Butterfat has stayed flat around 3.9% the whole time.</p>
   </div>
 
   <div class="grid-2">
@@ -348,9 +353,9 @@
   </div>
 
   <div class="panel">
-    <div class="panel-head"><h3>Herd Quality Benchmarks</h3></div>
+    <div class="panel-head"><h3>Herd Quality Benchmarks<sup>2</sup></h3></div>
     <div class="panel-body">
-      <div class="hbars" id="milkQualBars"></div>
+      <div class="hbars connected" id="milkQualBars"></div>
     </div>
   </div>
 
@@ -358,8 +363,8 @@
     <div class="panel-head"><h3>Appendix: Data Sources</h3></div>
     <div class="panel-body">
       <p class="panel-note">Annual Production and Monthly Production figures above are built from Casey's internal weekly raw-milk KPI log (<em>Raw Milk Production &ndash; Weekly KPI</em>), not the external sources below &mdash; those cover the industry-benchmark figures cited elsewhere on this page.</p>
-      <p class="source-cat">Lbs/Cow/Day, Butterfat &amp; SCC stat cards<sup>2</sup></p>
-      <p class="panel-note"><sup>2</sup> Per Casey, Aug 2026. Lbs/cow/day and butterfat are measured at the robots (and cross-checked at the plant/outside labs for butterfat); SCC comes from bulk-tank samples sent to outside labs. SCC runs seasonal &mdash; ~175,000 most of the year, creeping toward 250,000 in summer; lofty goal is 100,000, Casey would be satisfied under 150,000. Butterfat has held around 3.9% for the past two years.</p>
+      <p class="source-cat">Lbs/Cow/Day, Butterfat &amp; SCC stat cards, and Herd Quality Benchmarks<sup>2</sup></p>
+      <p class="panel-note"><sup>2</sup> Per Casey, Aug 2026. Lbs/cow/day and butterfat are measured at the robots (and cross-checked at the plant/outside labs for butterfat); SCC comes from bulk-tank samples sent to outside labs. SCC runs seasonal &mdash; ~175,000 most of the year, creeping toward 250,000 in summer; lofty goal is 100,000, Casey would be satisfied under 150,000. Butterfat has held around 3.9% for the past two years. The Herd Quality Benchmarks panel reuses the Lbs/Cow/Day and SCC targets from the stat cards above; Butterfat and Herd Size aren't shown there since there's no real target on file for either yet.</p>
       <p class="source-cat">Weekly Production chart &mdash; methodology</p>
       <p class="panel-note">Plots the weekly "Actual" readings from Casey's raw-milk KPI log directly, one point per week, with no monthly rollup &mdash; each of the two lines starts the week containing 7/1 (TTM Jul 2026 = weeks of 6/30/25&ndash;7/31/26; TTM Jul 2025 = weeks of 7/1/24&ndash;7/28/25) and runs through the latest available week, so each is ~13 months, not a strict trailing-12; the two are aligned week-for-week by position from that 7/1 anchor rather than by calendar date, since the weekly cadence isn't perfectly regular. The Annual Production stat card above is unaffected by this &mdash; it's still a strict trailing-twelve-month sum, so it won't exactly match a manual sum of the chart's longer window. That sheet's "Actual" column is labeled pounds but is actually gallons (confirmed against the KPI's own 2026 target note: 709,500 lbs &asymp; 82,500 gal, and 82,500 is what's in the sheet); cwt is derived from it at 8.6 lbs/gal, matching the sheet's own cwt column. The y-axis does not start at zero &mdash; weekly production only moves in a ~16% band, so a zero baseline flattened it to near-invisible; the axis is zoomed to the data instead, with headroom below the minimum.</p>
       <p class="source-cat">A2 Status of Milking Herd chart &mdash; methodology</p>
@@ -496,13 +501,10 @@
 <section id="sec-crops" class="page-section">
   <div class="sec-head">
     <h2>Crop Efficiency</h2>
+    <p>2,500 acres farmed, owned &amp; rented</p>
   </div>
 
-  <div class="stats stats-7">
-    <div class="stat">
-      <div class="num">2,500</div>
-      <div class="lbl">Acres Farmed<span class="sub">owned &amp; rented</span></div>
-    </div>
+  <div class="stats stats-6">
     <div class="stat">
       <div class="num">15</div>
       <div class="lbl">Corn Silage Yield<span class="sub">tons / acre<sup>1</sup></span></div>
@@ -535,7 +537,7 @@
   <div class="callout">
     <div class="eyebrow">Strategic Finding</div>
     <h4>Measured against the county, our yields are in line with local norms</h4>
-    <p>The Michigan state average overstates our gaps: against Oceana County, wheat (60 bu/a) runs 4.3% above the county's 57.5 bu/a average, and grain corn (~150 bu/a, a rough estimate) is within 2% of the county's 152.8 bu/a average &mdash; not the double-digit shortfalls the state comparison implied. Corn silage and alfalfa don't have a published county-level yield, so no comparison is shown for those. Crops labor cost holds essentially flat at $0.65/cwt (TTM Jul 2026 vs. $0.64 a year ago).</p>
+    <p>The Michigan state average overstates our gaps: against Oceana County, wheat (60 bu/a) runs 4.3% above the county's 57.5 bu/a average, and grain corn (~150 bu/a, a rough estimate) is within 2% of the county's 152.8 bu/a average, not the double-digit shortfalls the state comparison implied. Corn silage and alfalfa don't have a published county-level yield, so no comparison is shown for those. Crops labor cost holds essentially flat at $0.65/cwt (TTM Jul 2026 vs. $0.64 a year ago).</p>
   </div>
 
   <div class="panel">
@@ -552,11 +554,11 @@
     <div class="panel-head"><h3>Appendix: Data Sources</h3></div>
     <div class="panel-body">
       <p class="source-cat">Yield stat cards &amp; chart<sup>1</sup></p>
-      <p class="panel-note"><sup>1</sup> Per Casey, 2025 crop-year averages. Yield methodology: forage yields (corn silage, alfalfa silage) are supplied by SDG; any crop taken for grain (wheat) is measured with the combine's yield monitor. The alfalfa figure is silage tons/acre (~35&ndash;40% dry matter), not dry hay tons/acre &mdash; not directly comparable to a hay-basis benchmark. Rye isn't yield-tracked; it's grown only as a cover-crop seed source, not harvested for grain or forage. Grain corn (a separate crop from corn silage) runs an estimated 150 bu/ac &mdash; a rough figure Casey flagged as needing more digging to pin down exactly; it's benchmarked against Oceana County (154.1 bu/a in 2022, 151.5 bu/a in 2023, averaging 152.8 bu/a) rather than the Michigan state average (168.0 bu/a both years), per the same County Estimates &mdash; Corn Harvested for Grain table cited below for wheat. Strategic context: since taking heifers back, Country Dairy has very little buffer for poor crop years and no extra grain to sell in an average year; a spring-forage-then-corn double-crop trial is planned for next year, aimed at increasing forage tons/acre over the current rotation.<br><br>Wheat is benchmarked against Oceana County, not the Michigan state average, as a more relevant local comparison: 60.5 bu/a (2022) and 54.5 bu/a (2023), averaging 57.5 bu/a, per the <em>Michigan Annual Statistical Bulletin</em>'s County Estimates &mdash; Winter Wheat table (the source below; the bulletin doesn't break out county-level yield for corn silage or alfalfa, so no county comparison is shown for those two).</p>
+      <p class="panel-note"><sup>1</sup> Per Casey, 2025 crop-year averages. Yield methodology: forage yields (corn silage, alfalfa silage) are supplied by SDG; any crop taken for grain (wheat) is measured with the combine's yield monitor. The alfalfa figure is silage tons/acre (~35&ndash;40% dry matter), not dry hay tons/acre, so it isn't directly comparable to a hay-basis benchmark. Rye isn't yield-tracked; it's grown only as a cover-crop seed source, not harvested for grain or forage. Grain corn (a separate crop from corn silage) runs an estimated 150 bu/ac, a rough figure Casey flagged as needing more digging to pin down exactly; it's benchmarked against Oceana County (154.1 bu/a in 2022, 151.5 bu/a in 2023, averaging 152.8 bu/a) rather than the Michigan state average (168.0 bu/a both years), per the same County Estimates: Corn Harvested for Grain table cited below for wheat. Strategic context: since taking heifers back, Country Dairy has very little buffer for poor crop years and no extra grain to sell in an average year; a spring-forage-then-corn double-crop trial is planned for next year, aimed at increasing forage tons/acre over the current rotation.<br><br>Wheat is benchmarked against Oceana County, not the Michigan state average, as a more relevant local comparison: 60.5 bu/a (2022) and 54.5 bu/a (2023), averaging 57.5 bu/a, per the <em>Michigan Annual Statistical Bulletin</em>'s County Estimates: Winter Wheat table (the source below; the bulletin doesn't break out county-level yield for corn silage or alfalfa, so no county comparison is shown for those two).</p>
       <p class="source-cat">Total Value of Crops Produced<sup>2</sup></p>
-      <p class="panel-note"><sup>2</sup> Acres &times; Casey's 2025 yields &times; Michigan NASS 2023 price per unit (<em>Michigan Annual Statistical Bulletin</em>, Dec 2024, the source below). Wheat: 200 ac &times; 60 bu/ac &times; $6.28/bu = $75,360. Alfalfa: 700 ac &times; 9.8 T/ac &times; $195.00/ton = $1,337,700, using the 2023 Michigan <em>dry alfalfa hay</em> price as an approximation &mdash; NASS does not publish a price for alfalfa haylage/silage (what Country Dairy actually produces), and hay and silage aren't the same moisture basis, so this over- or understates true value. <strong>Corn silage (1,600 of 2,500 acres) is excluded entirely</strong> &mdash; NASS reports Michigan corn-silage production but no price or value of production for it, and there's no clean proxy. This total therefore covers only 900 of 2,500 farmed acres (36%) &mdash; it is not a full-farm crop value figure.</p>
+      <p class="panel-note"><sup>2</sup> Acres &times; Casey's 2025 yields &times; Michigan NASS 2023 price per unit (<em>Michigan Annual Statistical Bulletin</em>, Dec 2024, the source below). Wheat: 200 ac &times; 60 bu/ac &times; $6.28/bu = $75,360. Alfalfa: 700 ac &times; 9.8 T/ac &times; $195.00/ton = $1,337,700, using the 2023 Michigan <em>dry alfalfa hay</em> price as an approximation, since NASS does not publish a price for alfalfa haylage/silage (what Country Dairy actually produces), and hay and silage aren't the same moisture basis, so this over- or understates true value. <strong>Corn silage (1,600 of 2,500 acres) is excluded entirely</strong>: NASS reports Michigan corn-silage production but no price or value of production for it, and there's no clean proxy. This total therefore covers only 900 of 2,500 farmed acres (36%); it is not a full-farm crop value figure.</p>
       <ul class="source-list">
-        <li><a href="https://www.nass.usda.gov/Statistics_by_State/Michigan/Publications/Annual_Statistical_Bulletin/stats24/agstat.pdf" target="_blank" rel="noopener">USDA NASS &mdash; Michigan Annual Statistical Bulletin (December 2024)</a> &mdash; source for Oceana County winter wheat and grain corn yield (County Estimates section) and Michigan alfalfa hay price used in Total Value of Crops Produced</li>
+        <li><a href="https://www.nass.usda.gov/Statistics_by_State/Michigan/Publications/Annual_Statistical_Bulletin/stats24/agstat.pdf" target="_blank" rel="noopener">USDA NASS: Michigan Annual Statistical Bulletin (December 2024)</a>, source for Oceana County winter wheat and grain corn yield (County Estimates section) and Michigan alfalfa hay price used in Total Value of Crops Produced</li>
       </ul>
       <p class="source-cat">Crops Labor $/cwt<sup>3</sup></p>
       <p class="panel-note"><sup>3</sup> Hourly labor only (excludes salaried labor), per cwt of crop produced. TTM Jul 2026: $0.65/cwt avg. TTM Jul 2025: $0.64/cwt avg.</p>

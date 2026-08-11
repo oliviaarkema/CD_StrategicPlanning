@@ -251,6 +251,8 @@ table.dt tr:hover td{background:var(--bg)}
   font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;
   color:#fff;background:rgba(20,30,20,.72);pointer-events:none;
 }
+#milkQualBars.connected>*{filter:none;opacity:1}
+#milkQualBars.connected::after{content:none}
 
 /* ── Radius heatmap ── */
 .radius-heatmap{display:flex;align-items:center;gap:28px;flex-wrap:wrap}
