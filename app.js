@@ -47,6 +47,28 @@ function initSection(name) {
     market:initMarket}[name] || (()=>{}))();
 }
 
+// ─── Print / export current page as PDF ───────────────────────────────────────
+// Uses the browser's native print-to-PDF (no external library needed). Chart.js
+// canvases are sized to their on-screen container by default, so if print layout
+// ever changes a container's width, the canvas would print at the wrong size —
+// resizing every live chart right before printing keeps them correctly sized for
+// whatever the print page's layout ends up being, avoiding cut-off/blank charts.
+let printPrevTitle = document.title;
+document.getElementById("printPageBtn")?.addEventListener("click", () => {
+  const h2 = document.querySelector(".page-section.active h2");
+  const pageName = h2 ? h2.textContent.trim() : "Dashboard";
+  printPrevTitle = document.title;
+  document.title = `Country Dairy - ${pageName} - ${new Date().toISOString().slice(0,10)}`;
+  window.print();
+});
+window.addEventListener("beforeprint", () => {
+  Object.values(Chart.instances || {}).forEach(c => { try { c.resize(); } catch(e) {} });
+});
+window.addEventListener("afterprint", () => {
+  document.title = printPrevTitle;
+  Object.values(Chart.instances || {}).forEach(c => { try { c.resize(); } catch(e) {} });
+});
+
 // ═══════════════════════════════════════════════════════════════════════════════
 //  HOME
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -574,24 +596,34 @@ function initRawMilk() {
     }
   });
 
-  // Pulled from this page's own stat cards (per Casey, Aug 2026) rather than an
-  // external benchmark — Butterfat and Herd Size don't have a real target on file,
-  // so they're left off rather than shown against a made-up one.
-  document.getElementById("milkQualBars").innerHTML = [
-    {lbl:"Lbs/Cow/Day",     sub:"Target: 94.3 (660 lbs/wk)", val:96,  bench:94.3, max:110, fmt:v=>v.toFixed(1)},
-    {lbl:"SCC (K cells/mL)",sub:"Target: <150K",             val:250, bench:150,  max:400, fmt:v=>v+"K", invert:true},
-  ].map(r=>{
-    const pct = Math.min(100, r.val / r.max * 100).toFixed(1);
-    const bpct= Math.min(100, r.bench / r.max * 100).toFixed(1);
-    const cls = r.invert ? (r.val < r.bench ? "good" : "warn") : (r.val >= r.bench ? "good" : "warn");
-    return `<div class="hbar-row">
-      <div class="hbar-label">${r.lbl}<i>${r.sub}</i></div>
-      <div class="hbar-track">
-        <div class="hbar-fill ${cls}" style="width:${pct}%"></div>
-      </div>
-      <div class="hbar-val">${r.fmt(r.val)}</div>
-    </div>`;
-  }).join("");
+  // Herd Quality Benchmarks: simple Actual-vs-Target bar charts, pulled from this
+  // page's own stat cards (per Casey, Aug 2026) rather than an external benchmark.
+  // Each metric gets its own chart/axis rather than one shared chart, since Lbs/
+  // Cow/Day (~96) and SCC (~250K) are on wildly different scales. Butterfat and
+  // Herd Size aren't shown here since there's no real target on file for either.
+  function renderHerdBenchmarkChart(canvasId, val, bench, invert, fmt) {
+    const above = val >= bench;
+    const cls = invert ? (above ? C.amber : C.kelly) : (above ? C.kelly : C.amber);
+    new Chart(document.getElementById(canvasId), {
+      type:"bar",
+      data:{
+        labels:["Actual","Target"],
+        datasets:[{ data:[val, bench], backgroundColor:[cls, C.muted], borderRadius:4 }]
+      },
+      options:{
+        responsive:true, maintainAspectRatio:false,
+        indexAxis:"y",
+        plugins:{ legend:{display:false},
+          tooltip:{callbacks:{label: c => c.label + ": " + fmt(c.parsed.x)}} },
+        scales:{
+          x:{grid:{color:gridColor()}, ticks:{callback:v=>fmt(v)}},
+          y:{grid:{display:false}}
+        }
+      }
+    });
+  }
+  renderHerdBenchmarkChart("herdLbsCowDayChart", 96, 94.3, false, v=>v.toFixed(1));
+  renderHerdBenchmarkChart("herdSccChart", 250, 150, true, v=>v+"K");
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
