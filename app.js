@@ -162,9 +162,10 @@ function initHome() {
       // Plant: Utilization Rate is the current-schedule figure from the Plant
       // Efficiency page (66.7%, per Nate, Aug 2026) — it reflects today's schedule,
       // not a full prior fiscal year, so there's no TTM Jul 2025 comparison to show.
-      // Labor Hrs/cwt has the same limitation (source only goes back to Jan '25).
+      // Labor Cost/cwt (TTM Jul 2026 only, no prior-year figure yet) is $6.68/cwt,
+      // equivalently $0.57/gallon — see footnote.
       ["Plant","Utilization Rate", "66.7%"],
-      ["Plant","Labor Hrs/cwt", "0.191"],
+      ["Plant","Labor Cost/cwt<sup>5</sup>", "$6.68"],
       ["Financials","Total Revenue (Ordinary Income)", fmtM(finRevenue), fmtM(finRevenuePrior), pctChg(finRevenue,finRevenuePrior)],
       ["Financials","COGS", fmtM(finCogs), fmtM(finCogsPrior), pctChg(finCogs,finCogsPrior)],
       ["Financials","Total Costs (COGS + OPEx)", fmtM(finCosts), fmtM(finCostsPrior), pctChg(finCosts,finCostsPrior)],
