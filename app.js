@@ -702,22 +702,24 @@ function renderPlantMetricTable(unit) {
 // ═══════════════════════════════════════════════════════════════════════════════
 //  CROP EFFICIENCY
 // ═══════════════════════════════════════════════════════════════════════════════
-// Per Casey, 2025 crop-year averages. Oceana County Average (57.5 bu/a wheat, the
-// 2022-23 average) is the same figure cited on the wheat stat card, from the
-// Michigan Annual Statistical Bulletin's County Estimates table — a more relevant
-// local benchmark than the Michigan state average used previously. Corn silage and
-// alfalfa are shown without a benchmark: the county-level breakout in that bulletin
-// doesn't cover either crop, and alfalfa's own figure is silage tons/acre (not the
-// dry hay tons/acre a hay-basis benchmark would report), so it wasn't comparable
-// even when a state figure was shown.
+// Per Casey, 2025 crop-year averages. Oceana County Average (57.5 bu/a wheat,
+// 152.8 bu/a grain corn — both 2022-23 averages) is the same figure cited on the
+// wheat and Corn (Grain) stat cards, from the Michigan Annual Statistical
+// Bulletin's County Estimates table — a more relevant local benchmark than the
+// Michigan state average used previously. Corn silage and alfalfa are shown
+// without a benchmark: the county-level breakout in that bulletin doesn't cover
+// either crop, and alfalfa's own figure is silage tons/acre (not the dry hay
+// tons/acre a hay-basis benchmark would report), so it wasn't comparable even
+// when a state figure was shown.
+const CROP_YIELD_UNITS = ["t/a","t/a","bu/a","bu/a"];
 function initCrops() {
   new Chart(document.getElementById("cropYieldChart"), {
     type:"bar",
     data:{
-      labels:["Corn Silage","Alfalfa Silage","Wheat"],
+      labels:["Corn Silage","Alfalfa Silage","Wheat","Corn (Grain)"],
       datasets:[
-        {label:"Country Dairy Actual",   data:[15,9.8,60], backgroundColor:C.kelly, borderRadius:4},
-        {label:"Oceana County Average",  data:[null,null,57.5], backgroundColor:C.muted, borderRadius:4},
+        {label:"Country Dairy Actual",   data:[15,9.8,60,150],   backgroundColor:C.kelly, borderRadius:4},
+        {label:"Oceana County Average",  data:[null,null,57.5,152.8], backgroundColor:C.muted, borderRadius:4},
       ]
     },
     options:{
@@ -725,7 +727,7 @@ function initCrops() {
       plugins:{
         legend:{position:"top"},
         tooltip:{callbacks:{label: c => c.dataset.label + ": " +
-          c.parsed.y + (c.dataIndex===2 ? " bu/a" : " t/a")}}
+          c.parsed.y + " " + CROP_YIELD_UNITS[c.dataIndex]}}
       },
       scales:{
         x:{grid:{display:false}},
