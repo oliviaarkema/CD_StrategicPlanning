@@ -67,17 +67,19 @@ function initHome() {
     "Jul '25","Aug '25","Sep '25","Oct '25","Nov '25","Dec '25",
     "Jan '26","Feb '26","Mar '26","Apr '26","May '26","Jun '26",
   ];
+  // Monthly Revenue vs. Operating Costs.xlsx — Revenue $ and Operating Costs $
+  // (COGS + Expenses) columns, Jul 2024-Jun 2026.
   const rev  = [
-    1645545, 2299610, 2055377, 2225430, 2138141, 2086631,
+    2349438, 2299610, 2055377, 2225430, 2138141, 2086631,
     2079507, 1772753, 2087068, 2184308, 2277922, 2523351,
-    2585013, 2446680, 2244856, 2418070, 1972220, 2411809,
+    2585013, 2466680, 2244856, 2418070, 1972220, 2411809,
     1686045, 1646609, 1861769, 2062624, 2028185, 2099555,
   ];
   const cost = [
-    1087512, 2341380, 2149066, 2077783, 2130164, 2175007,
-    2150906, 1836586, 1942402, 2111801, 2241576, 2455781,
-    2572680, 2319274, 2320298, 2643262, 2138672, 2235684,
-    1557016, 1614992, 1674430, 1997175, 1861458, 1918430,
+    2115213, 2313676, 2108503, 2038955, 2093132, 2144030,
+    2199971, 1808808, 2012894, 2178820, 2211062, 2431456,
+    2585382, 2303469, 2303836, 2609718, 2088374, 2216423,
+    1608831, 1584523, 1734346, 1971756, 1830498, 1891915,
   ];
   const netIncome = rev.map((r,i) => r - cost[i]);
 
@@ -130,8 +132,23 @@ function initHome() {
     }
   });
 
-  const ttmRevenue = rev.slice(-12).reduce((s,v)=>s+v,0);
-  const cogs = 4341828, totalExpenses = 20387243;
+  // Financials rows below are recalculated directly from Monthly Revenue vs.
+  // Operating Costs.xlsx (Revenue $, COGS, and Expenses columns, summed month by
+  // month for each TTM window) rather than taken as given from Key Metrics at a
+  // Glance.xlsx. That workbook's Total Revenue/Total Costs cells reconcile with this
+  // (within ~$1, a rounding artifact), but its hardcoded Operating Margin (2.4% /
+  // 2.7%) does not: (Revenue-Costs)/Revenue from its own adjacent cells works out to
+  // ~3.0% / ~1.6% — the reverse year-over-year direction from what it states. Treating
+  // that as a data-entry error and using the recalculated figures below; flagged for
+  // Casey to confirm. Also worth a flag on its own: COGS fell from ~$600-750K/mo to
+  // under $80K/mo starting Jan 2026, which is most of the TTM26 margin improvement —
+  // unclear whether that's a real cost change or a reclassification into Expenses.
+  const finRevenue = 25483435, finRevenuePrior = 26079536;
+  const finCogs = 4341827, finCogsPrior = 7826513;
+  const finCosts = 24729071, finCostsPrior = 25656520;
+  const pctChg = (cur,prior) => { const p = (cur-prior)/prior*100; return (p>=0?"+":"")+p.toFixed(1)+"%"; };
+  const pctPts = (cur,prior) => { const p = cur-prior; return (p>=0?"+":"")+p.toFixed(1)+" pts"; };
+  const om26 = (finRevenue-finCosts)/finRevenue*100, om25 = (finRevenuePrior-finCostsPrior)/finRevenuePrior*100;
 
   document.getElementById("homeMetricTable").innerHTML =
     `<thead><tr><th>Area</th><th>Metric</th><th class="n">TTM Jul 2026</th><th class="n">TTM Jul 2025</th><th class="n">Change</th></tr></thead>
@@ -148,13 +165,10 @@ function initHome() {
       // Labor Hrs/cwt has the same limitation (source only goes back to Jan '25).
       ["Plant","Utilization Rate", "66.7%"],
       ["Plant","Labor Hrs/cwt", "0.191"],
-      ["Financials","Total Revenue", fmtM(ttmRevenue), fmtM(25375643), "+0.3%"],
-      // COGS and Total Expenses (TTM Jul 2026), per Casey. No prior-year figures
-      // yet, so TTM Jul 2025 and Change are left blank.
-      ["Financials","COGS", fmtM(cogs)],
-      ["Financials","Gross Margin", ((ttmRevenue-cogs)/ttmRevenue*100).toFixed(1)+"%"],
-      ["Financials","Total Costs", fmtM(totalExpenses)],
-      ["Financials","Operating Margin", ((ttmRevenue-totalExpenses)/ttmRevenue*100).toFixed(1)+"%"],
+      ["Financials","Total Revenue (Ordinary Income)", fmtM(finRevenue), fmtM(finRevenuePrior), pctChg(finRevenue,finRevenuePrior)],
+      ["Financials","COGS", fmtM(finCogs), fmtM(finCogsPrior), pctChg(finCogs,finCogsPrior)],
+      ["Financials","Total Costs (COGS + OPEx)", fmtM(finCosts), fmtM(finCostsPrior), pctChg(finCosts,finCostsPrior)],
+      ["Financials","Operating Margin", om26.toFixed(1)+"%", om25.toFixed(1)+"%", pctPts(om26,om25)],
     ].map(([a,m,cur,prior,chg]) =>
       `<tr><td style="color:var(--muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.4px">${a}</td>
        <td>${m}</td><td class="n">${cur ?? "###"}</td><td class="n" style="color:var(--muted)">${prior ?? "###"}</td>
