@@ -656,19 +656,22 @@ function renderPlantMetricTable(unit) {
 // ═══════════════════════════════════════════════════════════════════════════════
 //  CROP EFFICIENCY
 // ═══════════════════════════════════════════════════════════════════════════════
-// Per Casey, 2025 crop-year averages. MI State Average is the same NASS figure
-// cited on the stat cards (20.5 corn silage, 87.0 wheat) — previously this chart
-// had its own out-of-sync mock benchmark (19.8, 4.2), now corrected to match.
-// Alfalfa's MI average is omitted: Country Dairy's figure is silage tons/acre,
-// not the dry hay tons/acre NASS reports, so the two aren't comparable.
+// Per Casey, 2025 crop-year averages. Oceana County Average (57.5 bu/a wheat, the
+// 2022-23 average) is the same figure cited on the wheat stat card, from the
+// Michigan Annual Statistical Bulletin's County Estimates table — a more relevant
+// local benchmark than the Michigan state average used previously. Corn silage and
+// alfalfa are shown without a benchmark: the county-level breakout in that bulletin
+// doesn't cover either crop, and alfalfa's own figure is silage tons/acre (not the
+// dry hay tons/acre a hay-basis benchmark would report), so it wasn't comparable
+// even when a state figure was shown.
 function initCrops() {
   new Chart(document.getElementById("cropYieldChart"), {
     type:"bar",
     data:{
       labels:["Corn Silage","Alfalfa Silage","Wheat"],
       datasets:[
-        {label:"Country Dairy Actual", data:[15,9.8,60], backgroundColor:C.kelly, borderRadius:4},
-        {label:"MI State Average",     data:[20.5,null,87.0], backgroundColor:C.muted, borderRadius:4},
+        {label:"Country Dairy Actual",   data:[15,9.8,60], backgroundColor:C.kelly, borderRadius:4},
+        {label:"Oceana County Average",  data:[null,null,57.5], backgroundColor:C.muted, borderRadius:4},
       ]
     },
     options:{

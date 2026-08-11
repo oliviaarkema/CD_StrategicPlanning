@@ -126,6 +126,7 @@ nav.topnav button.active{color:var(--kelly);border-bottom-color:var(--kelly);fon
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
 .stats-5{grid-template-columns:repeat(5,1fr)}
 .stats-6{grid-template-columns:repeat(6,1fr)}
+.stats-7{grid-template-columns:repeat(7,1fr)}
 .stat{
   background:var(--panel);border:1px solid var(--border);border-radius:14px;
   padding:16px 18px;box-shadow:var(--shadow);
