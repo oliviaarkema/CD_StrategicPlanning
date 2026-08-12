@@ -89,8 +89,15 @@ function initHome() {
     "Jul '25","Aug '25","Sep '25","Oct '25","Nov '25","Dec '25",
     "Jan '26","Feb '26","Mar '26","Apr '26","May '26","Jun '26",
   ];
-  // Monthly Revenue vs. Operating Costs.xlsx — Revenue $ and Operating Costs $
-  // (COGS + Expenses) columns, Jul 2024-Jun 2026.
+  // Monthly Revenue vs. Operating Costs.xlsx, Jul 2024-Jun 2026. Through Dec 2025,
+  // the books credited Casey for raw milk production and debited Nate for the milk
+  // cost as an offsetting wash entry that inflated both Revenue and COGS by the same
+  // amount each month; that practice stopped in January 2026 (net income unaffected
+  // either way). To keep the series on one consistent basis, Jul'24-Dec'25 below
+  // uses the "adj" sheet (which restates that wash entry back in) instead of the
+  // "Data" sheet's un-restated figures for those months; Jan'26-Jun'26 uses the
+  // "Data" sheet's Revenue $ and Operating Costs $ (COGS + Expenses) columns
+  // directly, since those months were never washed to begin with.
   const rev  = [
     2349438, 2299610, 2055377, 2225430, 2138141, 2086631,
     2079507, 1772753, 2087068, 2184308, 2277922, 2523351,
@@ -156,15 +163,20 @@ function initHome() {
 
   // Financials rows below are recalculated directly from Monthly Revenue vs.
   // Operating Costs.xlsx (Revenue $, COGS, and Expenses columns, summed month by
-  // month for each TTM window) rather than taken as given from Key Metrics at a
-  // Glance.xlsx. That workbook's Total Revenue/Total Costs cells reconcile with this
-  // (within ~$1, a rounding artifact), but its hardcoded Operating Margin (2.4% /
-  // 2.7%) does not: (Revenue-Costs)/Revenue from its own adjacent cells works out to
-  // ~3.0% / ~1.6% — the reverse year-over-year direction from what it states. Treating
-  // that as a data-entry error and using the recalculated figures below; flagged for
-  // Casey to confirm. Also worth a flag on its own: COGS fell from ~$600-750K/mo to
-  // under $80K/mo starting Jan 2026, which is most of the TTM26 margin improvement —
-  // unclear whether that's a real cost change or a reclassification into Expenses.
+  // month for each TTM window: TTM Jun'26 = Jul'25-Jun'26, TTM Jun'25 = Jul'24-Jun'25
+  // — trailing 12 months before Jul 1, 2026, per Casey) rather than taken as given
+  // from Key Metrics at a Glance.xlsx. That workbook's Total Revenue/Total Costs
+  // cells reconcile with this (within ~$1, a rounding artifact), but its hardcoded
+  // Operating Margin (2.4% / 2.7%) does not; treating that as a data-entry error and
+  // using the recalculated figures below. Revenue and Total Costs for the Jul'25-
+  // Dec'25 months are taken from the "adj" sheet rather than "Data", matching the
+  // restated basis used in the chart above (see comment there) — Casey confirmed the
+  // COGS drop starting Jan 2026 is a reclassification (the Casey/Nate milk wash entry
+  // stopping), not a real cost reduction, so this table restates the full TTM window
+  // onto one consistent basis rather than mixing washed and un-washed months. COGS is
+  // unaffected by that reclassification either way (it's a straight column sum in
+  // both sheets). Operating Margin here reduces to Net Income / Revenue regardless of
+  // the COGS/Expenses split, so it isn't distorted by the reclassification.
   const finRevenue = 25483435, finRevenuePrior = 26079536;
   const finCogs = 4341827, finCogsPrior = 7826513;
   const finCosts = 24729071, finCostsPrior = 25656520;
