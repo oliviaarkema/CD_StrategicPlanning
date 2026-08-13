@@ -159,6 +159,10 @@ nav.topnav button.active{color:var(--kelly);border-bottom-color:var(--kelly);fon
   box-shadow:var(--shadow);margin-bottom:24px;overflow:hidden;
   scroll-margin-top:140px;
 }
+/* Key Metrics' hover tooltips extend below their row and must not be clipped
+   by the panel's rounded-corner overflow:hidden; nothing else in this panel
+   relies on that clipping, so it's safe to open up just here. */
+.panel--tooltips{overflow:visible}
 .panel-head{
   display:flex;align-items:center;gap:12px;flex-wrap:wrap;
   padding:14px 20px;border-bottom:1px solid var(--border);
@@ -238,6 +242,8 @@ table.dt td.rk{color:var(--kelly);font-weight:700;width:26px}
 table.dt tr:last-child td{border-bottom:0}
 table.dt tr:hover td{background:var(--bg)}
 table.dt tr.row-total td{border-top:2px solid var(--border);font-weight:700}
+table.dt td.col-ttm{color:var(--kelly)}
+table.dt th.col-ttm{color:var(--kelly)}
 
 /* ── H-bars ── */
 .hbars{display:flex;flex-direction:column;gap:10px}

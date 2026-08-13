@@ -654,9 +654,10 @@ function initRawMilk() {
 // Utilization Rate, Shrinkage Rate, and Open Capacity are real, per Nate, Aug
 // 2026 — see the page appendix for formulas and citations. Shrinkage Rate is
 // shown only as a stat card (top of page), not in the Key Metrics panel below,
-// to avoid duplicating it. Labor Hrs/cwt (0.42) has no industry benchmark on
-// file, so no comparison is shown for it. Energy $/cwt has been dropped
-// entirely — no reliable source yet.
+// to avoid duplicating it. Labor Hrs/cwt (0.191, TTM Jul 2026 = 63,209 plant
+// hours / 330,273 cwt processed — same figure as the Home page and the stat
+// card above) has no industry benchmark on file, so no comparison is shown
+// for it. Energy $/cwt has been dropped entirely — no reliable source yet.
 // Weekly-hours figures (run/prep/available/possible) are per Nate, Aug 2026 — see
 // the page appendix. "Possible" run time under an added shift is modeled at the
 // same utilization rate as today (144 &times; 66.7% &asymp; 96 hrs/wk).
@@ -699,9 +700,9 @@ function initPlant() {
     <div class="hbar-row">
       <div class="hbar-label">Labor Hrs / cwt</div>
       <div class="hbar-track">
-        <div class="hbar-fill primary" style="width:${(0.42/0.8*100).toFixed(1)}%"></div>
+        <div class="hbar-fill primary" style="width:${(0.191/0.4*100).toFixed(1)}%"></div>
       </div>
-      <div class="hbar-val">0.42 hrs</div>
+      <div class="hbar-val">0.191 hrs</div>
     </div>
   `;
 
@@ -784,10 +785,10 @@ function renderPlantMarginTable() {
     {lbl:"Margin %",              i:8, fmt:v=>v+"%", total:true},
   ];
   document.getElementById("plantMarginTable").innerHTML =
-    `<thead><tr><th>Metric</th>${cols.map(c=>`<th class="n">${c}</th>`).join("")}</tr></thead>
+    `<thead><tr><th>Metric</th>${cols.map((c,i)=>`<th class="n${i===cols.length-1 ? " col-ttm" : ""}">${c}</th>`).join("")}</tr></thead>
     <tbody>${rows.map(r => {
       const cells = PLANT_MARGIN.map(row => `<td class="n">${r.fmt(row[r.i])}</td>`).join("");
-      const ttmCell = `<td class="n">${r.fmt(PLANT_MARGIN_TTM[r.i-1])}</td>`;
+      const ttmCell = `<td class="n col-ttm">${r.fmt(PLANT_MARGIN_TTM[r.i-1])}</td>`;
       return `<tr${r.total ? ' class="row-total"' : ""}><td>${r.lbl}</td>${cells}${ttmCell}</tr>`;
     }).join("")}
     </tbody>`;
