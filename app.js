@@ -651,60 +651,57 @@ function initRawMilk() {
 // ═══════════════════════════════════════════════════════════════════════════════
 //  PLANT EFFICIENCY
 // ═══════════════════════════════════════════════════════════════════════════════
-// Utilization Rate, Shrinkage Rate, and Open Capacity are real, per Nate, Aug
-// 2026 — see the page appendix for formulas and citations. Shrinkage Rate is
-// shown only as a stat card (top of page), not in the Key Metrics panel below,
-// to avoid duplicating it. Labor Hrs/cwt (0.191, TTM Jul 2026 = 63,209 plant
-// hours / 330,273 cwt processed — same figure as the Home page and the stat
-// card above) has no industry benchmark on file, so no comparison is shown
-// for it. Energy $/cwt has been dropped entirely — no reliable source yet.
-// Weekly-hours figures (run/prep/available/possible) are per Nate, Aug 2026 — see
-// the page appendix. "Possible" run time under an added shift is modeled at the
-// same utilization rate as today (144 &times; 66.7% &asymp; 96 hrs/wk).
+// Utilization Rate and Open Capacity are real, per Nate, Aug 2026 — see the
+// page appendix for formulas and citations. Shrinkage Rate and Labor Hrs/cwt
+// are shown only as stat cards (top of page), not in this chart, since
+// they're on different scales (%, hrs/cwt) than the hrs/wk this chart uses.
+// Both bars share one 0-144 hrs/wk axis (144 = the possible-with-an-added-
+// shift ceiling) so equal hour values render as equal segment widths across
+// rows — e.g. the 72 hrs/wk actually run shows up the same width in both
+// bars. "Possible" run time under an added shift is modeled at the same
+// utilization rate as today (144 &times; 66.7% &asymp; 96 hrs/wk).
+let plantKeyMetricsChartInstance = null;
 function initPlant() {
   const RUN_HRS = 72, PREP_HRS = 36, AVAIL_HRS = 108, POSSIBLE_HRS = 144;
   const UTIL_PCT = RUN_HRS / AVAIL_HRS * 100;
   const OPEN_HRS = AVAIL_HRS - RUN_HRS;
+  const EXTRA_SHIFT_HRS = POSSIBLE_HRS - AVAIL_HRS;
   const EXPANDED_RUN_HRS = Math.round(POSSIBLE_HRS * (UTIL_PCT / 100));
 
-  document.getElementById("plantKpiBars").innerHTML = `
-    <div class="hbar-row has-tip" tabindex="0">
-      <div class="hbar-label">Utilization Rate<i>Current schedule: 108 hrs/wk avail.</i></div>
-      <div class="hbar-track hbar-track--split">
-        <div class="hbar-seg run" style="width:${(RUN_HRS/AVAIL_HRS*100).toFixed(1)}%"></div>
-        <div class="hbar-seg prep" style="width:${(PREP_HRS/AVAIL_HRS*100).toFixed(1)}%"></div>
-      </div>
-      <div class="hbar-val">${UTIL_PCT.toFixed(1)}%</div>
-      <div class="hbar-tip">
-        <b>${RUN_HRS} hrs/wk</b> actually run<br>
-        <b>${PREP_HRS} hrs/wk</b> cleaning, prep, etc.<br>
-        <b>${AVAIL_HRS} hrs/wk</b> currently available
-      </div>
-    </div>
-
-    <div class="hbar-row has-tip" tabindex="0">
-      <div class="hbar-label">Open Capacity<i>Current schedule: 108 hrs/wk avail.</i></div>
-      <div class="hbar-track hbar-track--split">
-        <div class="hbar-seg run" style="width:${(RUN_HRS/POSSIBLE_HRS*100).toFixed(1)}%"></div>
-        <div class="hbar-seg open" style="width:${(OPEN_HRS/POSSIBLE_HRS*100).toFixed(1)}%"></div>
-        <div class="hbar-seg possible" style="width:${((POSSIBLE_HRS-AVAIL_HRS)/POSSIBLE_HRS*100).toFixed(1)}%"></div>
-      </div>
-      <div class="hbar-val">${OPEN_HRS} hrs/wk</div>
-      <div class="hbar-tip">
-        <b>${AVAIL_HRS} hrs/wk</b> currently available<br>
-        <b>${POSSIBLE_HRS} hrs/wk</b> possible with an additional shift<br>
-        &rarr; ~<b>${EXPANDED_RUN_HRS} hrs/wk</b> run time at the current utilization rate
-      </div>
-    </div>
-
-    <div class="hbar-row">
-      <div class="hbar-label">Labor Hrs / cwt</div>
-      <div class="hbar-track">
-        <div class="hbar-fill primary" style="width:${(0.191/0.4*100).toFixed(1)}%"></div>
-      </div>
-      <div class="hbar-val">0.191 hrs</div>
-    </div>
-  `;
+  if (plantKeyMetricsChartInstance) plantKeyMetricsChartInstance.destroy();
+  plantKeyMetricsChartInstance = new Chart(document.getElementById("plantKeyMetricsChart"), {
+    type:"bar",
+    data:{
+      labels:["Utilization Rate", "Open Capacity"],
+      datasets:[
+        {label:"Actual run time",                      data:[RUN_HRS, RUN_HRS],  backgroundColor:C.kelly, stack:"s"},
+        {label:"Cleaning, prep, etc.",                  data:[PREP_HRS, 0],       backgroundColor:C.amber, stack:"s"},
+        {label:"Open capacity (current schedule)",      data:[0, OPEN_HRS],       backgroundColor:"rgba(61,174,43,.32)", stack:"s"},
+        {label:"Possible with an additional shift",     data:[0, EXTRA_SHIFT_HRS],
+          backgroundColor:"rgba(61,174,43,.12)", borderColor:C.kelly, borderWidth:1, borderDash:[4,3], stack:"s"},
+      ]
+    },
+    options:{
+      indexAxis:"y", responsive:true, maintainAspectRatio:false,
+      scales:{
+        x:{stacked:true, min:0, max:POSSIBLE_HRS, grid:{color:gridColor()}, ticks:{callback:v=>v+" hrs"}},
+        y:{stacked:true, grid:{display:false}}
+      },
+      plugins:{
+        legend:{position:"top", labels:{boxWidth:12, font:{size:10}}},
+        tooltip:{
+          mode:"index", intersect:false,
+          filter: item => item.parsed.x !== 0,
+          callbacks:{
+            label: c => `${c.dataset.label}: ${c.parsed.x} hrs/wk`,
+            footer: items => items[0].label === "Utilization Rate"
+              ? `= ${UTIL_PCT.toFixed(1)}% of ${AVAIL_HRS} hrs/wk currently available`
+              : `${POSSIBLE_HRS} hrs/wk possible with an added shift → ~${EXPANDED_RUN_HRS} hrs/wk run time at today's utilization rate`
+          }
+        }
+      }
+    }
+  });
 
   renderPlantMetricTable("cwt");
   renderPlantMarginTable();

@@ -159,10 +159,6 @@ nav.topnav button.active{color:var(--kelly);border-bottom-color:var(--kelly);fon
   box-shadow:var(--shadow);margin-bottom:24px;overflow:hidden;
   scroll-margin-top:140px;
 }
-/* Key Metrics' hover tooltips extend below their row and must not be clipped
-   by the panel's rounded-corner overflow:hidden; nothing else in this panel
-   relies on that clipping, so it's safe to open up just here. */
-.panel--tooltips{overflow:visible}
 .panel-head{
   display:flex;align-items:center;gap:12px;flex-wrap:wrap;
   padding:14px 20px;border-bottom:1px solid var(--border);
@@ -245,44 +241,6 @@ table.dt tr.row-total td{border-top:2px solid var(--border);font-weight:700}
 table.dt td.col-ttm{color:var(--kelly)}
 table.dt th.col-ttm{color:var(--kelly)}
 
-/* ── H-bars ── */
-.hbars{display:flex;flex-direction:column;gap:10px}
-.hbar-row{display:grid;grid-template-columns:160px 1fr 70px;align-items:center;gap:10px;font-size:.83rem}
-.hbar-label{line-height:1.25}
-.hbar-label i{display:block;color:var(--muted);font-size:.72rem}
-.hbar-track{display:flex;background:var(--bg);border-radius:6px;height:18px;overflow:hidden;position:relative}
-.hbar-fill{height:100%;border-radius:6px;transition:width .4s ease}
-.hbar-fill.primary{background:var(--kelly)}
-.hbar-fill.good{background:#16a34a}
-.hbar-fill.warn{background:#d97706}
-.hbar-fill.bench{background:#9aa79a}
-.hbar-val{text-align:right;font-variant-numeric:tabular-nums;font-weight:600;color:var(--green)}
-
-.hbar-row{position:relative;scroll-margin-top:200px}
-.hbar-track--split{display:flex}
-.hbar-seg{height:100%}
-.hbar-seg.run{background:var(--kelly)}
-.hbar-seg.prep{background:#d97706;opacity:.4}
-.hbar-seg.open{background:var(--kelly);opacity:.22}
-.hbar-seg.possible{
-  background-image:repeating-linear-gradient(135deg, var(--kelly) 0 5px, transparent 5px 10px);
-  opacity:.4;
-}
-.hbar-row.has-tip{cursor:help}
-.hbar-row.has-tip .hbar-label{border-bottom:1px dotted var(--muted);width:fit-content}
-.hbar-tip{
-  position:absolute;left:0;top:calc(100% + 6px);z-index:30;
-  background:var(--nav-bg);color:#fff;padding:10px 13px;border-radius:10px;
-  font-size:.74rem;line-height:1.6;width:max-content;max-width:270px;
-  box-shadow:0 10px 28px rgba(0,0,0,.3);
-  opacity:0;visibility:hidden;transform:translateY(-4px);
-  transition:opacity .15s ease,transform .15s ease,visibility .15s;
-  pointer-events:none;
-}
-.hbar-row.has-tip:hover .hbar-tip,.hbar-row.has-tip:focus-visible .hbar-tip{
-  opacity:1;visibility:visible;transform:translateY(0);
-}
-
 #marketRadiusHeatmap{position:relative;min-height:80px}
 #marketRadiusHeatmap>*{filter:grayscale(1);opacity:.35}
 #marketRadiusHeatmap::after{
@@ -317,14 +275,12 @@ footer{max-width:1200px;margin:0 auto;padding:0 20px 50px;color:var(--muted);fon
   .grid-2,.grid-3{grid-template-columns:1fr}
   .span-2{grid-column:auto}
   header{flex-wrap:wrap}
-  .hbar-row{grid-template-columns:110px 1fr 56px}
 }
 @media(max-width:480px){
   .stats{grid-template-columns:repeat(2,1fr)}
   .stat .num{font-size:1.4rem}
   header .header-right{display:none}
   .panel{scroll-margin-top:190px}
-  .hbar-row{scroll-margin-top:250px}
 }
 
 /* ── Print / PDF export ── */
