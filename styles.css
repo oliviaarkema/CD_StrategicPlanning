@@ -204,6 +204,7 @@ nav.topnav button.active{color:var(--kelly);border-bottom-color:var(--kelly);fon
 }
 .chart-box.connected canvas{filter:none;opacity:1}
 .chart-box.connected::after{content:none}
+.chart-box.pending-reclass::after{content:"Pending Reclassification"}
 
 /* ── Grid layouts ── */
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
