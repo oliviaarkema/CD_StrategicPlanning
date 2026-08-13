@@ -1210,29 +1210,74 @@ function initMarket() {
     }
   });
 
-  const PEN_RANGES = ["0-24 mi","25-49 mi","50-99 mi","100-199 mi","200-499 mi"];
+  // Same 7 distance bands as Customer Share by Distance Band above. "actual" is Country
+  // Dairy's own customer count (from Customer Cases by Distance's own plotted points,
+  // binned by distance -- an exact count, not estimated). "estTotal" is a rough estimate
+  // of ALL businesses of that type in that band, regardless of whether they're a Country
+  // Dairy customer -- built from county-level population placed in each band (land/road-
+  // reachable Michigan and adjacent-state geography only; straight-line distance would
+  // otherwise pull in Milwaukee/Chicago across Lake Michigan, which isn't a realistic
+  // delivery area) times a national businesses-per-capita benchmark for that category
+  // (NACS for convenience stores, FMI/Census for grocery, NCES for K-12 schools, industry
+  // estimates for coffee shops and restaurants -- see appendix for figures and sources).
+  // 200-249 mi and 250-299 mi are shown for completeness (they match the chart above) but
+  // actual = 0 for all 5 types there; 300+ mi is omitted from estTotal entirely -- it's an
+  // open-ended distance with no natural population boundary, and actual is 0 there too.
+  // Treat estTotal, and therefore the % figures below, as order-of-magnitude: population-
+  // by-band and the density benchmarks are both national/regional approximations, not a
+  // GIS radius query, so the true estimated-total count could reasonably be half to double
+  // what's shown here. See the appendix footnote for the full methodology and caveats.
+  const PEN_BANDS = ["0-49 mi","50-99 mi","100-149 mi","150-199 mi","200-249 mi","250-299 mi","300+ mi"];
   const PEN_BY_TYPE = [
-    {label:"Convenience Store", data:[88,74,55,31,12], color:C.green},
-    {label:"School",            data:[76,68,52,29,14], color:C.kelly},
-    {label:"Coffee Shop",       data:[64,49,33,17, 6], color:C.mid},
-    {label:"Supermarket",       data:[92,81,63,38,19], color:C.blue},
-    {label:"Restaurant",        data:[57,45,30,15, 5], color:C.amber},
+    {label:"Convenience Store / Gas", color:C.green,
+      actual:[108,215,191,34,0,0,0], estTotal:[159,635,544,817,1270,681,null]},
+    {label:"Supermarket / Grocery",   color:C.blue,
+      actual:[31,39,29,9,0,0,0],     estTotal:[58,233,200,300,467,250,null]},
+    {label:"School / Institutional",  color:C.kelly,
+      actual:[46,77,66,18,0,0,0],    estTotal:[134,537,461,691,1075,576,null]},
+    {label:"Coffee Shop",             color:C.mid,
+      actual:[20,39,68,19,0,0,0],    estTotal:[47,187,160,240,373,200,null]},
+    {label:"Restaurant / Food Service", color:C.amber,
+      actual:[2,10,13,7,0,0,0],      estTotal:[778,3111,2667,4000,6222,3333,null]},
   ];
+  const penDatasets = [];
+  PEN_BY_TYPE.forEach(t => {
+    const pct = t.actual.map((a,i) => t.estTotal[i] ? a/t.estTotal[i]*100 : 0);
+    penDatasets.push({
+      label:t.label, stack:t.label, data:pct.map(p=>+p.toFixed(1)),
+      backgroundColor:t.color, borderRadius:{topLeft:4,topRight:4}, borderSkipped:false
+    });
+    penDatasets.push({
+      label:t.label+" (not ordering)", stack:t.label,
+      data:pct.map((p,i)=>t.estTotal[i]===null ? 0 : +(100-p).toFixed(1)),
+      backgroundColor:t.color+"33", borderRadius:{bottomLeft:4,bottomRight:4}, borderSkipped:false
+    });
+  });
   new Chart(document.getElementById("marketPenetrationChart"), {
     type:"bar",
-    data:{
-      labels: PEN_RANGES,
-      datasets: PEN_BY_TYPE.map(t => ({
-        label:t.label, data:t.data, backgroundColor:t.color, borderRadius:4
-      }))
-    },
+    data:{ labels: PEN_BANDS, datasets: penDatasets },
     options:{
       responsive:true, maintainAspectRatio:false,
-      plugins:{ legend:{position:"top"},
-        tooltip:{callbacks:{label: c => c.dataset.label + ": " + c.parsed.y + "%"}} },
+      plugins:{
+        legend:{
+          labels:{ filter: item => !item.text.includes("(not ordering)") }
+        },
+        tooltip:{
+          filter: item => !item.dataset.label.includes("(not ordering)"),
+          callbacks:{
+            label: c => {
+              const t = PEN_BY_TYPE[Math.floor(c.datasetIndex/2)];
+              const est = t.estTotal[c.dataIndex];
+              if (est === null) return `${t.label}: not enough data to estimate at this distance`;
+              return [`${t.label}: ${c.parsed.y}% of an estimated ${fmt(est)} in this band`,
+                `Actual customers: ${fmt(t.actual[c.dataIndex])}`];
+            }
+          }
+        }
+      },
       scales:{
-        x:{grid:{display:false}},
-        y:{grid:{color:gridColor()}, ticks:{callback:v=>v+"%"}, max:100}
+        x:{grid:{display:false}, stacked:true},
+        y:{grid:{color:gridColor()}, stacked:true, ticks:{callback:v=>v+"%"}, max:100}
       }
     }
   });
