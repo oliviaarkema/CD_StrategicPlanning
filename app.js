@@ -196,10 +196,13 @@ function initHome() {
       // Plant: Utilization Rate is the current-schedule figure from the Plant
       // Efficiency page (66.7%, per Nate, Aug 2026) — it reflects today's schedule,
       // not a full prior fiscal year, so there's no TTM Jul 2025 comparison to show.
-      // Labor Cost/cwt (TTM Jul 2026 only, no prior-year figure yet) is $6.68/cwt,
-      // equivalently $0.57/gallon — see footnote.
+      // Labor Hrs/cwt (TTM Jul 2026 = 63,209 hrs / 330,273 cwt = 0.191) is from Paul's
+      // Monthly Gallons Produced / Monthly Plant Hours data — see footnote. No TTM
+      // Jul 2025 comparison: the only prior-year figure on file is a single blended
+      // "2024 average," not actual Jul-Dec 2024 months, so a prior TTM built from it
+      // would be a guess dressed up as a real figure.
       ["Plant","Utilization Rate", "66.7%"],
-      ["Plant","Labor Cost/cwt<sup>5</sup>", "$6.68"],
+      ["Plant","Labor Hrs/cwt<sup>5</sup>", "0.191"],
       ["Financials","Total Revenue (Ordinary Income)", fmtM(finRevenue), fmtM(finRevenuePrior), pctChg(finRevenue,finRevenuePrior)],
       ["Financials","COGS", fmtM(finCogs), fmtM(finCogsPrior), pctChg(finCogs,finCogsPrior)],
       ["Financials","Total Costs (COGS + OPEx)", fmtM(finCosts), fmtM(finCostsPrior), pctChg(finCosts,finCostsPrior)],
@@ -218,58 +221,61 @@ function initHome() {
 // TTM Jul '25-Jun '26, from Items_Sold_TTM_July2026.xlsx's MilkProducts sheet (fluid
 // milk only — not Ice Cream/Soft Serve/etc.). Every SKU on that sheet (its own item
 // descriptions, unmodified), sorted descending by quantity. Qty is each SKU's own
-// sales unit (gallon/half-gallon/quart/pint) as sold.
+// sales unit (gallon/half-gallon/quart/pint) as sold. sizeGal is that same unit's
+// size in gallons, read off each SKU's own name (half pint=1/16, pint=1/8,
+// quart=1/4, half gallon=1/2, gallon=1, "HGL"=half gallon, dispenser sizes as
+// labeled e.g. "5 Gal Disp"=5) — used only for the Price/Gallon toggle below.
 const MILK_SKUS = [
-  { name:"64 CD CHOC FF HALF PINT",              qty:3273358, rev:1246863.06 },
-  { name:"26 CD CHOC MILK Pint",                 qty:2219715, rev:1783732.32 },
-  { name:"63 CD 1% LF HALF PINT",                qty: 672569, rev: 240215.94 },
-  { name:"25 CD CHOC MILK Quart",                qty: 512866, rev: 675719.94 },
-  { name:"13 CD 2% RF Pint",                     qty: 417829, rev: 282155.05 },
-  { name:"56 WF HVD HALF GALLON",                qty: 416988, rev: 844031.98 },
-  { name:"57 WF 2% HALF GALLON",                 qty: 352188, rev: 687793.86 },
-  { name:"05 CD HVD Gallon",                     qty: 339155, rev:1151279.38 },
-  { name:"52 WF HVD GALLON",                     qty: 336240, rev:1294029.20 },
-  { name:"24 CD CHOC MILK 1/2 Gallon",            qty: 325287, rev: 735296.91 },
-  { name:"11 CD 2% RF Gallon",                   qty: 298077, rev: 937165.06 },
-  { name:"27 CD STRAW MILK Pint",                 qty: 253594, rev: 203722.53 },
-  { name:"12 CD 2% RF 1/2 Gallon",                qty: 221364, rev: 385118.24 },
-  { name:"08 CD HVD Pint",                        qty: 219495, rev: 151867.61 },
-  { name:"53 WF 2% GALLON",                      qty: 210090, rev: 777794.27 },
-  { name:"06 CD HVD 1/2 Gallon",                  qty: 193179, rev: 350440.73 },
-  { name:"89 QD CHOC PINT",                       qty: 176107, rev: 128807.23 },
-  { name:"59 WF FAT FREE HALF GALLON",            qty: 143748, rev: 259870.10 },
-  { name:"58 WF 1% HALF GALLON",                  qty: 130464, rev: 243542.33 },
-  { name:"W33 CD WHP CRM HGL",                    qty: 114210, rev: 641389.56 },
-  { name:"23 CD CHOC MILK Gallon",                qty: 103601, rev: 444031.24 },
-  { name:"07 CD HVD Quart",                       qty:  97768, rev: 107456.86 },
-  { name:"44 CD 2% QUART",                        qty:  90124, rev:  95532.46 },
-  { name:"70 QD HVD GALLON",                      qty:  83759, rev: 282431.99 },
-  { name:"88 QD CHOC QUART",                      qty:  75883, rev:  96378.28 },
-  { name:"71 QD 2% RF GALLON",                    qty:  73032, rev: 235359.41 },
-  { name:"15 CD 1% LF GALLON",                    qty:  50123, rev: 151347.13 },
-  { name:"87 QD CHOC HALF GALLON",                qty:  46541, rev:  98278.46 },
-  { name:"83 QD 2% PINT",                         qty:  42712, rev:  26588.60 },
-  { name:"82 QD HVD PINT",                        qty:  37462, rev:  24292.15 },
-  { name:"74 QD HVD HALF GALLON",                 qty:  35573, rev:  63222.36 },
-  { name:"75 QD 2% RF HALF GALLON",               qty:  35235, rev:  58929.28 },
-  { name:"18 CD FAT FREE Gallon",                 qty:  33524, rev:  97248.04 },
-  { name:"86 QD CHOC GALLON",                     qty:  26711, rev: 107910.96 },
-  { name:"62 CD 1% LF HALF GALLON",               qty:  22962, rev:  37155.42 },
-  { name:"79 QD 2% QUART",                        qty:  19876, rev:  20864.17 },
-  { name:"78 QD HVD QUART",                       qty:  19777, rev:  21784.28 },
-  { name:"33 CD HVY WHIP CRM 1/2 Gallon",          qty:  18887, rev: 102939.95 },
-  { name:"19 CD FAT FREE 1/2 Gallon",              qty:  17301, rev:  27703.18 },
-  { name:"72 QD 1% LF GALLON",                    qty:  11434, rev:  34853.22 },
-  { name:"76 QD 1% HALF GALLON",                  qty:  11366, rev:  18143.91 },
-  { name:"77 QD FAT FREE HALF GALLON",             qty:  10833, rev:  16602.96 },
-  { name:"73 QD FAT FREE Gallon",                 qty:   9250, rev:  27137.49 },
-  { name:"10 CC 2% RF Gallon",                    qty:   4852, rev:  13537.08 },
-  { name:"04 CC HVD Gallon",                      qty:   1935, rev:   5957.78 },
-  { name:"CD 2.5 GAL DISP WHOLE CHOCOLATE",       qty:   1347, rev:  13554.33 },
-  { name:"09 CD 2% RF 5 Gal Disp",                qty:    983, rev:  15216.50 },
-  { name:"22FF CD FF CHOCOLATE 5 GAL DISP",       qty:    532, rev:   8830.91 },
-  { name:"29 CD STRAW MILK 1/2 Gallon",           qty:    216, rev:    470.66 },
-  { name:"22 CD CHOC 5 Gal Disp",                 qty:     58, rev:   1150.61 },
+  { name:"64 CD CHOC FF HALF PINT",              qty:3273358, rev:1246863.06, sizeGal:0.0625 },
+  { name:"26 CD CHOC MILK Pint",                 qty:2219715, rev:1783732.32, sizeGal:0.125 },
+  { name:"63 CD 1% LF HALF PINT",                qty: 672569, rev: 240215.94, sizeGal:0.0625 },
+  { name:"25 CD CHOC MILK Quart",                qty: 512866, rev: 675719.94, sizeGal:0.25 },
+  { name:"13 CD 2% RF Pint",                     qty: 417829, rev: 282155.05, sizeGal:0.125 },
+  { name:"56 WF HVD HALF GALLON",                qty: 416988, rev: 844031.98, sizeGal:0.5 },
+  { name:"57 WF 2% HALF GALLON",                 qty: 352188, rev: 687793.86, sizeGal:0.5 },
+  { name:"05 CD HVD Gallon",                     qty: 339155, rev:1151279.38, sizeGal:1 },
+  { name:"52 WF HVD GALLON",                     qty: 336240, rev:1294029.20, sizeGal:1 },
+  { name:"24 CD CHOC MILK 1/2 Gallon",            qty: 325287, rev: 735296.91, sizeGal:0.5 },
+  { name:"11 CD 2% RF Gallon",                   qty: 298077, rev: 937165.06, sizeGal:1 },
+  { name:"27 CD STRAW MILK Pint",                 qty: 253594, rev: 203722.53, sizeGal:0.125 },
+  { name:"12 CD 2% RF 1/2 Gallon",                qty: 221364, rev: 385118.24, sizeGal:0.5 },
+  { name:"08 CD HVD Pint",                        qty: 219495, rev: 151867.61, sizeGal:0.125 },
+  { name:"53 WF 2% GALLON",                      qty: 210090, rev: 777794.27, sizeGal:1 },
+  { name:"06 CD HVD 1/2 Gallon",                  qty: 193179, rev: 350440.73, sizeGal:0.5 },
+  { name:"89 QD CHOC PINT",                       qty: 176107, rev: 128807.23, sizeGal:0.125 },
+  { name:"59 WF FAT FREE HALF GALLON",            qty: 143748, rev: 259870.10, sizeGal:0.5 },
+  { name:"58 WF 1% HALF GALLON",                  qty: 130464, rev: 243542.33, sizeGal:0.5 },
+  { name:"W33 CD WHP CRM HGL",                    qty: 114210, rev: 641389.56, sizeGal:0.5 },
+  { name:"23 CD CHOC MILK Gallon",                qty: 103601, rev: 444031.24, sizeGal:1 },
+  { name:"07 CD HVD Quart",                       qty:  97768, rev: 107456.86, sizeGal:0.25 },
+  { name:"44 CD 2% QUART",                        qty:  90124, rev:  95532.46, sizeGal:0.25 },
+  { name:"70 QD HVD GALLON",                      qty:  83759, rev: 282431.99, sizeGal:1 },
+  { name:"88 QD CHOC QUART",                      qty:  75883, rev:  96378.28, sizeGal:0.25 },
+  { name:"71 QD 2% RF GALLON",                    qty:  73032, rev: 235359.41, sizeGal:1 },
+  { name:"15 CD 1% LF GALLON",                    qty:  50123, rev: 151347.13, sizeGal:1 },
+  { name:"87 QD CHOC HALF GALLON",                qty:  46541, rev:  98278.46, sizeGal:0.5 },
+  { name:"83 QD 2% PINT",                         qty:  42712, rev:  26588.60, sizeGal:0.125 },
+  { name:"82 QD HVD PINT",                        qty:  37462, rev:  24292.15, sizeGal:0.125 },
+  { name:"74 QD HVD HALF GALLON",                 qty:  35573, rev:  63222.36, sizeGal:0.5 },
+  { name:"75 QD 2% RF HALF GALLON",               qty:  35235, rev:  58929.28, sizeGal:0.5 },
+  { name:"18 CD FAT FREE Gallon",                 qty:  33524, rev:  97248.04, sizeGal:1 },
+  { name:"86 QD CHOC GALLON",                     qty:  26711, rev: 107910.96, sizeGal:1 },
+  { name:"62 CD 1% LF HALF GALLON",               qty:  22962, rev:  37155.42, sizeGal:0.5 },
+  { name:"79 QD 2% QUART",                        qty:  19876, rev:  20864.17, sizeGal:0.25 },
+  { name:"78 QD HVD QUART",                       qty:  19777, rev:  21784.28, sizeGal:0.25 },
+  { name:"33 CD HVY WHIP CRM 1/2 Gallon",          qty:  18887, rev: 102939.95, sizeGal:0.5 },
+  { name:"19 CD FAT FREE 1/2 Gallon",              qty:  17301, rev:  27703.18, sizeGal:0.5 },
+  { name:"72 QD 1% LF GALLON",                    qty:  11434, rev:  34853.22, sizeGal:1 },
+  { name:"76 QD 1% HALF GALLON",                  qty:  11366, rev:  18143.91, sizeGal:0.5 },
+  { name:"77 QD FAT FREE HALF GALLON",             qty:  10833, rev:  16602.96, sizeGal:0.5 },
+  { name:"73 QD FAT FREE Gallon",                 qty:   9250, rev:  27137.49, sizeGal:1 },
+  { name:"10 CC 2% RF Gallon",                    qty:   4852, rev:  13537.08, sizeGal:1 },
+  { name:"04 CC HVD Gallon",                      qty:   1935, rev:   5957.78, sizeGal:1 },
+  { name:"CD 2.5 GAL DISP WHOLE CHOCOLATE",       qty:   1347, rev:  13554.33, sizeGal:2.5 },
+  { name:"09 CD 2% RF 5 Gal Disp",                qty:    983, rev:  15216.50, sizeGal:5 },
+  { name:"22FF CD FF CHOCOLATE 5 GAL DISP",       qty:    532, rev:   8830.91, sizeGal:5 },
+  { name:"29 CD STRAW MILK 1/2 Gallon",           qty:    216, rev:    470.66, sizeGal:0.5 },
+  { name:"22 CD CHOC 5 Gal Disp",                 qty:     58, rev:   1150.61, sizeGal:5 },
 ];
 
 // Monthly Revenue of milk products only (the "Milk Products" category above, i.e.
@@ -329,10 +335,13 @@ function renderMarginChart(canvasId, labels, revData, pctData, revMax, showShare
   });
 }
 
-// rankBy: "qty" (Units), "rev" (Overall Revenue), or "ppu" (Price per Unit = rev/qty).
+// rankBy: "qty" (Units), "rev" (Overall Revenue), "ppu" (Price per Unit = rev/qty),
+// or "ppg" (Price per Gallon = price/unit ÷ that SKU's own size in gallons —
+// normalizes every pack size, half-pint through 5-gal dispenser, onto one basis).
 function milkProdValue(sku, rankBy) {
   if (rankBy === "rev") return sku.rev;
   if (rankBy === "ppu") return sku.rev / sku.qty;
+  if (rankBy === "ppg") return (sku.rev / sku.qty) / sku.sizeGal;
   return sku.qty;
 }
 
@@ -346,7 +355,7 @@ function renderMilkProdChart(rankBy) {
   // legible; the wrapper (h420, overflow-y:auto) turns that into a scrollable window.
   document.getElementById("milkProdChartInner").style.height = (sorted.length * 26) + "px";
 
-  const datasetLabel = {qty:"Units Sold", rev:"Overall Revenue", ppu:"Price per Unit"}[rankBy];
+  const datasetLabel = {qty:"Units Sold", rev:"Overall Revenue", ppu:"Price per Unit", ppg:"Price per Gallon"}[rankBy];
 
   if (milkProdChartInstance) milkProdChartInstance.destroy();
   milkProdChartInstance = new Chart(document.getElementById("milkProdChart"), {
@@ -364,11 +373,12 @@ function renderMilkProdChart(rankBy) {
           label: c => {
             const sku = sorted[c.dataIndex];
             return [`Units: ${fmt(sku.qty)}`, `Overall Revenue: $${fmt(Math.round(sku.rev))}`,
-              `Price/Unit: $${(sku.rev/sku.qty).toFixed(2)}`];
+              `Price/Unit: $${(sku.rev/sku.qty).toFixed(2)} (${sku.sizeGal} gal)`,
+              `Price/Gallon: $${((sku.rev/sku.qty)/sku.sizeGal).toFixed(3)}`];
           }
         }} },
       scales:{
-        x:{grid:{color:gridColor()}, ticks:{callback: v => rankBy === "ppu" ? "$"+v.toFixed(2) : rankBy === "rev" ? "$"+fmt(v) : fmt(v)}},
+        x:{grid:{color:gridColor()}, ticks:{callback: v => (rankBy === "ppu" || rankBy === "ppg") ? "$"+v.toFixed(2) : rankBy === "rev" ? "$"+fmt(v) : fmt(v)}},
         y:{grid:{display:false}, ticks:{font:{size:9}}}
       }
     }
@@ -641,31 +651,62 @@ function initRawMilk() {
 // ═══════════════════════════════════════════════════════════════════════════════
 //  PLANT EFFICIENCY
 // ═══════════════════════════════════════════════════════════════════════════════
-// Utilization Rate, Shrinkage Rate, and Open Capacity are real, per Nate (Plant
-// Manager, Aug 2026) — see the page appendix for formulas and citations. Labor
-// Hrs/cwt and Energy $/cwt remain placeholders (greyed out below; Energy $/cwt has
-// no reliable source yet — see the PLANT_MONTHS comment below on the ~15x labor cost
-// scale error in the source file) and are excluded from the pct/bench math since
-// they're not driven by real benchmarks.
+// Utilization Rate, Shrinkage Rate, and Open Capacity are real, per Nate, Aug
+// 2026 — see the page appendix for formulas and citations. Shrinkage Rate is
+// shown only as a stat card (top of page), not in the Key Metrics panel below,
+// to avoid duplicating it. Labor Hrs/cwt (0.42) has no industry benchmark on
+// file, so no comparison is shown for it. Energy $/cwt has been dropped
+// entirely — no reliable source yet.
+// Weekly-hours figures (run/prep/available/possible) are per Nate, Aug 2026 — see
+// the page appendix. "Possible" run time under an added shift is modeled at the
+// same utilization rate as today (144 &times; 66.7% &asymp; 96 hrs/wk).
 function initPlant() {
-  document.getElementById("plantKpiBars").innerHTML = [
-    {lbl:"Utilization Rate",   sub:"Current schedule: 108 hrs/wk avail.", val:66.7, bench:85,   max:100, fmt:v=>v+"%",     cls:"warn"},
-    {lbl:"Shrinkage Rate",     sub:"Week of 7/28 &middot; industry avg: 2.1%",  val:3.06, bench:2.1,  max:5,   fmt:v=>v+"%",     cls:"warn", invert:true},
-    {lbl:"Open Capacity",      sub:"Current schedule: 108 hrs/wk avail.", val:36,   bench:null, max:108, fmt:v=>v+" hrs/wk", cls:"primary"},
-    {lbl:"Labor Hrs / cwt",    sub:"Industry avg: 0.48 (placeholder)", val:0.42, bench:0.48, max:0.8, fmt:v=>v+" hrs",  cls:"pending", pending:true},
-    {lbl:"Energy $ / cwt",     sub:"Industry avg: $1.38 (placeholder)", val:1.24, bench:1.38, max:2.2, fmt:v=>"$"+v,     cls:"pending", pending:true},
-  ].map(r=>{
-    const pct  = (r.val  / r.max * 100).toFixed(1);
-    return `<div class="hbar-row${r.pending ? " pending" : ""}">
-      <div class="hbar-label">${r.lbl}<i>${r.sub}</i></div>
-      <div class="hbar-track">
-        <div class="hbar-fill ${r.cls}" style="width:${pct}%"></div>
+  const RUN_HRS = 72, PREP_HRS = 36, AVAIL_HRS = 108, POSSIBLE_HRS = 144;
+  const UTIL_PCT = RUN_HRS / AVAIL_HRS * 100;
+  const OPEN_HRS = AVAIL_HRS - RUN_HRS;
+  const EXPANDED_RUN_HRS = Math.round(POSSIBLE_HRS * (UTIL_PCT / 100));
+
+  document.getElementById("plantKpiBars").innerHTML = `
+    <div class="hbar-row has-tip" tabindex="0">
+      <div class="hbar-label">Utilization Rate<i>Current schedule: 108 hrs/wk avail.</i></div>
+      <div class="hbar-track hbar-track--split">
+        <div class="hbar-seg run" style="width:${(RUN_HRS/AVAIL_HRS*100).toFixed(1)}%"></div>
+        <div class="hbar-seg prep" style="width:${(PREP_HRS/AVAIL_HRS*100).toFixed(1)}%"></div>
       </div>
-      <div class="hbar-val">${r.fmt(r.val)}</div>
-    </div>`;
-  }).join("");
+      <div class="hbar-val">${UTIL_PCT.toFixed(1)}%</div>
+      <div class="hbar-tip">
+        <b>${RUN_HRS} hrs/wk</b> actually run<br>
+        <b>${PREP_HRS} hrs/wk</b> cleaning, prep, etc.<br>
+        <b>${AVAIL_HRS} hrs/wk</b> currently available
+      </div>
+    </div>
+
+    <div class="hbar-row has-tip" tabindex="0">
+      <div class="hbar-label">Open Capacity<i>Current schedule: 108 hrs/wk avail.</i></div>
+      <div class="hbar-track hbar-track--split">
+        <div class="hbar-seg run" style="width:${(RUN_HRS/POSSIBLE_HRS*100).toFixed(1)}%"></div>
+        <div class="hbar-seg open" style="width:${(OPEN_HRS/POSSIBLE_HRS*100).toFixed(1)}%"></div>
+        <div class="hbar-seg possible" style="width:${((POSSIBLE_HRS-AVAIL_HRS)/POSSIBLE_HRS*100).toFixed(1)}%"></div>
+      </div>
+      <div class="hbar-val">${OPEN_HRS} hrs/wk</div>
+      <div class="hbar-tip">
+        <b>${AVAIL_HRS} hrs/wk</b> currently available<br>
+        <b>${POSSIBLE_HRS} hrs/wk</b> possible with an additional shift<br>
+        &rarr; ~<b>${EXPANDED_RUN_HRS} hrs/wk</b> run time at the current utilization rate
+      </div>
+    </div>
+
+    <div class="hbar-row">
+      <div class="hbar-label">Labor Hrs / cwt</div>
+      <div class="hbar-track">
+        <div class="hbar-fill primary" style="width:${(0.42/0.8*100).toFixed(1)}%"></div>
+      </div>
+      <div class="hbar-val">0.42 hrs</div>
+    </div>
+  `;
 
   renderPlantMetricTable("cwt");
+  renderPlantMarginTable();
   document.querySelectorAll(".js-plant-unit-toggle button").forEach(btn =>
     btn.addEventListener("click", () => {
       const unit = btn.dataset.unit;
@@ -676,8 +717,7 @@ function initPlant() {
 }
 
 // Jul '25-Jun '26 (dashboard fiscal year), from Plant_Production_Headcount_MonthlyGallons.xlsx.
-// [month, gallons, cwt, laborHrsPerCwt, laborHrsPerGal]. Utilization/Energy/Loss aren't in
-// that file, so those columns stay "###". The file's "Hourly Labor Cost - Plant" column is
+// [month, gallons, cwt, laborHrsPerCwt, laborHrsPerGal]. The file's "Hourly Labor Cost - Plant" column is
 // excluded here — 6 of 18 months imply a ~$300/hr rate vs. ~$18-22/hr for the rest, a ~15x
 // scale error, so it needs correcting at the source before it's usable anywhere.
 const PLANT_MONTHS = [
@@ -698,15 +738,57 @@ const PLANT_MONTHS = [
 function renderPlantMetricTable(unit) {
   const volLabel    = unit === "gal" ? "Gallons Processed" : "cwt Processed";
   const laborLabel  = unit === "gal" ? "Labor Hrs/gal" : "Labor Hrs/cwt";
-  const energyLabel = unit === "gal" ? "Energy $/gal" : "Energy $/cwt";
   document.getElementById("plantMetricTable").innerHTML =
-    `<thead><tr><th>Month</th><th class="n">${volLabel}</th><th class="n">Utilization</th>
-    <th class="n">${laborLabel}</th><th class="n">${energyLabel}</th><th class="n">Loss %</th></tr></thead>
+    `<thead><tr><th>Month</th><th class="n">${volLabel}</th>
+    <th class="n">${laborLabel}</th></tr></thead>
     <tbody>${PLANT_MONTHS.map(([m, gal, cwt, hrsPerCwt, hrsPerGal]) => {
       const vol   = unit === "gal" ? fmt(gal) : fmt(cwt);
       const labor = unit === "gal" ? hrsPerGal : hrsPerCwt;
-      return `<tr><td>${m}</td><td class="n">${vol}</td><td class="n">###</td>
-      <td class="n">${labor}</td><td class="n">###</td><td class="n">###</td></tr>`;
+      return `<tr><td>${m}</td><td class="n">${vol}</td>
+      <td class="n">${labor}</td></tr>`;
+    }).join("")}
+    </tbody>`;
+}
+
+// Per Paul, Aug 2026 — directional summary from Plant Costs - Margin Directional
+// Summary - 2025.07-2026.csv. [month, FMMO gallons, revenue/gal, COGS milk (est.),
+// labor/gal, packaging & ingredients/gal, all other plant costs/gal, net margin/gal,
+// margin %]. COGS milk is held flat at $2.25/gal (FMMO Class I) every month — an
+// estimate, not a measured plant figure — see appendix.
+const PLANT_MARGIN = [
+  ["Jul '25", 333613, 5.284, 2.25, 0.457, 1.530, 0.301, 0.746, 14],
+  ["Aug '25", 306932, 5.217, 2.25, 0.496, 0.686, 0.394, 1.391, 27],
+  ["Sep '25", 284884, 4.881, 2.25, 0.503, 1.177, 0.371, 0.580, 12],
+  ["Oct '25", 317889, 4.725, 2.25, 0.465, 0.975, 0.356, 0.679, 14],
+  ["Nov '25", 262089, 4.755, 2.25, 0.513, 1.000, 0.359, 0.633, 13],
+  ["Dec '25", 332448, 4.698, 2.25, 0.461, 0.533, 0.267, 1.187, 25],
+  ["Jan '26", 307297, 4.898, 2.25, 0.518, 1.188, 0.329, 0.613, 13],
+  ["Feb '26", 300520, 4.739, 2.25, 0.508, 1.189, 0.332, 0.461, 10],
+  ["Mar '26", 345432, 4.875, 2.25, 0.447, 0.992, 0.228, 0.957, 20],
+  ["Apr '26", 348067, 5.611, 2.25, 0.460, 1.367, 0.328, 1.207, 22],
+  ["May '26", 344494, 5.473, 2.25, 0.566, 1.086, 0.315, 1.256, 23],
+  ["Jun '26", 332148, 5.556, 2.25, 0.472, 1.415, 0.338, 1.080, 19],
+];
+const PLANT_MARGIN_TTM = [3815814, 5.074, 2.25, 0.488, 1.098, 0.324, 0.914, 18];
+
+function renderPlantMarginTable() {
+  const cols = [...PLANT_MARGIN.map(r => r[0]), "TTM"];
+  const rows = [
+    {lbl:"FMMO Reported Gallons", i:1, fmt:v=>fmt(v)},
+    {lbl:"Revenue / Gallon",      i:2, fmt:v=>"$"+v.toFixed(3)},
+    {lbl:"COGS Milk (est.)<sup>3</sup>", i:3, fmt:v=>"$"+v.toFixed(2)},
+    {lbl:"Labor",                 i:4, fmt:v=>"$"+v.toFixed(3)},
+    {lbl:"Packaging &amp; Ingredients", i:5, fmt:v=>"$"+v.toFixed(3)},
+    {lbl:"All Other Plant Costs", i:6, fmt:v=>"$"+v.toFixed(3)},
+    {lbl:"Net Margin / Gallon",   i:7, fmt:v=>"$"+v.toFixed(3), total:true},
+    {lbl:"Margin %",              i:8, fmt:v=>v+"%", total:true},
+  ];
+  document.getElementById("plantMarginTable").innerHTML =
+    `<thead><tr><th>Metric</th>${cols.map(c=>`<th class="n">${c}</th>`).join("")}</tr></thead>
+    <tbody>${rows.map(r => {
+      const cells = PLANT_MARGIN.map(row => `<td class="n">${r.fmt(row[r.i])}</td>`).join("");
+      const ttmCell = `<td class="n">${r.fmt(PLANT_MARGIN_TTM[r.i-1])}</td>`;
+      return `<tr${r.total ? ' class="row-total"' : ""}><td>${r.lbl}</td>${cells}${ttmCell}</tr>`;
     }).join("")}
     </tbody>`;
 }

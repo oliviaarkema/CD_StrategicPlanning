@@ -126,7 +126,7 @@
   <p class="panel-note"><sup>2</sup> Other Income and Other Expenses are not included &mdash; these would be things like interest payments and patronage dividends from our loan provider, Greenstone.</p>
   <p class="panel-note"><sup>3</sup> From <em>Revenue by Source.xlsx</em>, TTM Jul 2026. This file has category share of revenue only (no dollar figures), so the mix is shown as a percentage split.</p>
   <p class="panel-note"><sup>4</sup> Unlike the Monthly Revenue vs. Operating Costs chart<sup>2</sup>, this figure includes Other Income and Other Expenses (e.g. interest payments and patronage dividends from Greenstone), so it isn't directly comparable to the Total Revenue/Costs figures in the Key Metrics table below.</p>
-  <p class="panel-note"><sup>5</sup> $6.68/cwt, equivalently $0.57/gallon, TTM Jul 2026. No prior-year figure available yet. Source: <em>KPI - Plant Hours and Gallons Produced.xlsx</em>.</p>
+  <p class="panel-note"><sup>5</sup> 0.191 hrs/cwt, TTM Jul 2026 (63,209 plant hours &divide; 330,273 cwt processed). No prior-year figure available yet &mdash; the only 2024 data on file is a single blended "2024 average," not actual month-by-month figures. Source: Paul, Aug 2026 (Monthly Gallons Produced &amp; Monthly Plant Hours).</p>
   <p class="panel-note"><sup>6</sup> Most of the gross-margin improvement is a bookkeeping change, not new efficiency: through December 2025 the books credited Casey for raw milk production and debited Nate for the cost as an offsetting wash entry that inflated Revenue and COGS equally; that practice stopped in January 2026, which is why COGS appears to drop sharply and gross margin appears to jump (70.0% to 83.0%). Operating margin isn't distorted by this, since it reduces to net income &divide; revenue regardless of classification.</p>
 </section>
 
@@ -173,6 +173,7 @@
         <button type="button" data-rank="qty" class="active">Units</button>
         <button type="button" data-rank="rev">Overall Revenue</button>
         <button type="button" data-rank="ppu">Price per Unit</button>
+        <button type="button" data-rank="ppg">Price per Gallon</button>
       </div>
     </div>
     <div class="panel-body">
@@ -217,7 +218,7 @@
   <div class="panel">
     <div class="panel-head"><h3>Appendix: Data Sources</h3></div>
     <div class="panel-body">
-      <p class="panel-note"><sup>1</sup> From actual sales, Jul '25&ndash;Jun '26 (<em>Items_Sold_TTM_July2026.xlsx</em>). Quantity by Product uses every SKU on the MilkProducts sheet (fluid milk only, its own item descriptions, unmodified), ranked descending by units sold; reconciles exactly to that sheet's total (11,810,180 units / $15,275,744.97). Monthly Revenue of Milk Products is summed directly from the underlying invoice-line detail (Sheet1), restricted to line items matching a SKU name in the MilkProducts sheet, and also reconciles exactly to that sheet's total. By-customer figures are summed the same way from Sheet1, matched across all 7 category sheets (Milk Products, Ice Cream, Soft Serve Mix, Sour Cream / Chip Dip, Butter, Other Products, Co-Packing Products), and reconcile exactly to the Summary sheet's grand total ($18,960,891.43 / 12,406,277.96 units, excl. Bulk-Commodity and Animal sales, which are covered elsewhere on this dashboard). Half-Pint Revenue Share and Top SKU Share are measured against that same grand total. Qty figures are each SKU's native sales unit (gallon/half-gallon/quart/pint) &mdash; there's no case-pack conversion in the source, so quantities are mixed units and not strictly additive across rows.</p>
+      <p class="panel-note"><sup>1</sup> From actual sales, Jul '25&ndash;Jun '26 (<em>Items_Sold_TTM_July2026.xlsx</em>). Quantity by Product uses every SKU on the MilkProducts sheet (fluid milk only, its own item descriptions, unmodified), ranked descending by units sold; reconciles exactly to that sheet's total (11,810,180 units / $15,275,744.97). Monthly Revenue of Milk Products is summed directly from the underlying invoice-line detail (Sheet1), restricted to line items matching a SKU name in the MilkProducts sheet, and also reconciles exactly to that sheet's total. By-customer figures are summed the same way from Sheet1, matched across all 7 category sheets (Milk Products, Ice Cream, Soft Serve Mix, Sour Cream / Chip Dip, Butter, Other Products, Co-Packing Products), and reconcile exactly to the Summary sheet's grand total ($18,960,891.43 / 12,406,277.96 units, excl. Bulk-Commodity and Animal sales, which are covered elsewhere on this dashboard). Half-Pint Revenue Share and Top SKU Share are measured against that same grand total. Qty figures are each SKU's native sales unit (gallon/half-gallon/quart/pint) &mdash; there's no case-pack conversion in the source, so quantities are mixed units and not strictly additive across rows. The Price per Gallon toggle divides each SKU's Price per Unit by that SKU's own size in gallons (read off its item name: half pint = 1/16 gal, pint = 1/8, quart = 1/4, half gallon = 1/2, gallon = 1, dispenser sizes as labeled e.g. "5 Gal Disp" = 5), to make small and large pack sizes comparable on one basis.</p>
       <p class="panel-note"><sup>2</sup> This workbook has revenue and quantity by product/customer, but no cost or COGS data, so profit margin can't be computed from it alone &mdash; margin bars are placeholders (0%) pending a cost source.</p>
     </div>
   </div>
@@ -448,7 +449,7 @@
     <p>Aenean lacinia bibendum nulla sed consectetur. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
   </div>
 
-  <div class="stats">
+  <div class="stats stats-5">
     <div class="stat">
       <div class="num">66.7%</div>
       <div class="lbl">Utilization Rate<span class="sub">current schedule: 108 hrs/wk avail.<sup>1</sup></span></div>
@@ -465,9 +466,13 @@
       <div class="delta up">###% below avg</div>
     </div>
     <div class="stat">
-      <div class="num">###</div>
-      <div class="lbl">Energy Cost / cwt<span class="sub">industry avg: $###</span></div>
-      <div class="delta up">###% below avg</div>
+      <div class="num">61</div>
+      <div class="lbl">Gallons / Plant Hour<span class="sub">TTM average</span></div>
+    </div>
+    <div class="stat">
+      <div class="num">$0.91</div>
+      <div class="lbl">Net Margin / Gallon<span class="sub">TTM average<sup>2</sup></span></div>
+      <div class="delta neu">18% margin</div>
     </div>
   </div>
 
@@ -503,9 +508,22 @@
   </div>
 
   <div class="panel">
+    <div class="panel-head">
+      <h3>Plant Margin (Directional)<sup>2</sup></h3>
+    </div>
+    <div class="panel-body">
+      <div class="tbl-wrap">
+        <table class="dt" id="plantMarginTable"></table>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
     <div class="panel-head"><h3>Appendix: Data Sources</h3></div>
     <div class="panel-body">
-      <p class="panel-note"><sup>1</sup> Per Nate (Plant Manager), Aug 2026. Utilization Rate = Actual Operating Hours &divide; Potential Hours Available &times; 100. Current schedule (Mon 5am&ndash;Fri 5pm) = 108 hrs/wk available; average 72 hrs/wk actually run = 66.7% utilization. Possibility schedule (Mon 5am&ndash;Sun 5am, 7 days) = 144 hrs/wk available; same formula, applied to the average hours needed to complete orders &mdash; modeled here at the same 72 hrs/wk, since that reflects today's order volume, giving 50.0% utilization and 72 hrs/wk open capacity. Shrinkage Rate = (Milk Input &minus; Saleable Output) &divide; Input &times; 100. Week of 7/28: Milk Input 83,247 gal, Milk Sales 80,697 gal, shrink &divide; input = 3.06%. Nate's note states the input/output difference as 2,250 gal, but 83,247 &minus; 80,697 = 2,550 gal &mdash; it's 2,550 gal that reconciles to the stated 3.06% (2,550 / 83,247 = 3.063%), so 2,550 is used here; flagged for Nate to confirm which figure (the 2,250 or the 83,247/80,697 inputs) is the typo.</p>
+      <p class="panel-note"><sup>1</sup> Per Nate, Aug 2026. Utilization Rate = Actual Operating Hours &divide; Potential Hours Available &times; 100. Current schedule (Mon 5am&ndash;Fri 5pm) = 108 hrs/wk available; average 72 hrs/wk actually run = 66.7% utilization. Possibility schedule (Mon 5am&ndash;Sun 5am, 7 days) = 144 hrs/wk available; same formula, applied to the average hours needed to complete orders &mdash; modeled here at the same 72 hrs/wk, since that reflects today's order volume, giving 50.0% utilization and 72 hrs/wk open capacity. Shrinkage Rate = (Milk Input &minus; Saleable Output) &divide; Input &times; 100. Week of 7/28: Milk Input 83,247 gal, Milk Sales 80,697 gal, shrink &divide; input = 3.06%. Nate's note states the input/output difference as 2,250 gal, but 83,247 &minus; 80,697 = 2,550 gal &mdash; it's 2,550 gal that reconciles to the stated 3.06% (2,550 / 83,247 = 3.063%), so 2,550 is used here; flagged for Nate to confirm which figure (the 2,250 or the 83,247/80,697 inputs) is the typo. Source: <em>KPI - Plant Hours and Gallons Produced.xlsx</em>.</p>
+      <p class="panel-note"><sup>2</sup> Per Paul, Aug 2026 &mdash; a directional summary integrating Revenue/Gallon, FMMO Reported Gallons (TTM Jul 2026), COGS (estimated), plant labor, ingredient costs, and all other plant costs. Figures are per FMMO Reported Gallon (a raw-milk basis) &mdash; not a per-retail-gallon figure, since not all products are packaged in gallons. Source: <em>Plant Costs - Margin Directional Summary - 2025.07-2026.csv</em>.</p>
+      <p class="panel-note"><sup>3</sup> COGS Milk of $2.25/gallon is an estimate, held flat at the FMMO Class I benchmark for every month &mdash; not a measured plant figure.</p>
     </div>
   </div>
 </section>
