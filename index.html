@@ -161,9 +161,9 @@
 
   <div class="callout">
     <div class="eyebrow">Strategic Finding</div>
-    <h4>Sed do eiusmod tempor incididunt ut labore et dolore</h4>
-    <p>Aenean lacinia bibendum nulla sed consectetur. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
-    <p>Sed posuere consectetur est at lobortis. Nulla vitae elit libero, a pharetra augue. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh.</p>
+    <h4>Milk drives the business, but the highest per-gallon value sits in small-format dips and ice cream, not the flagship pints</h4>
+    <p>Milk products are 80.6% of TTM revenue ($15.28M of $18.96M). Two secondary lines are worth watching: Soft Serve Mix at 8.8% ($1.67M, concentrated in just 3 bulk SKUs sold to food service) and Co-Packing at 5.2% ($0.98M). Everything else &mdash; Ice Cream, Sour Cream/Chip Dip, Butter, Other &mdash; is under 3% of revenue each.</p>
+    <p>Popular and profitable aren't the same thing here. The two highest-volume milk SKUs, chocolate half-pints and pints, together account for over a quarter of all units sold, but on a price-per-gallon basis they land in the middle of the pack (~$6/gallon) &mdash; right alongside bulk 2.5-gallon soft-serve mix sold to food service. The real per-gallon standouts are small-format sour cream/dip tubs and ice cream novelty cups, priced $12&ndash;22/gallon: 3&ndash;7x the flagship chocolate milk items, and more than 5x plain gallon-jug milk (the cheapest format on the whole list, ~$2.79&ndash;3.19/gallon). Those categories are tiny today, though &mdash; Sour Cream/Chip Dip is just 0.6% of revenue, Ice Cream 2.8% &mdash; so the packaging-economics upside they show is mostly untapped.</p>
   </div>
 
   <div class="panel">
@@ -186,11 +186,30 @@
 
   <div class="panel">
     <div class="panel-head">
+      <h3>Quantity by Product &mdash; All Dairy Products<sup>3</sup></h3>
+      <div class="unit-toggle js-allprod-rank-toggle" role="group" aria-label="Rank by">
+        <button type="button" data-rank="qty" class="active">Units</button>
+        <button type="button" data-rank="rev">Overall Revenue</button>
+        <button type="button" data-rank="ppu">Price per Unit</button>
+        <button type="button" data-rank="ppg">Price per Gallon</button>
+      </div>
+    </div>
+    <div class="panel-body">
+      <div class="chart-box chart-scroll h420 connected">
+        <div class="chart-inner" id="allProdChartInner"><canvas id="allProdChart"></canvas></div>
+      </div>
+      <p class="panel-note">Every dairy product line (milk, ice cream, soft serve mix, sour cream/dip, butter, eggnog, and co-packing), ranked high to low; scroll for the full list.</p>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head">
       <h3>Monthly Revenue of Milk Products<sup>1</sup></h3>
       <span class="hint">fluid milk only</span>
     </div>
     <div class="panel-body">
       <div class="chart-box h360 connected"><canvas id="milkTrendChart"></canvas></div>
+      <p class="panel-note">Est. Profit overlay applies Plant Efficiency's directional Net Margin (18%, TTM Jul 2026, per Paul) flat to each month's revenue &mdash; a single average rate spread evenly, not a measured monthly figure. Plant Efficiency's own data shows margin actually ranging 10&ndash;27% month to month, so read this line as directional, not exact.</p>
     </div>
   </div>
 
@@ -220,6 +239,7 @@
     <div class="panel-body">
       <p class="panel-note"><sup>1</sup> From actual sales, Jul '25&ndash;Jun '26 (<em>Items_Sold_TTM_July2026.xlsx</em>). Quantity by Product uses every SKU on the MilkProducts sheet (fluid milk only, its own item descriptions, unmodified), ranked descending by units sold; reconciles exactly to that sheet's total (11,810,180 units / $15,275,744.97). Monthly Revenue of Milk Products is summed directly from the underlying invoice-line detail (Sheet1), restricted to line items matching a SKU name in the MilkProducts sheet, and also reconciles exactly to that sheet's total. By-customer figures are summed the same way from Sheet1, matched across all 7 category sheets (Milk Products, Ice Cream, Soft Serve Mix, Sour Cream / Chip Dip, Butter, Other Products, Co-Packing Products), and reconcile exactly to the Summary sheet's grand total ($18,960,891.43 / 12,406,277.96 units, excl. Bulk-Commodity and Animal sales, which are covered elsewhere on this dashboard). Half-Pint Revenue Share and Top SKU by Revenue are measured against that same grand total ($1,783,732.32 for 26 CD CHOC MILK Pint &divide; $18,960,891.43 = 9.4%). Qty figures are each SKU's native sales unit (gallon/half-gallon/quart/pint) &mdash; there's no case-pack conversion in the source, so quantities are mixed units and not strictly additive across rows. The Price per Gallon toggle divides each SKU's Price per Unit by that SKU's own size in gallons (read off its item name: half pint = 1/16 gal, pint = 1/8, quart = 1/4, half gallon = 1/2, gallon = 1, dispenser sizes as labeled e.g. "5 Gal Disp" = 5), to make small and large pack sizes comparable on one basis.</p>
       <p class="panel-note"><sup>2</sup> This workbook has revenue and quantity by product/customer, but no cost or COGS data, so profit margin can't be computed from it alone &mdash; margin bars are placeholders (0%) pending a cost source.</p>
+      <p class="panel-note"><sup>3</sup> Quantity by Product &mdash; All Dairy Products combines all 7 category sheets in <em>Items_Sold_TTM_July2026.xlsx</em> (Milk Products above, plus Ice Cream, Soft Serve Mix, Sour Cream / Chip Dip, Butter, Other Products, and Co-Packing Products; Bulk-Commodity and AnimalCounts are covered elsewhere on this dashboard). Same units-as-sold and Price per Gallon methodology as Quantity by Product<sup>1</sup>. Price per Gallon excludes Butter (sold by the pound, no fluid-gallon equivalent) and six "Frosty Products&hellip;price / unit" Co-Packing lines whose pack size isn't stated in the source &mdash; both are still ranked under Units, Overall Revenue, and Price per Unit. One SKU was dropped entirely: the Other Products sheet's cheese line, flagged in the source file itself as "get rid of this &mdash; residual inventory." The Butter sheet also notes that cream/butter sold to Continental and G&amp;K Sales isn't included as product SKUs in this workbook.</p>
     </div>
   </div>
 

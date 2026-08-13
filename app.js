@@ -278,6 +278,126 @@ const MILK_SKUS = [
   { name:"22 CD CHOC 5 Gal Disp",                 qty:     58, rev:   1150.61, sizeGal:5 },
 ];
 
+// The other 6 category sheets in Items_Sold_TTM_July2026.xlsx (Bulk-Commodity and
+// AnimalCounts are covered elsewhere on this dashboard, so not included here).
+// Same sizeGal convention as MILK_SKUS above (fl oz &divide; 128, explicit "N Gal/
+// Gallon" as labeled). sizeGal:null where the source doesn't support a reliable
+// gallon-equivalent — those SKUs are excluded from the Price per Gallon ranking
+// only (still included under Units/Revenue/Price per Unit):
+//  - Butter (BUTTER_SKUS): sold by the pound, a solid with no fluid-gallon analog.
+//  - 6 "Frosty Products ... price / unit" lines in COPACK_SKUS: the source states
+//    a price but never the pack size, so no gallon conversion can be derived.
+// One line was dropped entirely, not just from Price per Gallon: the Other
+// Products sheet's cheese SKU carries the source file's own flag "get rid of
+// this — residual inventory," so it's excluded from OTHER_DAIRY_SKUS. The Butter
+// sheet also carries a note that cream/butter sold to Continental and G&K Sales
+// isn't included as product SKUs in this workbook at all.
+const ICE_CREAM_SKUS = [
+  { name:"CD 48oz Scround SIMPLY GRANDPA'S VANILLA", qty:13755, rev:59008.95, sizeGal:0.375 },
+  { name:"CD 48oz Scround PEANUT 'UDDER BLISS", qty:6360, rev:27284.4, sizeGal:0.375 },
+  { name:"CD 48oz Scround BUTTER CHURN PECAN", qty:5190, rev:22265.1, sizeGal:0.375 },
+  { name:"CD 48oz Scround MOOEY GOOEY FUDGE", qty:4797, rev:20579.13, sizeGal:0.375 },
+  { name:"CD 48oz Scround A MOO'S MINT", qty:3171, rev:13603.59, sizeGal:0.375 },
+  { name:"CD 48oz Scround HOOPRINTS", qty:2133, rev:9150.57, sizeGal:0.375 },
+  { name:"CD 48oz Scround HAYDAY", qty:2106, rev:9034.74, sizeGal:0.375 },
+  { name:"CD 48oz Scround SIMPLY DUTCH CHOCOLATE", qty:1785, rev:7657.65, sizeGal:0.375 },
+  { name:"CD 3 Gallon PEANUT 'UDDER BLISS", qty:1745, rev:49994.25, sizeGal:3.0 },
+  { name:"CD 48oz Scround SIMPLY STRAWBERRY PATCH", qty:1662, rev:7129.98, sizeGal:0.375 },
+  { name:"CD 48oz Scround NUTTY JAVA MOO", qty:1650, rev:7078.5, sizeGal:0.375 },
+  { name:"CD 48oz Scround RASPBERRY ROUNDUP", qty:1638, rev:7027.02, sizeGal:0.375 },
+  { name:"CD 48oz Scround MOOKIES & CREAM", qty:1632, rev:7001.28, sizeGal:0.375 },
+  { name:"CD 48oz Scround SIMPLY BLACK CHERRY", qty:1572, rev:6743.88, sizeGal:0.375 },
+  { name:"CD 48oz Scround TRIPLE CHOCOWLATE", qty:1542, rev:6615.18, sizeGal:0.375 },
+  { name:"CD 48oz Scround SIMPLY COWCONUT CREAM", qty:1245, rev:5341.05, sizeGal:0.375 },
+  { name:"CD 48oz Scround MOM'S COOKIE DOUGH", qty:1116, rev:4787.64, sizeGal:0.375 },
+  { name:"CD 3 Gallon SIMPLY GRANDPA'S VANILLA", qty:909, rev:23197.77, sizeGal:3.0 },
+  { name:"CD 3 Gallon SIMPLY SUPERCOW", qty:881, rev:34270.9, sizeGal:3.0 },
+  { name:"CD 3 Gallon BUTTER CHURN PECAN", qty:726, rev:24161.28, sizeGal:3.0 },
+  { name:"CD 3 Gallon A MOO'S MINT", qty:618, rev:16995, sizeGal:3.0 },
+  { name:"CD 3 Gallon MOM'S COOKIE DOUGH", qty:562, rev:15854.02, sizeGal:3.0 },
+  { name:"CD 3 Gallon SIMPLY COWCONUT CREAM", qty:495, rev:15087.6, sizeGal:3.0 },
+  { name:"CD 48oz Scround UDDER NUTSENSE", qty:480, rev:2059.2, sizeGal:0.375 },
+  { name:"CD 48oz Scround PEPPERMINT STICK", qty:462, rev:1981.98, sizeGal:0.375 },
+  { name:"CD 3 Gallon MINT MOOKIES & CREAM", qty:360, rev:9273.6, sizeGal:3.0 },
+  { name:"CD 3 Gallon STRAWBERRY CHEESECAKE", qty:334, rev:9736.1, sizeGal:3.0 },
+  { name:"CD 3 Gallon HOOFPRINTS", qty:320, rev:8755.2, sizeGal:3.0 },
+  { name:"CD 3 Gallon MOOKIES & CREAM", qty:319, rev:8565.15, sizeGal:3.0 },
+  { name:"CD 3 Gallon RASPBERRY ROUNDUP", qty:301, rev:8548.4, sizeGal:3.0 },
+  { name:"CD 3 Gallon SIMPLY STRAWBERRY PATCH", qty:300, rev:8334, sizeGal:3.0 },
+  { name:"CD 3 Gallon BLUE MOO", qty:299, rev:7343.44, sizeGal:3.0 },
+  { name:"CD 3 Gallon TRIPLE CHOCOWLATE", qty:290, rev:7577.7, sizeGal:3.0 },
+  { name:"CD 3 Gallon MOOEY GOOEY FUDGE", qty:280, rev:8087.46, sizeGal:3.0 },
+  { name:"CD 3 Gallon HAYDAY", qty:266, rev:7424.06, sizeGal:3.0 },
+  { name:"CD 3 Gallon LEMON BAR CHEESECAKE", qty:196, rev:7157.92, sizeGal:3.0 },
+  { name:"CD 3 Gallon AMOORETTO CHERRY", qty:183, rev:5438.76, sizeGal:3.0 },
+  { name:"CD 3 Gallon CALF TRACKS", qty:175, rev:5153.75, sizeGal:3.0 },
+  { name:"CD 3 Gallon BIRTHDAY CAKE", qty:171, rev:5295.87, sizeGal:3.0 },
+  { name:"CD 3 Gallon SIMPLY DUTCH CHOCOLATE", qty:165, rev:4092.04, sizeGal:3.0 },
+  { name:"CD 3 Gallon S'MOORES", qty:150, rev:4450.5, sizeGal:3.0 },
+  { name:"CD 3 Gallon SIMPLY LEMON BLUEBERRY", qty:140, rev:4425.4, sizeGal:3.0 },
+  { name:"CD 3 Gallon SIMPLY ORANGE PINEAPPLE", qty:130, rev:3359.2, sizeGal:3.0 },
+  { name:"CD 3 Gallon SIMPLY BLACK CHERRY", qty:119, rev:2917.88, sizeGal:3.0 },
+  { name:"CD 3 Gallon PUMPKIN CHEESECAKE", qty:83, rev:2515.73, sizeGal:3.0 },
+  { name:"CD 3 Gallon COWCONUT FUDGE", qty:79, rev:2456.11, sizeGal:3.0 },
+  { name:"CD 3 Gallon VANILLA CHOC CHIP", qty:75, rev:2265.75, sizeGal:3.0 },
+  { name:"CD 3 Gallon UDDER NUTSENSE", qty:42, rev:1258.74, sizeGal:3.0 },
+  { name:"CD 3 Gallon SIMPLY CHILE CHOCOWLATE", qty:20, rev:562.8, sizeGal:3.0 },
+  { name:"CD 3 Gallon PEPPERMINT STICK", qty:14, rev:396.76, sizeGal:3.0 },
+  { name:"CD 3 Gallon MOONSTER COOKIE", qty:10, rev:284.6, sizeGal:3.0 },
+];
+
+const SOURCREAM_SKUS = [
+  { name:"CD SOUR CREAM 16 OZ", qty:24746, rev:47591.3, sizeGal:0.125 },
+  { name:"CD SOUR CREAM 16 OZ -corrugated", qty:9315, rev:19514.93, sizeGal:0.125 },
+  { name:"CD FRENCH ONION DIP 16 OZ", qty:23153, rev:46986.25, sizeGal:0.125 },
+];
+
+const SOFTSERVE_SKUS = [
+  { name:"42 CD 2.5 Gallon PREMIUM VANILLA SOFT SERVE MIX", qty:57936, rev:921544.45, sizeGal:2.5 },
+  { name:"47 CD 2.5 Gallon PREMIUM CHOCOLATE SOFT SERVE MIX", qty:11773, rev:212211.41, sizeGal:2.5 },
+  { name:"38 CD 16% IC MIX 2.5G", qty:26783, rev:541112.92, sizeGal:2.5 },
+];
+
+const BUTTER_SKUS = [
+  { name:"CD Butter, non-GMO Cert, 25-lb box", qty:91035.2, rev:290402.29, sizeGal:null },
+  { name:"CD 40LB BLOCK UNSALTED BUTTER-83%-per lb", qty:4750.6, rev:16028.26, sizeGal:null },
+  { name:"CD 30LB SALTED BUTTER/lb", qty:7539.11, rev:24502.14, sizeGal:null },
+];
+
+const OTHER_DAIRY_SKUS = [
+  { name:"37 CD EGG NOG Quart", qty:9599, rev:23299.78, sizeGal:0.25 },
+  { name:"39 CD EGG NOG Pint", qty:15710, rev:21565.91, sizeGal:0.125 },
+];
+
+const COPACK_SKUS = [
+  { name:"90 QD EGG NOG Pint", qty:18902, rev:24226.71, sizeGal:0.125 },
+  { name:"91 QD EGG NOG Quart", qty:10644, rev:25214.58, sizeGal:0.25 },
+  { name:"92 QD EGG NOG Half Gallon", qty:20971, rev:90370.35, sizeGal:0.5 },
+  { name:"QD FIESTA DIP 16 OZ", qty:375, rev:790.8, sizeGal:0.125 },
+  { name:"QD FRENCH ONION DIP 16 OZ", qty:98211, rev:186627.98, sizeGal:0.125 },
+  { name:"QD FRENCH ONION DIP 8 OZ", qty:35177, rev:49040.14, sizeGal:0.0625 },
+  { name:"QD SOUR CREAM 16 OZ", qty:12155, rev:21786.98, sizeGal:0.125 },
+  { name:"QD SOUR CREAM 8 OZ", qty:23, rev:31.23, sizeGal:0.0625 },
+  { name:"48 TWISTER'S 2.5 GAL PREMIUM VAN SS", qty:2358, rev:37977.95, sizeGal:2.5 },
+  { name:"49 IORIO'S GELATO MIX 2.5 Gal Bag", qty:2282, rev:44341.68, sizeGal:2.5 },
+  { name:"Frosty Products Custard Chocolate Mix, price / unit", qty:2004, rev:21724.89, sizeGal:null },
+  { name:"Frosty Products Custard Vanilla Mix, price / unit", qty:6404, rev:69752.94, sizeGal:null },
+  { name:"Frosty Products No Sugar Added Vanilla Yogurt Mix, price / unit", qty:300, rev:2574, sizeGal:null },
+  { name:"Frosty Products Non-Fat ChocolateYogurt Mix, price / unit", qty:1840, rev:14478.96, sizeGal:null },
+  { name:"Frosty Products Non-Fat Vanilla Yogurt Mix, price / unit", qty:12064, rev:88037.04, sizeGal:null },
+  { name:"Frosty Products Smoothie Shake Mix, Vanilla, price / unit", qty:2040, rev:13820.71, sizeGal:null },
+  { name:"Kuster's Chocolate Soft Serve Mix price / 2.5 Gal bag", qty:6035, rev:106070.23, sizeGal:2.5 },
+  { name:"Kuster's Premium Vanilla Custard Mix, price / Gal", qty:276, rev:2654.57, sizeGal:1.0 },
+  { name:"Kuster's Premium Vanilla Soft Serve Mix, price / 2.5 Gal Bag", qty:5817, rev:91693.09, sizeGal:2.5 },
+  { name:"Vara Juice 1 GAL Premium Vanilla Soft Serve Mix in corrugate, price/unit", qty:10854, rev:73034.44, sizeGal:1.0 },
+  { name:"Vara Juice 2.5 GAL CAN Premium Vanilla Soft Serve Mix, price/unit", qty:792, rev:13519.41, sizeGal:2.5 },
+];
+
+const ALL_DAIRY_SKUS = [
+  ...MILK_SKUS, ...ICE_CREAM_SKUS, ...SOURCREAM_SKUS, ...SOFTSERVE_SKUS,
+  ...BUTTER_SKUS, ...OTHER_DAIRY_SKUS, ...COPACK_SKUS,
+];
+
 // Monthly Revenue of milk products only (the "Milk Products" category above, i.e.
 // fluid milk — not Ice Cream/Soft Serve/etc.), Jul '25-Jun '26 (dashboard fiscal
 // year). Summed directly from Sheet1's invoice-line Amount (signed, not abs — some
@@ -338,27 +458,31 @@ function renderMarginChart(canvasId, labels, revData, pctData, revMax, showShare
 // rankBy: "qty" (Units), "rev" (Overall Revenue), "ppu" (Price per Unit = rev/qty),
 // or "ppg" (Price per Gallon = price/unit ÷ that SKU's own size in gallons —
 // normalizes every pack size, half-pint through 5-gal dispenser, onto one basis).
-function milkProdValue(sku, rankBy) {
+// Returns null for "ppg" on a SKU with no sizeGal, so it can be filtered out.
+function productChartValue(sku, rankBy) {
   if (rankBy === "rev") return sku.rev;
   if (rankBy === "ppu") return sku.rev / sku.qty;
-  if (rankBy === "ppg") return (sku.rev / sku.qty) / sku.sizeGal;
+  if (rankBy === "ppg") return sku.sizeGal ? (sku.rev / sku.qty) / sku.sizeGal : null;
   return sku.qty;
 }
 
-let milkProdChartInstance = null;
-function renderMilkProdChart(rankBy) {
-  const sorted = [...MILK_SKUS].sort((a,b) => milkProdValue(b,rankBy) - milkProdValue(a,rankBy));
+// Shared by the milk-only and all-dairy-products charts (same rankings/calcs);
+// state is {canvasId, innerId, instance} so each chart keeps its own Chart.js
+// instance to destroy/redraw on toggle.
+function renderProductChart(state, skus, rankBy) {
+  const eligible = rankBy === "ppg" ? skus.filter(s => s.sizeGal != null) : skus;
+  const sorted = [...eligible].sort((a,b) => productChartValue(b,rankBy) - productChartValue(a,rankBy));
   const labels = sorted.map(p => p.name);
-  const data   = sorted.map(p => milkProdValue(p, rankBy));
+  const data   = sorted.map(p => productChartValue(p, rankBy));
 
-  // Inner container is taller than its scrolling wrapper so all 50 SKUs stay
+  // Inner container is taller than its scrolling wrapper so every SKU stays
   // legible; the wrapper (h420, overflow-y:auto) turns that into a scrollable window.
-  document.getElementById("milkProdChartInner").style.height = (sorted.length * 26) + "px";
+  document.getElementById(state.innerId).style.height = (sorted.length * 26) + "px";
 
   const datasetLabel = {qty:"Units Sold", rev:"Overall Revenue", ppu:"Price per Unit", ppg:"Price per Gallon"}[rankBy];
 
-  if (milkProdChartInstance) milkProdChartInstance.destroy();
-  milkProdChartInstance = new Chart(document.getElementById("milkProdChart"), {
+  if (state.instance) state.instance.destroy();
+  state.instance = new Chart(document.getElementById(state.canvasId), {
     type:"bar",
     data:{
       labels, datasets:[{
@@ -372,9 +496,11 @@ function renderMilkProdChart(rankBy) {
         tooltip:{callbacks:{
           label: c => {
             const sku = sorted[c.dataIndex];
-            return [`Units: ${fmt(sku.qty)}`, `Overall Revenue: $${fmt(Math.round(sku.rev))}`,
-              `Price/Unit: $${(sku.rev/sku.qty).toFixed(2)} (${sku.sizeGal} gal)`,
-              `Price/Gallon: $${((sku.rev/sku.qty)/sku.sizeGal).toFixed(3)}`];
+            const lines = [`Units: ${fmt(sku.qty)}`, `Overall Revenue: $${fmt(Math.round(sku.rev))}`,
+              `Price/Unit: $${(sku.rev/sku.qty).toFixed(2)}${sku.sizeGal ? ` (${sku.sizeGal} gal)` : ""}`];
+            if (sku.sizeGal) lines.push(`Price/Gallon: $${((sku.rev/sku.qty)/sku.sizeGal).toFixed(3)}`);
+            else lines.push("Price/Gallon: n/a (no reliable pack size)");
+            return lines;
           }
         }} },
       scales:{
@@ -384,6 +510,11 @@ function renderMilkProdChart(rankBy) {
     }
   });
 }
+
+const milkProdChartState = {canvasId:"milkProdChart", innerId:"milkProdChartInner", instance:null};
+const allProdChartState  = {canvasId:"allProdChart",  innerId:"allProdChartInner",  instance:null};
+const renderMilkProdChart = rankBy => renderProductChart(milkProdChartState, MILK_SKUS, rankBy);
+const renderAllProdChart  = rankBy => renderProductChart(allProdChartState, ALL_DAIRY_SKUS, rankBy);
 
 function initMilk() {
   renderMilkProdChart("qty");
@@ -395,19 +526,38 @@ function initMilk() {
       renderMilkProdChart(rank);
     }));
 
+  renderAllProdChart("qty");
+  document.querySelectorAll(".js-allprod-rank-toggle button").forEach(btn =>
+    btn.addEventListener("click", () => {
+      const rank = btn.dataset.rank;
+      document.querySelectorAll(".js-allprod-rank-toggle button").forEach(b =>
+        b.classList.toggle("active", b.dataset.rank === rank));
+      renderAllProdChart(rank);
+    }));
+
+  // Est. Profit overlay = Plant Efficiency's directional Net Margin (18%, TTM Jul
+  // 2026, per Paul) applied flat to each month's actual milk revenue. It's a single
+  // TTM-average rate spread evenly across months, not a real monthly margin — Plant
+  // Efficiency's own data shows monthly margin actually ranging 10-27%, so treat
+  // this line as directional/illustrative, not a measured monthly P&L.
+  const MILK_MARGIN_PCT = 0.18;
+  const MILK_MONTHS_PROFIT_EST = MILK_MONTHS_REV.map(r => Math.round(r * MILK_MARGIN_PCT));
+
   new Chart(document.getElementById("milkTrendChart"), {
     type:"bar",
     data:{
       labels:mLabels,
-      datasets:[{
-        data: MILK_MONTHS_REV, backgroundColor: C.kelly, borderRadius:4,
-        label:"Revenue"
-      }]
+      datasets:[
+        {label:"Revenue", data: MILK_MONTHS_REV, backgroundColor: C.kelly, borderRadius:4},
+        {label:"Est. Profit (18% margin)", type:"line", data: MILK_MONTHS_PROFIT_EST,
+          borderColor:C.amber, backgroundColor:"rgba(217,119,6,.2)", fill:true, tension:.3,
+          pointRadius:3, pointBackgroundColor:C.amber},
+      ]
     },
     options:{
       responsive:true, maintainAspectRatio:false,
-      plugins:{ legend:{display:false},
-        tooltip:{callbacks:{label: c => "$" + fmt(Math.round(c.parsed.y))}} },
+      plugins:{ legend:{position:"top"},
+        tooltip:{callbacks:{label: c => c.dataset.label + ": $" + fmt(Math.round(c.parsed.y))}} },
       scales:{
         x:{grid:{display:false}},
         y:{grid:{color:gridColor()}, ticks:{callback:v=>"$"+fmt(v)}}
