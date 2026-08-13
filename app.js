@@ -1110,35 +1110,62 @@ function initMarket() {
   // customers with Weeks Ordered >= 3, summed Total Cases per category (same name-based categories
   // as 'Customer Cases by Distance'). Unlike that scatter, totals here include all customers --
   // 'Other' includes the 3 United Natural Foods distributor accounts (209,328 of its 270,063 cases).
+  // customerCount is the number of distinct customers plotted for that category in 'Customer Cases
+  // by Distance' (Weeks Ordered >= 3, mapped ZIP), +3 for Other's UNFI accounts (not plotted there,
+  // per that chart's own note). It therefore slightly undercounts categories that also have
+  // customers below the 3-week threshold, who still contribute to the case totals above -- treat
+  // Avg Cases/Customer as directional, not exact.
   const CASES_BY_CHANNEL = [
-    {label:"Other", cases:270063, color:C.muted},
-    {label:"Convenience Store / Gas", cases:226221, color:C.amber},
-    {label:"Supermarket / Grocery", cases:62206, color:C.blue},
-    {label:"Ice Cream / Dessert Shop", cases:52832, color:C.green},
-    {label:"School / Institutional", cases:47833, color:C.kelly},
-    {label:"Coffee Shop", cases:15882, color:C.mid},
-    {label:"Restaurant / Food Service", cases:4008, color:C.red},
+    {label:"Other", cases:270063, customerCount:281, color:C.muted},
+    {label:"Convenience Store / Gas", cases:226221, customerCount:548, color:C.amber},
+    {label:"Supermarket / Grocery", cases:62206, customerCount:108, color:C.blue},
+    {label:"Ice Cream / Dessert Shop", cases:52832, customerCount:180, color:C.green},
+    {label:"School / Institutional", cases:47833, customerCount:207, color:C.kelly},
+    {label:"Coffee Shop", cases:15882, customerCount:146, color:C.mid},
+    {label:"Restaurant / Food Service", cases:4008, customerCount:32, color:C.red},
   ];
-  new Chart(document.getElementById("marketDemandChart"), {
-    type:"bar",
-    data:{
-      labels: CASES_BY_CHANNEL.map(c => c.label),
-      datasets:[{
-        data: CASES_BY_CHANNEL.map(c => c.cases),
-        backgroundColor: CASES_BY_CHANNEL.map(c => c.color),
-        borderRadius:5, label:"Total Cases"
-      }]
-    },
-    options:{
-      indexAxis:"y", responsive:true, maintainAspectRatio:false,
-      plugins:{ legend:{display:false},
-        tooltip:{callbacks:{label: c => fmt(c.parsed.x) + " cases"}} },
-      scales:{
-        x:{grid:{color:gridColor()}, ticks:{callback:v=>fmt(v)}},
-        y:{grid:{display:false}, ticks:{font:{size:11}}}
+
+  let marketChannelChartInstance = null;
+  function renderMarketChannelChart(metric) {
+    const value = c => metric === "avg" ? c.cases / c.customerCount : c.cases;
+    const sorted = [...CASES_BY_CHANNEL].sort((a,b) => value(b) - value(a));
+
+    if (marketChannelChartInstance) marketChannelChartInstance.destroy();
+    marketChannelChartInstance = new Chart(document.getElementById("marketDemandChart"), {
+      type:"bar",
+      data:{
+        labels: sorted.map(c => c.label),
+        datasets:[{
+          data: sorted.map(value),
+          backgroundColor: sorted.map(c => c.color),
+          borderRadius:5, label: metric === "avg" ? "Avg Cases / Customer" : "Total Cases"
+        }]
+      },
+      options:{
+        indexAxis:"y", responsive:true, maintainAspectRatio:false,
+        plugins:{ legend:{display:false},
+          tooltip:{callbacks:{
+            label: c => {
+              const ch = sorted[c.dataIndex];
+              return [`Total Cases: ${fmt(ch.cases)}`, `Customers: ${fmt(ch.customerCount)}`,
+                `Avg Cases / Customer: ${fmt(Math.round(ch.cases/ch.customerCount))}`];
+            }
+          }} },
+        scales:{
+          x:{grid:{color:gridColor()}, ticks:{callback:v=>fmt(Math.round(v))}},
+          y:{grid:{display:false}, ticks:{font:{size:11}}}
+        }
       }
-    }
-  });
+    });
+  }
+  renderMarketChannelChart("total");
+  document.querySelectorAll(".js-channel-metric-toggle button").forEach(btn =>
+    btn.addEventListener("click", () => {
+      const metric = btn.dataset.metric;
+      document.querySelectorAll(".js-channel-metric-toggle button").forEach(b =>
+        b.classList.toggle("active", b.dataset.metric === metric));
+      renderMarketChannelChart(metric);
+    }));
 
   // Cedar Crest Weekly Sales Database - April2025-March2026.xlsx, 'Summary - All Weeks' tab,
   // filtered to customers with Weeks Ordered >= 3 (1,523 of 1,730 total). % is of the 1,502 of
@@ -1264,6 +1291,39 @@ function initMarket() {
     }
   };
 
+  // Per-category average cases, drawn as horizontal dashed reference lines (one per
+  // category, in that category's own color, parallel to the x-axis) so "typical" case
+  // volume for each channel reads at a glance despite the log-scale y-axis and the wide
+  // spread within each category. Only drawn for categories currently visible/selected
+  // in the legend, same as the vertical avg-distance line above.
+  const avgCasesByCategoryPlugin = {
+    id: "avgCasesByCategory",
+    afterDraw(chart) {
+      const {ctx, chartArea:{left, right}, scales:{y}} = chart;
+      chart.data.datasets.forEach((ds, i) => {
+        if (chart.getDatasetMeta(i).hidden) return;
+        const avg = ds.data.reduce((s,p) => s+p.y, 0) / ds.data.length;
+        const yPix = y.getPixelForValue(avg);
+        ctx.save();
+        ctx.beginPath();
+        ctx.setLineDash([5,3]);
+        ctx.lineWidth = 1.5;
+        ctx.strokeStyle = ds.borderColor;
+        ctx.globalAlpha = 0.7;
+        ctx.moveTo(left, yPix);
+        ctx.lineTo(right, yPix);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.globalAlpha = 1;
+        ctx.fillStyle = ds.borderColor;
+        ctx.font = "600 9px -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif";
+        ctx.textAlign = "right";
+        ctx.fillText(`avg ${fmt(Math.round(avg))}`, right - 4, yPix - 3);
+        ctx.restore();
+      });
+    }
+  };
+
   new Chart(document.getElementById("marketCasesByDistanceChart"), {
     type:"scatter",
     data:{
@@ -1271,7 +1331,7 @@ function initMarket() {
         label:t.label, data:t.data, backgroundColor:t.color, borderColor:t.color, pointRadius:4, pointHoverRadius:6
       }))
     },
-    plugins:[avgDistanceLinePlugin],
+    plugins:[avgDistanceLinePlugin, avgCasesByCategoryPlugin],
     options:{
       responsive:true, maintainAspectRatio:false,
       plugins:{ legend:{position:"top"},

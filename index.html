@@ -137,7 +137,6 @@
 <section id="sec-milk" class="page-section">
   <div class="sec-head">
     <h2>Milk Products</h2>
-    <p>Vestibulum id ligula porta felis euismod semper. Maecenas faucibus mollis interdum. Etiam porta sem malesuada magna mollis euismod.</p>
   </div>
 
   <div class="stats">
@@ -252,7 +251,6 @@
 <section id="sec-animals" class="page-section">
   <div class="sec-head">
     <h2>Animal Sales</h2>
-    <p>Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
   </div>
 
   <div class="stats">
@@ -466,7 +464,6 @@
 <section id="sec-plant" class="page-section">
   <div class="sec-head">
     <h2>Plant Efficiency</h2>
-    <p>Aenean lacinia bibendum nulla sed consectetur. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
   </div>
 
   <div class="stats stats-5">
@@ -697,7 +694,6 @@
 <section id="sec-market" class="page-section">
   <div class="sec-head">
     <h2>Market — Demand-Side Scan</h2>
-    <p>Sed posuere consectetur est at lobortis. Nulla vitae elit libero, a pharetra augue. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh.</p>
   </div>
 
   <div class="stats">
@@ -709,30 +705,28 @@
 
   <div class="callout">
     <div class="eyebrow">Strategic Finding</div>
-    <p>Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+    <h4>The market is a ~150-mile radius, and Convenience Store/Gas is the volume backbone &mdash; Supermarket/Grocery is the highest-value channel per account</h4>
+    <p>Nearly 70% of customers with a mapped distance fall within 50&ndash;149 miles of the plant (37.2% + 32.6%); penetration falls off sharply past 150 miles (9.7% in the 150&ndash;199 mi band, under 1% combined beyond 200 mi). That reads as a fairly hard geographic ceiling for the current route/distribution model, not a gradual taper.</p>
+    <p>Convenience Store/Gas is the volume backbone: the most customers of any channel (548+) and the most cases of any true retail channel (226,221), built on high order frequency and route density. Supermarket/Grocery runs the opposite way &mdash; only 108 customers, but the highest average cases per account of any retail channel (576) &mdash; a small number of large, valuable relationships worth actively growing. "Other" (270,063 cases) is the single largest bucket, but almost 80% of that is just 3 United Natural Foods distributor accounts, not a genuine retail segment &mdash; that's pass-through wholesale volume, not a demand signal to read the same way as the rest of this page.</p>
   </div>
 
   <div class="grid-2">
     <div class="panel">
       <div class="panel-head">
-        <h3>Overall Market Penetration by Distance</h3>
-        <span class="hint">distance from Country Dairy</span>
+        <h3>Customer Share by Distance Band</h3>
+        <span class="hint">% of customers within each band</span>
       </div>
       <div class="panel-body">
-        <div class="chart-box h320 connected"><canvas id="marketPenetrationByDistanceChart"></canvas></div>
-        <p class="panel-note">Note: penetration figures include any customer of any size within each distance band.</p>
+        <div class="chart-box h480 connected"><canvas id="marketPenetrationByDistanceChart"></canvas></div>
       </div>
     </div>
     <div class="panel">
       <div class="panel-head">
-        <h3>Customer Cases by Distance</h3>
+        <h3>Customer Cases by Distance<sup>1</sup></h3>
         <span class="hint">distance from Country Dairy</span>
       </div>
       <div class="panel-body">
         <div class="chart-box h480 connected"><canvas id="marketCasesByDistanceChart"></canvas></div>
-        <p class="panel-note">Revenue is not tracked in this data table; case volume is shown instead. Y-axis is log-scaled — a small number of wholesale/distributor accounts move far more volume than typical retail customers. Click a category in the legend to show/hide it — the dashed red line marks the average distance of whichever customers are currently shown.</p>
-        <p class="panel-note">Note: the 3 largest accounts are excluded from this chart to keep the scale readable for typical customers — all 3 are United Natural Foods distributor locations (119,928 / 54,864 / 34,536 cases). They're included in the "Other" total on Case Volume by Channel below.</p>
       </div>
     </div>
   </div>
@@ -750,10 +744,14 @@
   <div class="panel">
     <div class="panel-head">
       <h3>Case Volume by Channel</h3>
-      <span class="hint">total cases, Apr 2025–Mar 2026</span>
+      <div class="unit-toggle js-channel-metric-toggle" role="group" aria-label="Metric">
+        <button type="button" data-metric="total" class="active">Total Volume</button>
+        <button type="button" data-metric="avg">Avg / Customer</button>
+      </div>
     </div>
     <div class="panel-body">
       <div class="chart-box h280 connected"><canvas id="marketDemandChart"></canvas></div>
+      <p class="panel-note">Total cases, Apr 2025&ndash;Mar 2026. Hover a bar for customer count and average cases per customer in that channel.</p>
     </div>
   </div>
 
@@ -763,6 +761,13 @@
       <div class="tbl-wrap">
         <table class="dt" id="marketTable"></table>
       </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head"><h3>Appendix: Data Sources</h3></div>
+    <div class="panel-body">
+      <p class="panel-note"><sup>1</sup> Revenue is not tracked in this data table; case volume is shown instead. Y-axis is log-scaled &mdash; a small number of wholesale/distributor accounts move far more volume than typical retail customers. Click a category in the legend to show/hide it &mdash; the dashed red vertical line marks the average distance of whichever customers are currently shown; the dashed horizontal lines mark each visible category's own average case volume. The 3 largest accounts are excluded from this chart to keep the scale readable for typical customers &mdash; all 3 are United Natural Foods distributor locations (119,928 / 54,864 / 34,536 cases). They're included in the "Other" total on Case Volume by Channel above. Penetration figures on Customer Share by Distance Band include any customer of any size within each distance band.</p>
     </div>
   </div>
 </section>
