@@ -239,6 +239,7 @@ table.dt td.rk{color:var(--kelly);font-weight:700;width:26px}
 table.dt tr:last-child td{border-bottom:0}
 table.dt tr:hover td{background:var(--bg)}
 table.dt tr.row-total td{border-top:2px solid var(--border);font-weight:700}
+table.dt tr.row-pending td{opacity:.5;filter:grayscale(1);cursor:help}
 table.dt td.col-ttm{color:var(--kelly)}
 table.dt th.col-ttm{color:var(--kelly)}
 

@@ -203,12 +203,13 @@ function initHome() {
       // would be a guess dressed up as a real figure.
       ["Plant","Utilization Rate", "66.7%"],
       ["Plant","Labor Hrs/cwt<sup>5</sup>", "0.191"],
-      ["Financials","Total Revenue (Ordinary Income)", fmtM(finRevenue), fmtM(finRevenuePrior), pctChg(finRevenue,finRevenuePrior)],
-      ["Financials","COGS", fmtM(finCogs), fmtM(finCogsPrior), pctChg(finCogs,finCogsPrior)],
-      ["Financials","Total Costs (COGS + OPEx)", fmtM(finCosts), fmtM(finCostsPrior), pctChg(finCosts,finCostsPrior)],
-      ["Financials","Operating Margin", om26.toFixed(1)+"%", om25.toFixed(1)+"%", pctPts(om26,om25)],
-    ].map(([a,m,cur,prior,chg]) =>
-      `<tr><td style="color:var(--muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.4px">${a}</td>
+      // Greyed out pending the user double-checking these figures.
+      ["Financials","Total Revenue (Ordinary Income)", fmtM(finRevenue), fmtM(finRevenuePrior), pctChg(finRevenue,finRevenuePrior), true],
+      ["Financials","COGS", fmtM(finCogs), fmtM(finCogsPrior), pctChg(finCogs,finCogsPrior), true],
+      ["Financials","Total Costs (COGS + OPEx)", fmtM(finCosts), fmtM(finCostsPrior), pctChg(finCosts,finCostsPrior), true],
+      ["Financials","Operating Margin", om26.toFixed(1)+"%", om25.toFixed(1)+"%", pctPts(om26,om25), true],
+    ].map(([a,m,cur,prior,chg,pending]) =>
+      `<tr${pending ? ' class="row-pending" title="Pending review"' : ""}><td style="color:var(--muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.4px">${a}</td>
        <td>${m}</td><td class="n">${cur ?? "###"}</td><td class="n" style="color:var(--muted)">${prior ?? "###"}</td>
        <td class="n" style="color:var(--muted)">${chg ?? "###"}</td></tr>`
     ).join("")}
