@@ -13,6 +13,9 @@
   --callout-bg:#f0f7ee;
   --chart-grid:#e4ebe4;
   --chart-text:#5f6b60;
+  --swot-w:#b0201a;
+  --swot-o:#1d4ed8;
+  --swot-t:#b45309;
 }
 @media(prefers-color-scheme:dark){
   :root{
@@ -27,6 +30,9 @@
     --chart-grid:#253528;
     --chart-text:#7a9480;
     --green-dark:#6fcf7c;
+    --swot-w:#e2665f;
+    --swot-o:#6fa0f5;
+    --swot-t:#e0a94f;
   }
 }
 :root[data-theme="dark"]{
@@ -34,12 +40,14 @@
   --muted:#7a9480; --shadow:0 2px 14px rgba(0,0,0,.35);
   --nav-bg:#040e06; --callout-bg:#182519; --chart-grid:#253528; --chart-text:#7a9480;
   --green-dark:#6fcf7c;
+  --swot-w:#e2665f; --swot-o:#6fa0f5; --swot-t:#e0a94f;
 }
 :root[data-theme="light"]{
   --ink:#1c1c1c; --bg:#eef2ee; --panel:#ffffff; --border:#dbe2db;
   --muted:#5f6b60; --shadow:0 2px 10px rgba(10,31,13,.08);
   --nav-bg:#052e10; --callout-bg:#f0f7ee; --chart-grid:#e4ebe4; --chart-text:#5f6b60;
   --green-dark:#0a1f0d;
+  --swot-w:#b0201a; --swot-o:#1d4ed8; --swot-t:#b45309;
 }
 
 *{box-sizing:border-box}
@@ -253,6 +261,31 @@ table.dt th.col-ttm{color:var(--kelly)}
   font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;
   color:#fff;background:rgba(20,30,20,.72);pointer-events:none;
 }
+
+/* ── Growth opportunities: SWOT grid ── */
+.stats-2{grid-template-columns:repeat(2,1fr)}
+.growth-idea{scroll-margin-top:140px}
+.growth-idea .panel-body>*+*{margin-top:20px}
+.swot-grid{
+  display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;
+  gap:2px;border-radius:12px;overflow:hidden;background:var(--border);
+  border:1px solid var(--border);
+}
+.swot-cell{padding:16px 18px;background:var(--panel);min-height:120px}
+.swot-cell h4{
+  margin:0 0 8px;font-size:.72rem;text-transform:uppercase;letter-spacing:.6px;
+  font-weight:700;
+}
+.swot-cell ul{margin:0;padding-left:18px;font-size:.85rem;color:var(--ink);line-height:1.6}
+.swot-cell ul li{color:var(--muted)}
+.swot-s{background:rgba(61,174,43,.10)}
+.swot-s h4{color:var(--green-mid)}
+.swot-w{background:rgba(220,38,38,.08)}
+.swot-w h4{color:var(--swot-w)}
+.swot-o{background:rgba(37,99,235,.08)}
+.swot-o h4{color:var(--swot-o)}
+.swot-t{background:rgba(217,119,6,.10)}
+.swot-t h4{color:var(--swot-t)}
 
 /* ── Radius heatmap ── */
 .radius-heatmap{display:flex;align-items:center;gap:28px;flex-wrap:wrap}
