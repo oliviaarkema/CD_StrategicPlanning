@@ -329,8 +329,20 @@ footer{max-width:1200px;margin:0 auto;padding:0 20px 50px;color:var(--muted);fon
   main{padding:0}
   .page-section{padding:0 0 20px;max-width:none}
   .panel,.stat,.callout{box-shadow:none;break-inside:avoid;page-break-inside:avoid}
-  .tbl-wrap{break-inside:auto;page-break-inside:auto}
+  .tbl-wrap{break-inside:auto;page-break-inside:auto;overflow:visible!important}
   .grid-2,.grid-3{break-inside:avoid}
   a{color:inherit;text-decoration:none}
   a[href]::after{content:none}
+
+  /* On screen, these two panels scroll a tall inner chart within a fixed-height
+     box; a scrollbar has nothing to clip to on a printed page, so the box would
+     otherwise print showing only its first ~420px and silently drop the rest of
+     the SKU list. Let it expand to its full (already correctly sized) height. */
+  .chart-box.chart-scroll{overflow:visible!important;height:auto!important}
+
+  /* Some tables (e.g. Plant Margin, 12 months + TTM) are wider than the
+     printable page at normal size and would lose their right-most columns.
+     Shrink table type uniformly in print so every column stays on the page. */
+  table.dt{font-size:.64rem}
+  table.dt th,table.dt td{padding:4px 5px}
 }
