@@ -231,6 +231,8 @@ nav.topnav button.active{color:var(--kelly);border-bottom-color:var(--kelly);fon
 .callout h4{margin:0 0 9px;font-size:.97rem;color:var(--green-dark);font-weight:700}
 .callout p{margin:0;font-size:.875rem;color:var(--ink);line-height:1.65}
 .callout p+p{margin-top:8px}
+.notes-lines{margin-top:10px}
+.notes-line{height:26px;border-bottom:1px solid var(--border)}
 
 /* ── Tables ── */
 .tbl-wrap{overflow-x:auto}
