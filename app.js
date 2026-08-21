@@ -44,7 +44,7 @@ document.querySelectorAll("nav.topnav button").forEach(b =>
 function initSection(name) {
   ({home:initHome, milk:initMilk, animals:initAnimals,
     rawmilk:initRawMilk, plant:initPlant, crops:initCrops, costs:initCosts,
-    market:initMarket}[name] || (()=>{}))();
+    market:initMarket, growth:initGrowth}[name] || (()=>{}))();
 }
 
 // ─── Print / export current page as PDF ───────────────────────────────────────
@@ -1414,6 +1414,212 @@ function initMarket() {
       <td>${drv}</td><td>${pos}</td></tr>`
     ).join("")}
     </tbody>`;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+//  GROWTH OPPORTUNITIES
+// ═══════════════════════════════════════════════════════════════════════════════
+function initGrowth() {
+  const GROWTH_IDEAS = [
+    "Expand Ice Cream",
+    "Expand Half Pints/Schools",
+    "Competitive Product Line in High End Grocers",
+    "Expand Raw Milk Production & Sell to Co-Ops/Large Contracts",
+    "A2/Grocery Expansion",
+    "Expand Animal Breeding/Calves",
+    "Expand Other Products (Class 2 & 3 -- Butter, Yogurt, Frozen Yogurt, etc.)",
+    "TBD",
+    "TBD",
+  ];
+  // Ideas 8 and 9 are blank placeholders (see the panels below) -- default them out
+  // of the matrix until they're filled in and switched on.
+  const DEFAULT_EXCLUDED = new Set([8, 9]);
+  const LEVEL = {Low:0.5, Medium:1.5, High:2.5};
+  const STORAGE_KEY = "cd_growth_ratings";
+
+  // Difficulty/Expected Return/Show-in-matrix are set per idea via the controls on
+  // each idea panel below (id="growth-idea-N" data-idea="N"), persisted to
+  // localStorage so they survive a reload.
+  let ratings;
+  try { ratings = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
+  catch(e) { ratings = {}; }
+  GROWTH_IDEAS.forEach((_, i) => {
+    const idx = i + 1;
+    if (!ratings[idx]) ratings[idx] = {difficulty:null, expectedReturn:null, included: !DEFAULT_EXCLUDED.has(idx)};
+    if (ratings[idx].included === undefined) ratings[idx].included = !DEFAULT_EXCLUDED.has(idx);
+  });
+  const saveRatings = () => localStorage.setItem(STORAGE_KEY, JSON.stringify(ratings));
+
+  // Unrated ideas are plotted as a small placeholder cluster at the center so they
+  // stay visible (and distinguishable by number) until both axes are rated. Ideas
+  // switched off via "Show in matrix" are excluded from the chart entirely (but
+  // still listed, greyed out, in the key).
+  let allPoints = computeAllPoints();
+  let points = allPoints.filter(p => p.included);
+  function computeAllPoints() {
+    // Ideas rated into the same cell would otherwise land exactly on top of each
+    // other, so group by cell first (only counting ideas currently shown) and
+    // spread same-cell ideas in a small ring around that cell's center (radius
+    // stays well inside the cell's own half-width so the ring never bleeds into a
+    // neighboring cell).
+    const cellGroups = {};
+    GROWTH_IDEAS.forEach((_, i) => {
+      const idx = i + 1;
+      const r = ratings[idx];
+      if (r.difficulty && r.expectedReturn && r.included) {
+        const key = r.difficulty + "-" + r.expectedReturn;
+        (cellGroups[key] = cellGroups[key] || []).push(i);
+      }
+    });
+
+    return GROWTH_IDEAS.map((label, i) => {
+      const idx = i + 1;
+      const r = ratings[idx];
+      const rated = !!(r.difficulty && r.expectedReturn);
+      let x, y;
+      if (rated) {
+        const cx = LEVEL[r.difficulty], cy = LEVEL[r.expectedReturn];
+        const group = cellGroups[r.difficulty + "-" + r.expectedReturn];
+        if (group && group.length > 1) {
+          const angle = group.indexOf(i) * (2 * Math.PI / group.length);
+          x = cx + 0.28 * Math.cos(angle);
+          y = cy + 0.28 * Math.sin(angle);
+        } else {
+          x = cx; y = cy;
+        }
+      } else {
+        const angle = i * (2 * Math.PI / GROWTH_IDEAS.length);
+        x = 1.5 + 0.35 * Math.cos(angle);
+        y = 1.5 + 0.35 * Math.sin(angle);
+      }
+      return {x, y, n:idx, label, rated, included: r.included};
+    });
+  }
+
+  // Draws the 3x3 Low/Medium/High grid (with a green→red diagonal tint from
+  // best-case to worst-case cell) behind the points, and the idea number inside
+  // each point, the same way avgDistanceLinePlugin etc. draw over the market charts.
+  const growthMatrixGridPlugin = {
+    id: "growthMatrixGrid",
+    beforeDatasetsDraw(chart) {
+      const {ctx, chartArea:{left, right, top, bottom}} = chart;
+      const cellW = (right - left) / 3, cellH = (bottom - top) / 3;
+      ctx.save();
+      for (let dIdx = 0; dIdx < 3; dIdx++) {
+        for (let rIdx = 0; rIdx < 3; rIdx++) {
+          const score = rIdx - dIdx;
+          ctx.fillStyle = score > 0 ? `rgba(61,174,43,${0.05 * score})`
+                         : score < 0 ? `rgba(220,38,38,${0.05 * -score})`
+                         : "rgba(0,0,0,0)";
+          ctx.fillRect(left + dIdx * cellW, top + (2 - rIdx) * cellH, cellW, cellH);
+        }
+      }
+      ctx.strokeStyle = gridColor();
+      ctx.lineWidth = 1;
+      [1, 2].forEach(v => {
+        const xPix = left + (v / 3) * (right - left);
+        ctx.beginPath(); ctx.moveTo(xPix, top); ctx.lineTo(xPix, bottom); ctx.stroke();
+        const yPix = top + (v / 3) * (bottom - top);
+        ctx.beginPath(); ctx.moveTo(left, yPix); ctx.lineTo(right, yPix); ctx.stroke();
+      });
+      ctx.strokeRect(left, top, right - left, bottom - top);
+      ctx.restore();
+    },
+    afterDatasetsDraw(chart) {
+      const {ctx} = chart;
+      const meta = chart.getDatasetMeta(0);
+      ctx.save();
+      ctx.font = "700 10px -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif";
+      ctx.fillStyle = "#fff";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      meta.data.forEach((el, i) => ctx.fillText(String(points[i].n), el.x, el.y));
+      ctx.restore();
+    }
+  };
+
+  const levelLabel = v => ({0.5:"Low", 1.5:"Medium", 2.5:"High"}[v] || "");
+
+  const growthChart = new Chart(document.getElementById("growthMatrixChart"), {
+    type: "scatter",
+    data: { datasets: [{
+      label: "Growth Ideas",
+      data: points,
+      backgroundColor: C.green,
+      borderColor: C.green,
+      pointRadius: 11,
+      pointHoverRadius: 13,
+    }]},
+    plugins: [growthMatrixGridPlugin],
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display:false },
+        tooltip: { callbacks: {
+          title: items => `Idea ${points[items[0].dataIndex].n}`,
+          label: item => points[item.dataIndex].label + (points[item.dataIndex].rated ? "" : "  (not yet rated)"),
+        }}
+      },
+      scales: {
+        x: {
+          min:0, max:3,
+          grid: { display:false },
+          afterBuildTicks: s => s.ticks = [{value:0.5},{value:1.5},{value:2.5}],
+          ticks: { callback:levelLabel, font:{weight:600} },
+          title: { display:true, text:"Difficulty" }
+        },
+        y: {
+          min:0, max:3,
+          grid: { display:false },
+          afterBuildTicks: s => s.ticks = [{value:0.5},{value:1.5},{value:2.5}],
+          ticks: { callback:levelLabel, font:{weight:600} },
+          title: { display:true, text:"Expected Return" }
+        }
+      }
+    }
+  });
+
+  function renderKey() {
+    document.getElementById("growthMatrixKey").innerHTML = GROWTH_IDEAS.map((label, i) => {
+      const r = ratings[i + 1];
+      const ratingText = (r.difficulty && r.expectedReturn) ? `${r.difficulty} difficulty / ${r.expectedReturn} return`
+                        : "not yet rated";
+      const hiddenNote = r.included ? "" : " &mdash; hidden from matrix";
+      return `<li class="${r.included ? "" : "excluded"}"><b>${i + 1}.</b>${label}<span class="rating">${ratingText}${hiddenNote}</span></li>`;
+    }).join("");
+  }
+
+  function refreshGrowthChart() {
+    allPoints = computeAllPoints();
+    points = allPoints.filter(p => p.included);
+    growthChart.data.datasets[0].data = points;
+    growthChart.update();
+    renderKey();
+  }
+
+  renderKey();
+
+  document.querySelectorAll(".js-growth-toggle").forEach(group => {
+    const idea = group.dataset.idea, axis = group.dataset.axis;
+    const buttons = group.querySelectorAll("button");
+    buttons.forEach(b => b.classList.toggle("active", b.dataset.level === ratings[idea][axis]));
+    buttons.forEach(b => b.addEventListener("click", () => {
+      ratings[idea][axis] = b.dataset.level;
+      buttons.forEach(x => x.classList.toggle("active", x === b));
+      saveRatings();
+      refreshGrowthChart();
+    }));
+  });
+
+  document.querySelectorAll(".js-growth-include").forEach(checkbox => {
+    const idea = checkbox.dataset.idea;
+    checkbox.checked = ratings[idea].included;
+    checkbox.addEventListener("change", () => {
+      ratings[idea].included = checkbox.checked;
+      saveRatings();
+      refreshGrowthChart();
+    });
+  });
 }
 
 // ─── Access gate ─────────────────────────────────────────────────────────────

@@ -854,9 +854,25 @@
     <h2>Potential Growth Opportunities</h2>
   </div>
 
+  <div class="panel">
+    <div class="panel-head"><h3>Opportunity Matrix: Difficulty vs. Expected Return</h3></div>
+    <div class="panel-body">
+      <div class="growth-matrix-wrap">
+        <div class="chart-box h480 connected"><canvas id="growthMatrixChart"></canvas></div>
+        <ul class="growth-matrix-key" id="growthMatrixKey"></ul>
+      </div>
+      <p class="panel-note">Ideas are numbered 1&ndash;7 to match the sections below. Difficulty and Expected Return ratings haven&rsquo;t been assigned yet, so every idea is shown as a small placeholder cluster at the center &mdash; once each idea is rated Low/Medium/High on both axes, update its position in the data.</p>
+    </div>
+  </div>
+
   <div class="panel growth-idea" id="growth-idea-1">
     <div class="panel-head">
       <h3>Idea 1: Expand Ice Cream</h3>
+      <label class="growth-include" title="Include this idea in the Opportunity Matrix above">
+        <input type="checkbox" class="js-growth-include" data-idea="1" checked>
+        <span class="switch"></span>
+        Show in matrix
+      </label>
     </div>
     <div class="panel-body">
       <div class="stats stats-2">
@@ -869,11 +885,23 @@
           <div class="lbl">Est. Payback Period<span class="sub">time to recoup investment</span></div>
         </div>
       </div>
-      <div class="swot-grid">
-        <div class="swot-cell swot-s"><h4>Strengths</h4><ul><li>&mdash;</li></ul></div>
-        <div class="swot-cell swot-w"><h4>Weaknesses</h4><ul><li>&mdash;</li></ul></div>
-        <div class="swot-cell swot-o"><h4>Opportunities</h4><ul><li>&mdash;</li></ul></div>
-        <div class="swot-cell swot-t"><h4>Threats</h4><ul><li>&mdash;</li></ul></div>
+      <div class="growth-rating-row">
+        <div class="growth-rating">
+          <span class="growth-rating-lbl">Difficulty</span>
+          <div class="unit-toggle js-growth-toggle" role="group" aria-label="Difficulty" data-idea="1" data-axis="difficulty">
+            <button type="button" data-level="Low">Low</button>
+            <button type="button" data-level="Medium">Medium</button>
+            <button type="button" data-level="High">High</button>
+          </div>
+        </div>
+        <div class="growth-rating">
+          <span class="growth-rating-lbl">Expected Return</span>
+          <div class="unit-toggle js-growth-toggle" role="group" aria-label="Expected Return" data-idea="1" data-axis="expectedReturn">
+            <button type="button" data-level="Low">Low</button>
+            <button type="button" data-level="Medium">Medium</button>
+            <button type="button" data-level="High">High</button>
+          </div>
+        </div>
       </div>
       <div class="callout">
         <div class="eyebrow">Notes</div>
@@ -885,6 +913,11 @@
   <div class="panel growth-idea" id="growth-idea-2">
     <div class="panel-head">
       <h3>Idea 2: Expand Half Pints/Schools</h3>
+      <label class="growth-include" title="Include this idea in the Opportunity Matrix above">
+        <input type="checkbox" class="js-growth-include" data-idea="2" checked>
+        <span class="switch"></span>
+        Show in matrix
+      </label>
     </div>
     <div class="panel-body">
       <div class="stats stats-2">
@@ -897,11 +930,23 @@
           <div class="lbl">Est. Payback Period<span class="sub">time to recoup investment</span></div>
         </div>
       </div>
-      <div class="swot-grid">
-        <div class="swot-cell swot-s"><h4>Strengths</h4><ul><li>&mdash;</li></ul></div>
-        <div class="swot-cell swot-w"><h4>Weaknesses</h4><ul><li>&mdash;</li></ul></div>
-        <div class="swot-cell swot-o"><h4>Opportunities</h4><ul><li>&mdash;</li></ul></div>
-        <div class="swot-cell swot-t"><h4>Threats</h4><ul><li>&mdash;</li></ul></div>
+      <div class="growth-rating-row">
+        <div class="growth-rating">
+          <span class="growth-rating-lbl">Difficulty</span>
+          <div class="unit-toggle js-growth-toggle" role="group" aria-label="Difficulty" data-idea="2" data-axis="difficulty">
+            <button type="button" data-level="Low">Low</button>
+            <button type="button" data-level="Medium">Medium</button>
+            <button type="button" data-level="High">High</button>
+          </div>
+        </div>
+        <div class="growth-rating">
+          <span class="growth-rating-lbl">Expected Return</span>
+          <div class="unit-toggle js-growth-toggle" role="group" aria-label="Expected Return" data-idea="2" data-axis="expectedReturn">
+            <button type="button" data-level="Low">Low</button>
+            <button type="button" data-level="Medium">Medium</button>
+            <button type="button" data-level="High">High</button>
+          </div>
+        </div>
       </div>
       <div class="callout">
         <div class="eyebrow">Notes</div>
@@ -913,6 +958,11 @@
   <div class="panel growth-idea" id="growth-idea-3">
     <div class="panel-head">
       <h3>Idea 3: Competitive Product Line in High End Grocers</h3>
+      <label class="growth-include" title="Include this idea in the Opportunity Matrix above">
+        <input type="checkbox" class="js-growth-include" data-idea="3" checked>
+        <span class="switch"></span>
+        Show in matrix
+      </label>
     </div>
     <div class="panel-body">
       <div class="stats stats-2">
@@ -925,11 +975,23 @@
           <div class="lbl">Est. Payback Period<span class="sub">time to recoup investment</span></div>
         </div>
       </div>
-      <div class="swot-grid">
-        <div class="swot-cell swot-s"><h4>Strengths</h4><ul><li>&mdash;</li></ul></div>
-        <div class="swot-cell swot-w"><h4>Weaknesses</h4><ul><li>&mdash;</li></ul></div>
-        <div class="swot-cell swot-o"><h4>Opportunities</h4><ul><li>&mdash;</li></ul></div>
-        <div class="swot-cell swot-t"><h4>Threats</h4><ul><li>&mdash;</li></ul></div>
+      <div class="growth-rating-row">
+        <div class="growth-rating">
+          <span class="growth-rating-lbl">Difficulty</span>
+          <div class="unit-toggle js-growth-toggle" role="group" aria-label="Difficulty" data-idea="3" data-axis="difficulty">
+            <button type="button" data-level="Low">Low</button>
+            <button type="button" data-level="Medium">Medium</button>
+            <button type="button" data-level="High">High</button>
+          </div>
+        </div>
+        <div class="growth-rating">
+          <span class="growth-rating-lbl">Expected Return</span>
+          <div class="unit-toggle js-growth-toggle" role="group" aria-label="Expected Return" data-idea="3" data-axis="expectedReturn">
+            <button type="button" data-level="Low">Low</button>
+            <button type="button" data-level="Medium">Medium</button>
+            <button type="button" data-level="High">High</button>
+          </div>
+        </div>
       </div>
       <div class="callout">
         <div class="eyebrow">Notes</div>
@@ -941,6 +1003,11 @@
   <div class="panel growth-idea" id="growth-idea-4">
     <div class="panel-head">
       <h3>Idea 4: Expand Raw Milk Production &amp; Sell to Co-Ops/Large Contracts</h3>
+      <label class="growth-include" title="Include this idea in the Opportunity Matrix above">
+        <input type="checkbox" class="js-growth-include" data-idea="4" checked>
+        <span class="switch"></span>
+        Show in matrix
+      </label>
     </div>
     <div class="panel-body">
       <div class="stats stats-2">
@@ -953,11 +1020,23 @@
           <div class="lbl">Est. Payback Period<span class="sub">time to recoup investment</span></div>
         </div>
       </div>
-      <div class="swot-grid">
-        <div class="swot-cell swot-s"><h4>Strengths</h4><ul><li>&mdash;</li></ul></div>
-        <div class="swot-cell swot-w"><h4>Weaknesses</h4><ul><li>&mdash;</li></ul></div>
-        <div class="swot-cell swot-o"><h4>Opportunities</h4><ul><li>&mdash;</li></ul></div>
-        <div class="swot-cell swot-t"><h4>Threats</h4><ul><li>&mdash;</li></ul></div>
+      <div class="growth-rating-row">
+        <div class="growth-rating">
+          <span class="growth-rating-lbl">Difficulty</span>
+          <div class="unit-toggle js-growth-toggle" role="group" aria-label="Difficulty" data-idea="4" data-axis="difficulty">
+            <button type="button" data-level="Low">Low</button>
+            <button type="button" data-level="Medium">Medium</button>
+            <button type="button" data-level="High">High</button>
+          </div>
+        </div>
+        <div class="growth-rating">
+          <span class="growth-rating-lbl">Expected Return</span>
+          <div class="unit-toggle js-growth-toggle" role="group" aria-label="Expected Return" data-idea="4" data-axis="expectedReturn">
+            <button type="button" data-level="Low">Low</button>
+            <button type="button" data-level="Medium">Medium</button>
+            <button type="button" data-level="High">High</button>
+          </div>
+        </div>
       </div>
       <div class="callout">
         <div class="eyebrow">Notes</div>
@@ -969,6 +1048,11 @@
   <div class="panel growth-idea" id="growth-idea-5">
     <div class="panel-head">
       <h3>Idea 5: A2/Grocery Expansion</h3>
+      <label class="growth-include" title="Include this idea in the Opportunity Matrix above">
+        <input type="checkbox" class="js-growth-include" data-idea="5" checked>
+        <span class="switch"></span>
+        Show in matrix
+      </label>
     </div>
     <div class="panel-body">
       <div class="stats stats-2">
@@ -981,11 +1065,23 @@
           <div class="lbl">Est. Payback Period<span class="sub">time to recoup investment</span></div>
         </div>
       </div>
-      <div class="swot-grid">
-        <div class="swot-cell swot-s"><h4>Strengths</h4><ul><li>&mdash;</li></ul></div>
-        <div class="swot-cell swot-w"><h4>Weaknesses</h4><ul><li>&mdash;</li></ul></div>
-        <div class="swot-cell swot-o"><h4>Opportunities</h4><ul><li>&mdash;</li></ul></div>
-        <div class="swot-cell swot-t"><h4>Threats</h4><ul><li>&mdash;</li></ul></div>
+      <div class="growth-rating-row">
+        <div class="growth-rating">
+          <span class="growth-rating-lbl">Difficulty</span>
+          <div class="unit-toggle js-growth-toggle" role="group" aria-label="Difficulty" data-idea="5" data-axis="difficulty">
+            <button type="button" data-level="Low">Low</button>
+            <button type="button" data-level="Medium">Medium</button>
+            <button type="button" data-level="High">High</button>
+          </div>
+        </div>
+        <div class="growth-rating">
+          <span class="growth-rating-lbl">Expected Return</span>
+          <div class="unit-toggle js-growth-toggle" role="group" aria-label="Expected Return" data-idea="5" data-axis="expectedReturn">
+            <button type="button" data-level="Low">Low</button>
+            <button type="button" data-level="Medium">Medium</button>
+            <button type="button" data-level="High">High</button>
+          </div>
+        </div>
       </div>
       <div class="callout">
         <div class="eyebrow">Notes</div>
@@ -997,6 +1093,11 @@
   <div class="panel growth-idea" id="growth-idea-6">
     <div class="panel-head">
       <h3>Idea 6: Expand Animal Breeding/Calves</h3>
+      <label class="growth-include" title="Include this idea in the Opportunity Matrix above">
+        <input type="checkbox" class="js-growth-include" data-idea="6" checked>
+        <span class="switch"></span>
+        Show in matrix
+      </label>
     </div>
     <div class="panel-body">
       <div class="stats stats-2">
@@ -1009,11 +1110,23 @@
           <div class="lbl">Est. Payback Period<span class="sub">time to recoup investment</span></div>
         </div>
       </div>
-      <div class="swot-grid">
-        <div class="swot-cell swot-s"><h4>Strengths</h4><ul><li>&mdash;</li></ul></div>
-        <div class="swot-cell swot-w"><h4>Weaknesses</h4><ul><li>&mdash;</li></ul></div>
-        <div class="swot-cell swot-o"><h4>Opportunities</h4><ul><li>&mdash;</li></ul></div>
-        <div class="swot-cell swot-t"><h4>Threats</h4><ul><li>&mdash;</li></ul></div>
+      <div class="growth-rating-row">
+        <div class="growth-rating">
+          <span class="growth-rating-lbl">Difficulty</span>
+          <div class="unit-toggle js-growth-toggle" role="group" aria-label="Difficulty" data-idea="6" data-axis="difficulty">
+            <button type="button" data-level="Low">Low</button>
+            <button type="button" data-level="Medium">Medium</button>
+            <button type="button" data-level="High">High</button>
+          </div>
+        </div>
+        <div class="growth-rating">
+          <span class="growth-rating-lbl">Expected Return</span>
+          <div class="unit-toggle js-growth-toggle" role="group" aria-label="Expected Return" data-idea="6" data-axis="expectedReturn">
+            <button type="button" data-level="Low">Low</button>
+            <button type="button" data-level="Medium">Medium</button>
+            <button type="button" data-level="High">High</button>
+          </div>
+        </div>
       </div>
       <div class="callout">
         <div class="eyebrow">Notes</div>
@@ -1025,6 +1138,11 @@
   <div class="panel growth-idea" id="growth-idea-7">
     <div class="panel-head">
       <h3>Idea 7: Expand Other Products (Class 2 &amp; 3 &mdash; Butter, Yogurt, Frozen Yogurt, etc.)</h3>
+      <label class="growth-include" title="Include this idea in the Opportunity Matrix above">
+        <input type="checkbox" class="js-growth-include" data-idea="7" checked>
+        <span class="switch"></span>
+        Show in matrix
+      </label>
     </div>
     <div class="panel-body">
       <div class="stats stats-2">
@@ -1037,11 +1155,113 @@
           <div class="lbl">Est. Payback Period<span class="sub">time to recoup investment</span></div>
         </div>
       </div>
-      <div class="swot-grid">
-        <div class="swot-cell swot-s"><h4>Strengths</h4><ul><li>&mdash;</li></ul></div>
-        <div class="swot-cell swot-w"><h4>Weaknesses</h4><ul><li>&mdash;</li></ul></div>
-        <div class="swot-cell swot-o"><h4>Opportunities</h4><ul><li>&mdash;</li></ul></div>
-        <div class="swot-cell swot-t"><h4>Threats</h4><ul><li>&mdash;</li></ul></div>
+      <div class="growth-rating-row">
+        <div class="growth-rating">
+          <span class="growth-rating-lbl">Difficulty</span>
+          <div class="unit-toggle js-growth-toggle" role="group" aria-label="Difficulty" data-idea="7" data-axis="difficulty">
+            <button type="button" data-level="Low">Low</button>
+            <button type="button" data-level="Medium">Medium</button>
+            <button type="button" data-level="High">High</button>
+          </div>
+        </div>
+        <div class="growth-rating">
+          <span class="growth-rating-lbl">Expected Return</span>
+          <div class="unit-toggle js-growth-toggle" role="group" aria-label="Expected Return" data-idea="7" data-axis="expectedReturn">
+            <button type="button" data-level="Low">Low</button>
+            <button type="button" data-level="Medium">Medium</button>
+            <button type="button" data-level="High">High</button>
+          </div>
+        </div>
+      </div>
+      <div class="callout">
+        <div class="eyebrow">Notes</div>
+        <p>&mdash;</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel growth-idea" id="growth-idea-8">
+    <div class="panel-head">
+      <h3>Idea 8: TBD</h3>
+      <label class="growth-include" title="Include this idea in the Opportunity Matrix above">
+        <input type="checkbox" class="js-growth-include" data-idea="8" checked>
+        <span class="switch"></span>
+        Show in matrix
+      </label>
+    </div>
+    <div class="panel-body">
+      <div class="stats stats-2">
+        <div class="stat">
+          <div class="num">TBD</div>
+          <div class="lbl">Est. Total Cost</div>
+        </div>
+        <div class="stat">
+          <div class="num">TBD</div>
+          <div class="lbl">Est. Payback Period<span class="sub">time to recoup investment</span></div>
+        </div>
+      </div>
+      <div class="growth-rating-row">
+        <div class="growth-rating">
+          <span class="growth-rating-lbl">Difficulty</span>
+          <div class="unit-toggle js-growth-toggle" role="group" aria-label="Difficulty" data-idea="8" data-axis="difficulty">
+            <button type="button" data-level="Low">Low</button>
+            <button type="button" data-level="Medium">Medium</button>
+            <button type="button" data-level="High">High</button>
+          </div>
+        </div>
+        <div class="growth-rating">
+          <span class="growth-rating-lbl">Expected Return</span>
+          <div class="unit-toggle js-growth-toggle" role="group" aria-label="Expected Return" data-idea="8" data-axis="expectedReturn">
+            <button type="button" data-level="Low">Low</button>
+            <button type="button" data-level="Medium">Medium</button>
+            <button type="button" data-level="High">High</button>
+          </div>
+        </div>
+      </div>
+      <div class="callout">
+        <div class="eyebrow">Notes</div>
+        <p>&mdash;</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel growth-idea" id="growth-idea-9">
+    <div class="panel-head">
+      <h3>Idea 9: TBD</h3>
+      <label class="growth-include" title="Include this idea in the Opportunity Matrix above">
+        <input type="checkbox" class="js-growth-include" data-idea="9" checked>
+        <span class="switch"></span>
+        Show in matrix
+      </label>
+    </div>
+    <div class="panel-body">
+      <div class="stats stats-2">
+        <div class="stat">
+          <div class="num">TBD</div>
+          <div class="lbl">Est. Total Cost</div>
+        </div>
+        <div class="stat">
+          <div class="num">TBD</div>
+          <div class="lbl">Est. Payback Period<span class="sub">time to recoup investment</span></div>
+        </div>
+      </div>
+      <div class="growth-rating-row">
+        <div class="growth-rating">
+          <span class="growth-rating-lbl">Difficulty</span>
+          <div class="unit-toggle js-growth-toggle" role="group" aria-label="Difficulty" data-idea="9" data-axis="difficulty">
+            <button type="button" data-level="Low">Low</button>
+            <button type="button" data-level="Medium">Medium</button>
+            <button type="button" data-level="High">High</button>
+          </div>
+        </div>
+        <div class="growth-rating">
+          <span class="growth-rating-lbl">Expected Return</span>
+          <div class="unit-toggle js-growth-toggle" role="group" aria-label="Expected Return" data-idea="9" data-axis="expectedReturn">
+            <button type="button" data-level="Low">Low</button>
+            <button type="button" data-level="Medium">Medium</button>
+            <button type="button" data-level="High">High</button>
+          </div>
+        </div>
       </div>
       <div class="callout">
         <div class="eyebrow">Notes</div>
