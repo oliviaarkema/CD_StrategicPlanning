@@ -74,7 +74,9 @@ window.addEventListener("afterprint", () => {
 // ═══════════════════════════════════════════════════════════════════════════════
 function initHome() {
   document.getElementById("h-rev").textContent   = "$675,589";
-  document.getElementById("h-rev-d").textContent = "▲ 108.4% vs TTM Jul 2025";
+  document.getElementById("h-rev-d").textContent = "▲ 108.4% vs Annual Jul 2025";
+  document.getElementById("h-revenue").textContent   = "$25,483,840";
+  document.getElementById("h-revenue-d").textContent = "▼ 2.3% vs Annual Jul 2025 ($26,079,541)";
   // Milk Sold = Raw Milk Production page's Annual Production, converted to cwt
   // (4,200,548 / 4,020,672 gal at 8.6 lbs/gal, same TTM windows).
   document.getElementById("h-cwt").textContent   = "361,247";
@@ -203,11 +205,11 @@ function initHome() {
       // would be a guess dressed up as a real figure.
       ["Plant","Utilization Rate", "66.7%"],
       ["Plant","Labor Hrs/cwt<sup>5</sup>", "0.191"],
-      // Greyed out pending the user double-checking these figures.
-      ["Financials","Total Revenue (Ordinary Income)", fmtM(finRevenue), fmtM(finRevenuePrior), pctChg(finRevenue,finRevenuePrior), true],
-      ["Financials","COGS", fmtM(finCogs), fmtM(finCogsPrior), pctChg(finCogs,finCogsPrior), true],
-      ["Financials","Total Costs (COGS + OPEx)", fmtM(finCosts), fmtM(finCostsPrior), pctChg(finCosts,finCostsPrior), true],
-      ["Financials","Operating Margin", om26.toFixed(1)+"%", om25.toFixed(1)+"%", pctPts(om26,om25), true],
+      // Confirmed against Casey's TTM Ordinary Income/COGS/Expenses figures.
+      ["Financials","Total Revenue (Ordinary Income)", fmtM(finRevenue), fmtM(finRevenuePrior), pctChg(finRevenue,finRevenuePrior)],
+      ["Financials","COGS", fmtM(finCogs), fmtM(finCogsPrior), pctChg(finCogs,finCogsPrior)],
+      ["Financials","Total Costs (COGS + OPEx)", fmtM(finCosts), fmtM(finCostsPrior), pctChg(finCosts,finCostsPrior)],
+      ["Financials","Operating Margin", om26.toFixed(1)+"%", om25.toFixed(1)+"%", pctPts(om26,om25)],
     ].map(([a,m,cur,prior,chg,pending]) =>
       `<tr${pending ? ' class="row-pending" title="Pending review"' : ""}><td style="color:var(--muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.4px">${a}</td>
        <td>${m}</td><td class="n">${cur ?? "###"}</td><td class="n" style="color:var(--muted)">${prior ?? "###"}</td>
@@ -645,35 +647,24 @@ function initAnimals() {
     }
   });
 
-  // Benchmark $/Head, per footnote 2: Cows Over 2 Years vs. USDA NASS's national
-  // cull-cow price ($164.00/cwt, Mar 2026, applied to an assumed 1,450-lb cow).
-  // Cows Under 5 MOS and Cows 5-24 MOS reference the closest available USDA figures
-  // (0-14-day calves; bred replacement heifers) but aren't age-matched, so no
-  // vs.-benchmark % is shown for those two.
   const anData = [
-    {type:"Cows Under 5 MOS",  head:515, avgP:1405.39, total:723774, bench: 871,  benchCmp:false},
-    {type:"Cows Over 2 Years", head:281, avgP:1683.06, total:472941, bench:2378,  benchCmp:true},
-    {type:"Cows 5-24 MOS",     head: 84, avgP:1724.60, total:144866, bench:3130,  benchCmp:false},
+    {type:"Cows Under 5 MOS",  head:515, avgP:1405.39, total:723774},
+    {type:"Cows Over 2 Years", head:281, avgP:1683.06, total:472941},
+    {type:"Cows 5-24 MOS",     head: 84, avgP:1724.60, total:144866},
   ];
   const grandHead = anData.reduce((s,r)=>s+r.head,0);
   const grandTotal = anData.reduce((s,r)=>s+r.total,0);
   document.getElementById("animalTable").innerHTML =
     `<thead><tr><th>Category</th><th class="n">Head Sold</th>
-    <th class="n">Avg $/Head</th><th class="n">Total Revenue</th><th class="n">% of Animal Rev</th>
-    <th class="n">Benchmark $/Head<sup>2</sup></th><th class="n">vs. Benchmark</th></tr></thead>
+    <th class="n">Avg $/Head</th><th class="n">Total Revenue</th><th class="n">% of Animal Rev</th></tr></thead>
     <tbody>${anData.map(r => {
-      const vsBench = r.benchCmp
-        ? ((r.avgP-r.bench)/r.bench*100).toFixed(1) + "%"
-        : "n/c";
       return `<tr><td>${r.type}</td><td class="n">${fmt(r.head)}</td>
       <td class="n">${fmtD(r.avgP.toFixed(2))}</td><td class="n">${fmtD(r.total)}</td>
-      <td class="n">${(r.total/grandTotal*100).toFixed(1)}%</td>
-      <td class="n" style="color:var(--muted)">${fmtD(r.bench)}</td>
-      <td class="n" style="color:var(--muted)">${vsBench}</td></tr>`;
+      <td class="n">${(r.total/grandTotal*100).toFixed(1)}%</td></tr>`;
     }).join("")}
     <tr style="font-weight:700;border-top:2px solid var(--border)">
       <td>Total</td><td class="n">${fmt(grandHead)}</td><td class="n">${fmtD((grandTotal/grandHead).toFixed(2))}</td>
-      <td class="n">${fmtD(grandTotal)}</td><td class="n">100.0%</td><td class="n">###</td><td class="n">###</td>
+      <td class="n">${fmtD(grandTotal)}</td><td class="n">100.0%</td>
     </tr></tbody>`;
 }
 

@@ -63,11 +63,16 @@
     <h2>Business Overview</h2>
   </div>
 
-  <div class="stats">
+  <div class="stats stats-5">
     <div class="stat">
       <div class="num" id="h-rev">—</div>
       <div class="lbl">Net Income<sup>4</sup><span class="sub">all sources</span></div>
       <div class="delta up" id="h-rev-d">—</div>
+    </div>
+    <div class="stat">
+      <div class="num" id="h-revenue">—</div>
+      <div class="lbl">Revenue<sup>4</sup><span class="sub">ordinary income</span></div>
+      <div class="delta dn" id="h-revenue-d">—</div>
     </div>
     <div class="stat">
       <div class="num" id="h-cwt">—</div>
@@ -119,7 +124,6 @@
       <div class="tbl-wrap">
         <table class="dt" id="homeMetricTable"></table>
       </div>
-      <p class="panel-note">Financials rows are greyed out pending a check of the underlying numbers.</p>
     </div>
   </div>
 
@@ -136,7 +140,7 @@
   <p class="panel-note"><sup>1</sup> Per Casey, Aug 2026: Montague 701 milking / 0 dry; New Era 382 milking / 145 dry. Herd growth has topped out at current robot milking capacity: no more animals can be added without new robots.</p>
   <p class="panel-note"><sup>2</sup> Other Income and Other Expenses are not included; these would be things like interest payments and patronage dividends from our loan provider, Greenstone.</p>
   <p class="panel-note"><sup>3</sup> From <em>Revenue by Source.xlsx</em>, TTM Jul 2026. This file has category share of revenue only (no dollar figures), so the mix is shown as a percentage split.</p>
-  <p class="panel-note"><sup>4</sup> Unlike the Monthly Revenue vs. Operating Costs chart<sup>2</sup>, this figure includes Other Income and Other Expenses (e.g. interest payments and patronage dividends from Greenstone), so it isn't directly comparable to the Total Revenue/Costs figures in the Key Metrics table below.</p>
+  <p class="panel-note"><sup>4</sup> Net Income (all sources) includes Other Income and Other Expenses (e.g. interest payments and patronage dividends from Greenstone) that Revenue (Ordinary Income) does not, so the two stat cards above aren't on the same basis and shouldn't be netted against each other. Revenue (Ordinary Income) matches the Total Revenue figure in the Key Metrics table below; Net Income (all sources) does not match that table's Total Revenue &minus; Total Costs, which is Ordinary-Income-basis net income ($857,762, per the Executive Summary above).</p>
   <p class="panel-note"><sup>5</sup> 0.191 hrs/cwt, TTM Jul 2026 (63,209 plant hours &divide; 330,273 cwt processed). No prior-year figure available yet: the only 2024 data on file is a single blended "2024 average," not actual month-by-month figures. Source: Paul, Aug 2026 (Monthly Gallons Produced &amp; Monthly Plant Hours).</p>
   <p class="panel-note"><sup>6</sup> Most of the gross-margin improvement is a bookkeeping change, not new efficiency: through December 2025 the books credited Casey for raw milk production and debited Nate for the cost as an offsetting wash entry that inflated Revenue and COGS equally; that practice stopped in January 2026, which is why COGS appears to drop sharply and gross margin appears to jump (70.0% to 83.0%). Operating margin isn't distorted by this, since it reduces to net income &divide; revenue regardless of classification.</p>
 </section>
@@ -337,12 +341,6 @@
     <div class="panel-head"><h3>Appendix: Data Sources</h3></div>
     <div class="panel-body">
       <p class="panel-note"><sup>1</sup> From actual sales, Jul '25&ndash;Jun '26 (<em>Items_Sold_TTM_July2026.xlsx</em>, AnimalCounts sheet). Category labels match the QuickBooks item names as-is, except "Cows 5-24 MOS" (short for "Cows 5 mos to under 24 mos of age") and "Cows Under 5 MOS," which also absorbs the two dairy breeding-stock categories ("Animals sold Dairy, not beef/cull" and "Animals Under 2 yrs, for Dairy"); 37 head / $113,808.50 of that total is actually breeding stock sold to other dairies, not young stock sold for beef.</p>
-      <p class="source-cat">Benchmark $/Head<sup>2</sup></p>
-      <p class="panel-note"><sup>2</sup> Cows Over 2 Years vs. USDA's national cull-cow price ($164.00/cwt, Mar 2026), estimated at $2,378/head assuming a 1,450-lb cow. Cows Under 5 MOS and Cows 5-24 MOS reference the closest available USDA figures (newborn calves; bred replacement heifers), but aren't age-matched to Country Dairy's brackets, so no vs.-benchmark % is shown for those two.</p>
-      <ul class="source-list">
-        <li><a href="https://esmis.nal.usda.gov/sites/default/release-files/795882/agpr0426.pdf" target="_blank" rel="noopener">USDA NASS: Agricultural Prices (April 2026)</a>, source for the national cull-cow price ("Cows" row, Prices Received for Vegetables and Livestock table, footnoted there as "beef cows and cull dairy cows sold for slaughter") and the Michigan/US dairy replacement cow price (Prices Received for Milk Cows table)</li>
-        <li><a href="https://www.ams.usda.gov/mnreports/lsmdairycomp.pdf" target="_blank" rel="noopener">USDA AMS: National Dairy Comprehensive Report</a>, report for month ending July 31, 2026, source for calf prices (0-14 days old, by sex and grade)</li>
-      </ul>
     </div>
   </div>
 </section>
@@ -607,7 +605,7 @@
     <p>2,500 acres farmed, owned &amp; rented</p>
   </div>
 
-  <div class="stats stats-6">
+  <div class="stats stats-5">
     <div class="stat">
       <div class="num">15</div>
       <div class="lbl">Corn Silage Yield<span class="sub">tons / acre<sup>1</sup></span></div>
@@ -627,12 +625,8 @@
       <div class="delta up">▲ 4.3% above Oceana Co. avg</div>
     </div>
     <div class="stat">
-      <div class="num">$1,413,060</div>
-      <div class="lbl">Total Value of Crops Produced<span class="sub">wheat + alfalfa only, excl. corn silage<sup>2</sup></span></div>
-    </div>
-    <div class="stat">
       <div class="num">$0.65</div>
-      <div class="lbl">Crops Labor $/cwt<sup>3</sup><span class="sub">TTM Jul 2026 avg &middot; hourly labor only</span></div>
+      <div class="lbl">Crops Labor $/cwt<sup>2</sup><span class="sub">TTM Jul 2026 avg &middot; hourly labor only</span></div>
       <div class="delta neu">+1.6% vs TTM Jul 2025 ($0.64)</div>
     </div>
   </div>
@@ -668,13 +662,11 @@
     <div class="panel-body">
       <p class="source-cat">Yield stat cards &amp; chart<sup>1</sup></p>
       <p class="panel-note"><sup>1</sup> Per Casey, 2025 crop-year averages. Yield methodology: forage yields (corn silage, alfalfa silage) are supplied by SDG; any crop taken for grain (wheat) is measured with the combine's yield monitor. The alfalfa figure is silage tons/acre (~35&ndash;40% dry matter), not dry hay tons/acre, so it isn't directly comparable to a hay-basis benchmark. Rye isn't yield-tracked; it's grown only as a cover-crop seed source, not harvested for grain or forage. Grain corn (a separate crop from corn silage) runs an estimated 150 bu/ac, a rough figure Casey flagged as needing more digging to pin down exactly; it's benchmarked against Oceana County (154.1 bu/a in 2022, 151.5 bu/a in 2023, averaging 152.8 bu/a) rather than the Michigan state average (168.0 bu/a both years), per the same County Estimates: Corn Harvested for Grain table cited below for wheat. Strategic context: since taking heifers back, Country Dairy has very little buffer for poor crop years and no extra grain to sell in an average year; a spring-forage-then-corn double-crop trial is planned for next year, aimed at increasing forage tons/acre over the current rotation.<br><br>Wheat is benchmarked against Oceana County, not the Michigan state average, as a more relevant local comparison: 60.5 bu/a (2022) and 54.5 bu/a (2023), averaging 57.5 bu/a, per the <em>Michigan Annual Statistical Bulletin</em>'s County Estimates: Winter Wheat table (the source below; the bulletin doesn't break out county-level yield for corn silage or alfalfa, so no county comparison is shown for those two).</p>
-      <p class="source-cat">Total Value of Crops Produced<sup>2</sup></p>
-      <p class="panel-note"><sup>2</sup> Acres &times; Casey's 2025 yields &times; Michigan NASS 2023 price per unit (<em>Michigan Annual Statistical Bulletin</em>, Dec 2024, the source below). Wheat: 200 ac &times; 60 bu/ac &times; $6.28/bu = $75,360. Alfalfa: 700 ac &times; 9.8 T/ac &times; $195.00/ton = $1,337,700, using the 2023 Michigan <em>dry alfalfa hay</em> price as an approximation, since NASS does not publish a price for alfalfa haylage/silage (what Country Dairy actually produces), and hay and silage aren't the same moisture basis, so this over- or understates true value. <strong>Corn silage (1,600 of 2,500 acres) is excluded entirely</strong>: NASS reports Michigan corn-silage production but no price or value of production for it, and there's no clean proxy. This total therefore covers only 900 of 2,500 farmed acres (36%); it is not a full-farm crop value figure.</p>
       <ul class="source-list">
-        <li><a href="https://www.nass.usda.gov/Statistics_by_State/Michigan/Publications/Annual_Statistical_Bulletin/stats24/agstat.pdf" target="_blank" rel="noopener">USDA NASS: Michigan Annual Statistical Bulletin (December 2024)</a>, source for Oceana County winter wheat and grain corn yield (County Estimates section) and Michigan alfalfa hay price used in Total Value of Crops Produced</li>
+        <li><a href="https://www.nass.usda.gov/Statistics_by_State/Michigan/Publications/Annual_Statistical_Bulletin/stats24/agstat.pdf" target="_blank" rel="noopener">USDA NASS: Michigan Annual Statistical Bulletin (December 2024)</a>, source for Oceana County winter wheat and grain corn yield (County Estimates section)</li>
       </ul>
-      <p class="source-cat">Crops Labor $/cwt<sup>3</sup></p>
-      <p class="panel-note"><sup>3</sup> Hourly labor only (excludes salaried labor), per cwt of crop produced. TTM Jul 2026: $0.65/cwt avg. TTM Jul 2025: $0.64/cwt avg.</p>
+      <p class="source-cat">Crops Labor $/cwt<sup>2</sup></p>
+      <p class="panel-note"><sup>2</sup> Hourly labor only (excludes salaried labor), per cwt of crop produced. TTM Jul 2026: $0.65/cwt avg. TTM Jul 2025: $0.64/cwt avg.</p>
     </div>
   </div>
 </section>
