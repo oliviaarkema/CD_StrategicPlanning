@@ -676,7 +676,12 @@ function initAnimals() {
 // the dashboard's Jul-Jun fiscal year) and run through the latest available week, so
 // they're ~13 months, not a strict trailing-12. Aligned week-for-week by position from
 // that anchor, not by calendar offset, since the weekly cadence isn't perfectly regular.
+// The x-axis itself shows WEEK_LABELS (the TTM Jul 2026 line's real dates, used as the
+// shared category axis for both lines' week-position); WEEK_LABELS_2025 holds the TTM
+// Jul 2025 line's own real dates (exactly one year earlier) so its tooltip reads
+// correctly instead of borrowing the 2026 line's dates.
 const WEEK_LABELS = ["6/30/25","7/7/25","7/14/25","7/21/25","7/28/25","8/4/25","8/11/25","8/18/25","8/25/25","9/1/25","9/8/25","9/15/25","9/22/25","9/29/25","10/6/25","10/13/25","10/20/25","10/27/25","11/3/25","11/10/25","11/17/25","11/24/25","12/1/25","12/8/25","12/15/25","12/22/25","12/29/25","1/5/26","1/12/26","1/19/26","1/26/26","2/2/26","2/9/26","2/16/26","2/23/26","3/2/26","3/9/26","3/16/26","3/23/26","3/30/26","4/6/26","4/13/26","4/20/26","4/27/26","5/8/26","5/15/26","5/22/26","5/29/26","6/5/26","6/12/26","6/19/26","6/26/26","7/3/26","7/10/26","7/17/26","7/24/26","7/31/26"];
+const WEEK_LABELS_2025 = ["6/30/24","7/7/24","7/14/24","7/21/24","7/28/24","8/4/24","8/11/24","8/18/24","8/25/24","9/1/24","9/8/24","9/15/24","9/22/24","9/29/24","10/6/24","10/13/24","10/20/24","10/27/24","11/3/24","11/10/24","11/17/24","11/24/24","12/1/24","12/8/24","12/15/24","12/22/24","12/29/24","1/5/25","1/12/25","1/19/25","1/26/25","2/2/25","2/9/25","2/16/25","2/23/25","3/2/25","3/9/25","3/16/25","3/23/25","3/30/25","4/6/25","4/13/25","4/20/25","4/27/25","5/8/25","5/15/25","5/22/25","5/29/25","6/5/25","6/12/25","6/19/25","6/26/25","7/3/25","7/10/25","7/17/25","7/24/25","7/31/25"];
 const GAL_2026 = [78478,79533,78635,79230,77293,79752,77685,79308,80105,80542,81391,80592,80074,80264,79510,79473,79212,79528,79214,79430,78508,78203,78365,78879,79533,80739,80369,81004,80543,78209,79449,79631,78861,79150,80218,80207,79524,80383,81248,82448,81799,82151,81711,83137,82521,81468,82637,83085,84267,83787,83536,82809,82331,81701,83563,83192,85302];
 const GAL_2025 = [75861,76596,75375,75896,74778,75992,76705,75826,73311,75518,75782,75893,76340,75893,75901,76189,76362,77065,76850,77394,75889,74328,75397,74788,75416,75938,77607,77759,77899,76376,77449,78479,79013,79270,79739,79884,80463,79691,78982,77188,76802,76558,77215,77415,77189,78042,78082,79251,77944,80183,79711,76535,78478,79533,78635,79230,77293];
 const GAL_TO_CWT = 8.6 / 100; // 8.6 lbs/gal, 100 lbs/cwt — matches the weekly KPI log's own cwt column exactly
@@ -717,7 +722,10 @@ function renderRawMilkCharts(unit) {
       responsive:true, maintainAspectRatio:false,
       interaction:{mode:"nearest", axis:"x", intersect:false},
       plugins:{ legend:{position:"top"},
-        tooltip:{callbacks:{label: c => c.dataset.label + " (" + c.label + "): " + fmt(c.parsed.y) + " " + label}} },
+        tooltip:{callbacks:{label: c => {
+          const d = c.datasetIndex === 1 ? WEEK_LABELS_2025[c.dataIndex] : c.label;
+          return c.dataset.label + " (" + d + "): " + fmt(c.parsed.y) + " " + label;
+        }}} },
       scales:{
         x:{grid:{color:gridColor()}, ticks:{maxTicksLimit:12, autoSkip:true}},
         y:{grid:{color:gridColor()}, ticks:{callback:v=>fmt(Math.round(v))}, min:yMin}
