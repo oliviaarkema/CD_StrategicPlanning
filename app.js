@@ -69,6 +69,18 @@ window.addEventListener("afterprint", () => {
   Object.values(Chart.instances || {}).forEach(c => { try { c.resize(); } catch(e) {} });
 });
 
+// Chart.js's own ResizeObserver-driven auto-resize can occasionally leave a
+// stacked bar chart's layout stale after a window resize (e.g. maximizing,
+// or a DPI/zoom change) — force every live chart to recompute its layout
+// and repaint once things settle, same fix already applied around print above.
+let resizeChartsTimer = null;
+window.addEventListener("resize", () => {
+  clearTimeout(resizeChartsTimer);
+  resizeChartsTimer = setTimeout(() => {
+    Object.values(Chart.instances || {}).forEach(c => { try { c.resize(); } catch(e) {} });
+  }, 150);
+});
+
 // ═══════════════════════════════════════════════════════════════════════════════
 //  HOME
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -794,7 +806,7 @@ function initRawMilk() {
       }
     });
   }
-  renderHerdBenchmarkChart("herdLbsCowDayChart", 96, 94.3, false, v=>v.toFixed(1));
+  renderHerdBenchmarkChart("herdLbsCowDayChart", 96, 100, false, v=>v.toFixed(1));
   renderHerdBenchmarkChart("herdSccChart", 250, 150, true, v=>v+"K");
 }
 
@@ -928,12 +940,15 @@ function renderPlantMarginTable() {
     {lbl:"Labor",                 i:4, fmt:v=>"$"+v.toFixed(3)},
     {lbl:"Packaging &amp; Ingredients", i:5, fmt:v=>"$"+v.toFixed(3)},
     {lbl:"All Other Plant Costs", i:6, fmt:v=>"$"+v.toFixed(3)},
-    {lbl:"Net Margin / Gallon",   i:7, fmt:v=>"$"+v.toFixed(3), total:true},
-    {lbl:"Margin %",              i:8, fmt:v=>v+"%", total:true},
+    {lbl:"Net Margin / Gallon",   i:7, fmt:v=>"$"+v.toFixed(3), total:true, pending:true},
+    {lbl:"Margin %",              i:8, fmt:v=>v+"%", total:true, pending:true},
   ];
   document.getElementById("plantMarginTable").innerHTML =
     `<thead><tr><th>Metric</th>${cols.map((c,i)=>`<th class="n${i===cols.length-1 ? " col-ttm" : ""}">${c}</th>`).join("")}</tr></thead>
     <tbody>${rows.map(r => {
+      if (r.pending) {
+        return `<tr class="row-total row-pending" title="Pending review"><td>${r.lbl}</td><td class="n" colspan="${cols.length}">Pending Finalization</td></tr>`;
+      }
       const cells = PLANT_MARGIN.map(row => `<td class="n">${r.fmt(row[r.i])}</td>`).join("");
       const ttmCell = `<td class="n col-ttm">${r.fmt(PLANT_MARGIN_TTM[r.i-1])}</td>`;
       return `<tr${r.total ? ' class="row-total"' : ""}><td>${r.lbl}</td>${cells}${ttmCell}</tr>`;
