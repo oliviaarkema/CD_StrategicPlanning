@@ -73,8 +73,8 @@ window.addEventListener("afterprint", () => {
 //  HOME
 // ═══════════════════════════════════════════════════════════════════════════════
 function initHome() {
-  document.getElementById("h-rev").textContent   = "$610,096";
-  document.getElementById("h-rev-d").textContent = "▲ 88.2% vs TTM Jul 2025";
+  document.getElementById("h-rev").textContent   = "$675,589";
+  document.getElementById("h-rev-d").textContent = "▲ 108.4% vs TTM Jul 2025";
   // Milk Sold = Raw Milk Production page's Annual Production, converted to cwt
   // (4,200,548 / 4,020,672 gal at 8.6 lbs/gal, same TTM windows).
   document.getElementById("h-cwt").textContent   = "361,247";
