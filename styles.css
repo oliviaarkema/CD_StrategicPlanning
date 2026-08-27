@@ -106,31 +106,36 @@ header .header-right b{color:#fff}
 .print-btn:hover{background:rgba(255,255,255,.24)}
 .print-btn svg{pointer-events:none}
 
-/* ── Navbar ── */
+.menu-btn{
+  display:flex;align-items:center;justify-content:center;
+  width:32px;height:32px;padding:0;border:0;border-radius:8px;
+  background:rgba(255,255,255,.12);color:#fff;cursor:pointer;
+  transition:background .15s ease;
+}
+.menu-btn:hover,.menu-btn[aria-expanded="true"]{background:rgba(255,255,255,.24)}
+.menu-btn svg{pointer-events:none}
+
+/* ── Navbar (popout menu, opened from the hamburger button) ── */
 nav.topnav{
-  background-color:var(--nav-bg);border-bottom:1px solid rgba(255,255,255,.06);
-  display:flex;overflow-x:auto;scrollbar-width:none;
-  background-image:
-    linear-gradient(to right, var(--nav-bg) 30%, rgba(255,255,255,0)),
-    linear-gradient(to left, var(--nav-bg) 30%, rgba(255,255,255,0)),
-    radial-gradient(farthest-side at 0 50%, rgba(255,255,255,.22), rgba(255,255,255,0)),
-    radial-gradient(farthest-side at 100% 50%, rgba(255,255,255,.22), rgba(255,255,255,0));
-  background-position:0 0, 100% 0, 0 0, 100% 0;
-  background-repeat:no-repeat;
-  background-size:40px 100%, 40px 100%, 14px 100%, 14px 100%;
-  background-attachment:local, local, scroll, scroll;
+  position:absolute;top:calc(100% + 8px);left:28px;
+  background-color:var(--nav-bg);border:1px solid rgba(255,255,255,.1);
+  border-radius:12px;box-shadow:0 16px 32px rgba(0,0,0,.35);
+  display:flex;flex-direction:column;gap:2px;
+  min-width:230px;padding:8px;
+  opacity:0;visibility:hidden;transform:translateY(-6px);
+  transition:opacity .15s ease,transform .15s ease,visibility .15s;
+  z-index:500;
 }
-nav.topnav::-webkit-scrollbar{display:none}
+nav.topnav.open{opacity:1;visibility:visible;transform:translateY(0)}
 nav.topnav button{
-  border:0;background:transparent;color:rgba(255,255,255,.58);
-  padding:13px 22px;font-size:.84rem;font-weight:500;cursor:pointer;
-  white-space:nowrap;letter-spacing:.2px;
-  border-bottom:3px solid transparent;
-  transition:color .14s,border-color .14s;
-  flex-shrink:0;
+  border:0;background:transparent;color:rgba(255,255,255,.65);
+  padding:11px 14px;font-size:.86rem;font-weight:500;cursor:pointer;
+  text-align:left;letter-spacing:.2px;border-radius:7px;
+  border-left:3px solid transparent;
+  transition:color .14s,background .14s,border-color .14s;
 }
-nav.topnav button:hover{color:rgba(255,255,255,.88)}
-nav.topnav button.active{color:var(--kelly);border-bottom-color:var(--kelly);font-weight:600}
+nav.topnav button:hover{color:#fff;background:rgba(255,255,255,.08)}
+nav.topnav button.active{color:var(--kelly);border-left-color:var(--kelly);font-weight:600;background:rgba(61,174,43,.12)}
 
 /* ── Sections ── */
 .page-section{display:none;max-width:1200px;margin:0 auto;padding:28px 20px 60px}
@@ -326,7 +331,7 @@ footer{max-width:1200px;margin:0 auto;padding:0 20px 50px;color:var(--muted);fon
 @media(max-width:480px){
   .stats{grid-template-columns:repeat(2,1fr)}
   .stat .num{font-size:1.4rem}
-  header .header-right{display:none}
+  header .header-right .period-badge,header .header-right .print-btn{display:none}
   .panel{scroll-margin-top:190px}
 }
 

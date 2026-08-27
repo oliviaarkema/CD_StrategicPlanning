@@ -29,6 +29,13 @@
       <h1>Strategic Planning Dashboard</h1>
     </div>
     <div class="header-right">
+      <button type="button" id="menuBtn" class="menu-btn" title="Open section menu" aria-label="Open section menu" aria-haspopup="true" aria-expanded="false" aria-controls="topnav">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
       <button type="button" id="printPageBtn" class="print-btn" title="Export this page as PDF" aria-label="Export this page as PDF">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <polyline points="6 9 6 2 18 2 18 9"></polyline>
@@ -40,7 +47,7 @@
     </div>
   </header>
 
-  <nav class="topnav" role="navigation" aria-label="Dashboard sections">
+  <nav class="topnav" id="topnav" role="navigation" aria-label="Dashboard sections">
     <button data-section="home"    class="active">Home</button>
     <button data-section="crops">Crop Efficiency</button>
     <button data-section="animals">Animal Sales</button>
@@ -49,6 +56,7 @@
     <button data-section="milk">Milk Products</button>
     <!-- <button data-section="costs">Fixed vs. Variable Costs</button> -->
     <button data-section="market">Market - Demand-Side Scan</button>
+    <button data-section="trends">Dairy Consumer Trends</button>
     <button data-section="growth">Growth Opportunities</button>
   </nav>
 </div>
@@ -175,8 +183,8 @@
 
   <div class="callout">
     <div class="eyebrow">Strategic Finding</div>
-    <h4>Milk drives the business, but the highest per-gallon value sits in small-format dips and ice cream, not the flagship pints</h4>
-    <p>Milk products are 80.6% of TTM revenue ($15.28M of $18.96M). Two secondary lines are worth watching: Soft Serve Mix at 8.8% ($1.67M, concentrated in just 3 bulk SKUs sold to food service) and Co-Packing at 5.2% ($0.98M). Everything else (Ice Cream, Sour Cream/Chip Dip, Butter, Other) is under 3% of revenue each.</p>
+    <h4>Milk sweeps the volume rankings — the top 21 SKUs sold, out of 133 across all dairy products, are all milk — but the highest per-gallon value is in sour cream and dip</h4>
+    <p>Ranked by units sold across every dairy product on the Quantity by Product &mdash; All Dairy Products chart, the first non-milk item (QD French Onion Dip, a co-pack SKU) doesn't show up until #22. Milk products are 80.6% of TTM revenue ($15.28M of $18.96M). Two secondary lines are worth watching: Soft Serve Mix at 8.8% ($1.67M, concentrated in just 3 bulk SKUs sold to food service) and Co-Packing at 5.2% ($0.98M). Everything else (Ice Cream, Sour Cream/Chip Dip, Butter, Other) is under 3% of revenue each.</p>
     <p>Popular and profitable aren't the same thing here. The two highest-volume milk SKUs, chocolate half-pints and pints, together account for over a quarter of all units sold, but on a price-per-gallon basis they land in the middle of the pack (~$6/gallon), right alongside bulk 2.5-gallon soft-serve mix sold to food service. The real per-gallon standout is sour cream and dip: small 8&ndash;16 oz tubs (both CD and QD/Kuster's) dominate the top of the whole SKU list at $14&ndash;22/gallon, 3&ndash;4x the flagship chocolate milk items and more than 5x plain gallon-jug milk (the cheapest format on the list, ~$2.79&ndash;3.19/gallon). That category is tiny today, though (just 0.6% of revenue), so the packaging-economics upside is mostly untapped. Ice cream doesn't show the same small-format premium: its priciest items are two specific 3-gallon bulk flavors (Simply Supercow, Lemon Bar Cheesecake) at $12&ndash;13/gallon, closer to a flavor-driven premium than a pack-size effect.</p>
   </div>
 
@@ -775,7 +783,7 @@
     </div>
     <div class="panel">
       <div class="panel-head">
-        <h3>Customer Cases by Distance<sup>1</sup></h3>
+        <h3>Cedar Crest Only Customer Cases by Distance<sup>1</sup></h3>
         <span class="hint">distance from Country Dairy</span>
       </div>
       <div class="panel-body">
@@ -797,7 +805,7 @@
 
   <div class="panel">
     <div class="panel-head">
-      <h3>Case Volume by Channel</h3>
+      <h3>Cedar Crest Only Case Volume by Channel</h3>
       <div class="unit-toggle js-channel-metric-toggle" role="group" aria-label="Metric">
         <button type="button" data-metric="total" class="active">Total Volume</button>
         <button type="button" data-metric="avg">Avg / Customer</button>
@@ -831,10 +839,20 @@
   <div class="panel">
     <div class="panel-head"><h3>Appendix: Data Sources</h3></div>
     <div class="panel-body">
-      <p class="panel-note"><sup>1</sup> Revenue is not tracked in this data table; case volume is shown instead. Y-axis is log-scaled: a small number of wholesale/distributor accounts move far more volume than typical retail customers. Click a category in the legend to show/hide it; the dashed red vertical line marks the average distance of whichever customers are currently shown, and the dashed horizontal lines mark each visible category's own average case volume. The 3 largest accounts are excluded from this chart to keep the scale readable for typical customers: all 3 are United Natural Foods distributor locations (119,928 / 54,864 / 34,536 cases). They're included in the "Other" total on Case Volume by Channel above. Penetration figures on Customer Share by Distance Band include any customer of any size within each distance band.</p>
-      <p class="panel-note"><sup>2</sup> Estimated Market Penetration by Distance &amp; Type is directional, not a measured figure, and mixes two very different kinds of numbers: the "actual customers" count is exact (it's Country Dairy's own sales data, the same customer points plotted on Customer Cases by Distance, binned into the same 7 distance bands), but the "estimated total market" figure it's divided by is a rough desk estimate, not a GIS radius query or a real Google Maps count. Methodology: for each distance band, an approximate population was assigned to the land area that band covers, using Michigan (and, at longer distances, neighboring-state) counties actually reachable by road from New Era, MI &mdash; explicitly excluding Milwaukee/Chicago and the rest of Wisconsin/Illinois, which fall within some bands by straight-line distance across Lake Michigan but aren't a realistic delivery area. That population was then converted to an estimated business count per category using national businesses-per-capita benchmarks: convenience stores 1 per 2,204 people (NACS 2024 store count), grocery/supermarkets 1 per ~6,000 (blended from FMI's ~45,600-store supermarket definition and Census's broader ~66,000-store grocery count), K-12 schools 1 per 2,605 (NCES), coffee shops 1 per ~7,500 (industry estimates range 40,000&ndash;128,000 U.S. shops depending on definition; the middle of that range was used), and restaurants 1 per ~450 (National Restaurant Association's ~749,000 U.S. total). Two important caveats: (1) population-by-band and the density benchmarks are both approximations, not a precise radius calculation, so treat the resulting estimated-total figures &mdash; and the % figures computed from them &mdash; as order-of-magnitude, not exact; the true figure could reasonably be half to double what's shown. (2) National density benchmarks, especially for restaurants, count every establishment regardless of how it sources dairy; a large share of any category's raw count are chains supplied by broadline foodservice distributors, not realistic direct-from-Country-Dairy prospects, so the true penetration rate of the realistically addressable market is likely meaningfully higher than shown here, particularly for Restaurant/Food Service. 200&ndash;249 mi and 250&ndash;299 mi are included for consistency with the chart above, but actual customers = 0 for all 5 types at that distance; 300+ mi is omitted from the estimated-total calculation entirely, since it's an open-ended distance with no natural population boundary to estimate against (actual customers = 0 there too, for these 5 types).</p>
+      <p class="panel-note"><sup>1</sup> Revenue is not tracked in this data table; case volume is shown instead. Y-axis is log-scaled: a small number of wholesale/distributor accounts move far more volume than typical retail customers. Click a category in the legend to show/hide it; the dashed red vertical line marks the average distance of whichever customers are currently shown, and the dashed horizontal lines mark each visible category's own average case volume. The 3 largest accounts are excluded from this chart to keep the scale readable for typical customers: all 3 are United Natural Foods distributor locations (119,928 / 54,864 / 34,536 cases). They're included in the "Other" total on Cedar Crest Only Case Volume by Channel above. Penetration figures on Customer Share by Distance Band include any customer of any size within each distance band.</p>
+      <p class="panel-note"><sup>2</sup> Estimated Market Penetration by Distance &amp; Type is directional, not a measured figure, and mixes two very different kinds of numbers: the "actual customers" count is exact (it's Country Dairy's own sales data, the same customer points plotted on Cedar Crest Only Customer Cases by Distance, binned into the same 7 distance bands), but the "estimated total market" figure it's divided by is a rough desk estimate, not a GIS radius query or a real Google Maps count. Methodology: for each distance band, an approximate population was assigned to the land area that band covers, using Michigan (and, at longer distances, neighboring-state) counties actually reachable by road from New Era, MI &mdash; explicitly excluding Milwaukee/Chicago and the rest of Wisconsin/Illinois, which fall within some bands by straight-line distance across Lake Michigan but aren't a realistic delivery area. That population was then converted to an estimated business count per category using national businesses-per-capita benchmarks: convenience stores 1 per 2,204 people (NACS 2024 store count), grocery/supermarkets 1 per ~6,000 (blended from FMI's ~45,600-store supermarket definition and Census's broader ~66,000-store grocery count), K-12 schools 1 per 2,605 (NCES), coffee shops 1 per ~7,500 (industry estimates range 40,000&ndash;128,000 U.S. shops depending on definition; the middle of that range was used), and restaurants 1 per ~450 (National Restaurant Association's ~749,000 U.S. total). Two important caveats: (1) population-by-band and the density benchmarks are both approximations, not a precise radius calculation, so treat the resulting estimated-total figures &mdash; and the % figures computed from them &mdash; as order-of-magnitude, not exact; the true figure could reasonably be half to double what's shown. (2) National density benchmarks, especially for restaurants, count every establishment regardless of how it sources dairy; a large share of any category's raw count are chains supplied by broadline foodservice distributors, not realistic direct-from-Country-Dairy prospects, so the true penetration rate of the realistically addressable market is likely meaningfully higher than shown here, particularly for Restaurant/Food Service. 200&ndash;249 mi and 250&ndash;299 mi are included for consistency with the chart above, but actual customers = 0 for all 5 types at that distance; 300+ mi is omitted from the estimated-total calculation entirely, since it's an open-ended distance with no natural population boundary to estimate against (actual customers = 0 there too, for these 5 types).</p>
     </div>
   </div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     DAIRY CONSUMER TRENDS
+══════════════════════════════════════════════ -->
+<section id="sec-trends" class="page-section">
+  <div class="sec-head">
+    <h2>Dairy Consumer Trends</h2>
+  </div>
+  <p><a href="https://docs.google.com/document/d/1WDTDRToX_VXNfPcSPKHOwnXU_7x05lmhOfK1r1j8Alw/edit?usp=sharing" target="_blank" rel="noopener">https://docs.google.com/document/d/1WDTDRToX_VXNfPcSPKHOwnXU_7x05lmhOfK1r1j8Alw/edit?usp=sharing</a></p>
 </section>
 
 <!-- ════════════════════════════════════════════

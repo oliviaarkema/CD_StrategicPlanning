@@ -38,7 +38,27 @@ function showSection(name) {
   }
 }
 document.querySelectorAll("nav.topnav button").forEach(b =>
-  b.addEventListener("click", () => showSection(b.dataset.section)));
+  b.addEventListener("click", () => { showSection(b.dataset.section); closeNavMenu(); }));
+
+// ─── Section nav: hamburger popout menu ────────────────────────────────────────
+const menuBtn = document.getElementById("menuBtn");
+const topnavEl = document.getElementById("topnav");
+function closeNavMenu() {
+  topnavEl.classList.remove("open");
+  menuBtn.setAttribute("aria-expanded", "false");
+}
+function openNavMenu() {
+  topnavEl.classList.add("open");
+  menuBtn.setAttribute("aria-expanded", "true");
+}
+menuBtn.addEventListener("click", e => {
+  e.stopPropagation();
+  topnavEl.classList.contains("open") ? closeNavMenu() : openNavMenu();
+});
+document.addEventListener("click", e => {
+  if (!topnavEl.contains(e.target) && e.target !== menuBtn) closeNavMenu();
+});
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeNavMenu(); });
 
 // ─── Init dispatcher ─────────────────────────────────────────────────────────
 function initSection(name) {
@@ -1255,6 +1275,16 @@ function initMarket() {
     {label:"Restaurant / Food Service", color:C.amber,
       actual:[2,10,13,7,0,0,0],      estTotal:[778,3111,2667,4000,6222,3333,null]},
   ];
+  // Overall/Average: the 5 types above summed band-by-band (actual customers over
+  // estimated total market), not an average of their 5 percentages -- weights each
+  // type by how big its own addressable market is, so Convenience Store/Gas (the
+  // biggest bucket) drives the overall figure more than e.g. Coffee Shop.
+  PEN_BY_TYPE.push({
+    label:"Overall / Average", color:C.red,
+    actual: PEN_BANDS.map((_,i) => PEN_BY_TYPE.reduce((s,t) => s + t.actual[i], 0)),
+    estTotal: PEN_BANDS.map((_,i) => PEN_BY_TYPE.some(t => t.estTotal[i] === null)
+      ? null : PEN_BY_TYPE.reduce((s,t) => s + t.estTotal[i], 0)),
+  });
   const penDatasets = [];
   PEN_BY_TYPE.forEach(t => {
     const pct = t.actual.map((a,i) => t.estTotal[i] ? a/t.estTotal[i]*100 : 0);
