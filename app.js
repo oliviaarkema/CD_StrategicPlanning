@@ -177,9 +177,9 @@ function initHome() {
   // unaffected by that reclassification either way (it's a straight column sum in
   // both sheets). Operating Margin here reduces to Net Income / Revenue regardless of
   // the COGS/Expenses split, so it isn't distorted by the reclassification.
-  const finRevenue = 25483435, finRevenuePrior = 26079536;
-  const finCogs = 4341827, finCogsPrior = 7826513;
-  const finCosts = 24729071, finCostsPrior = 25656520;
+  const finRevenue = 25483840, finRevenuePrior = 26079541;
+  const finCogs = 4341828, finCogsPrior = 7826513;
+  const finCosts = 24626078, finCostsPrior = 25656521;
   const pctChg = (cur,prior) => { const p = (cur-prior)/prior*100; return (p>=0?"+":"")+p.toFixed(1)+"%"; };
   const pctPts = (cur,prior) => { const p = cur-prior; return (p>=0?"+":"")+p.toFixed(1)+" pts"; };
   const om26 = (finRevenue-finCosts)/finRevenue*100, om25 = (finRevenuePrior-finCostsPrior)/finRevenuePrior*100;
