@@ -1213,43 +1213,71 @@ function initMarket() {
   // those with a mapped ZIP/distance ('Miles to Country Dairy' column); 21 unmapped customers
   // excluded. Even 50-mile bands; the lone customer beyond 300 mi (a distributor, ~684 mi) falls
   // in the open-ended 300+ mi band.
-  const PEN_BY_DISTANCE = [
-    {label:"0-49 mi", count:293, pct:19.5},
-    {label:"50-99 mi", count:558, pct:37.2},
-    {label:"100-149 mi", count:490, pct:32.6},
-    {label:"150-199 mi", count:146, pct:9.7},
-    {label:"200-249 mi", count:8, pct:0.5},
-    {label:"250-299 mi", count:6, pct:0.4},
-    {label:"300+ mi", count:1, pct:0.1},
-  ];
+  const DIST_BAND_LABELS = ["0-49 mi","50-99 mi","100-149 mi","150-199 mi","200-249 mi","250-299 mi","300+ mi"];
+  const PEN_COUNTS_CEDAR = [293, 558, 490, 146, 8, 6, 1];
+  // Kusters_Country_Dairy_Sales_by_ZIP.xlsx, Customer Summary tab, one row per Ship-To
+  // customer (135 total): 130 with a mapped ZIP, bucketed into the same 7 bands as Cedar
+  // Crest above by straight-line distance from Country Dairy's ZIP (49446) to each
+  // destination ZIP's centroid; 5 unmapped customers (ships to an unspecified/consolidated
+  // location, or no ZIP on file) excluded, same treatment as Cedar Crest's own unmapped
+  // customers. See appendix footnote 3.
+  const PEN_COUNTS_KUSTERS = [0, 4, 42, 82, 1, 0, 1];
+  const distBandPct = counts => {
+    const total = counts.reduce((s,c) => s+c, 0);
+    return counts.map(c => +(c/total*100).toFixed(1));
+  };
+  const PEN_BY_DISTANCE_SOURCES = {
+    cedar:   { counts: PEN_COUNTS_CEDAR, pct: distBandPct(PEN_COUNTS_CEDAR) },
+    kusters: { counts: PEN_COUNTS_KUSTERS, pct: distBandPct(PEN_COUNTS_KUSTERS) },
+    // "Both Combined" sums the two sources' counts per band and recomputes % against
+    // the combined total -- not an average of the two sources' own percentages.
+    both: (() => {
+      const counts = PEN_COUNTS_CEDAR.map((c,i) => c + PEN_COUNTS_KUSTERS[i]);
+      return { counts, pct: distBandPct(counts) };
+    })(),
+  };
   const heatLow = [216,227,218], heatHigh = [7,77,26];
   const heatColor = pct => {
-    const t = pct/40;
+    const t = Math.min(1, pct/40);
     return "rgb(" + heatLow.map((l,i) => Math.round(l + (heatHigh[i]-l)*t)).join(",") + ")";
   };
-  new Chart(document.getElementById("marketPenetrationByDistanceChart"), {
-    type:"bar",
-    data:{
-      labels: PEN_BY_DISTANCE.map(b => b.label),
-      datasets:[{
-        data: PEN_BY_DISTANCE.map(b => b.pct),
-        backgroundColor: PEN_BY_DISTANCE.map(b => heatColor(b.pct)),
-        borderRadius:5, label:"% of Customers"
-      }]
-    },
-    options:{
-      indexAxis:"y", responsive:true, maintainAspectRatio:false,
-      plugins:{ legend:{display:false},
-        tooltip:{callbacks:{label: c => {
-          const b = PEN_BY_DISTANCE[c.dataIndex];
-          return `${b.pct}% of customers (${fmt(b.count)})`;
-        }}} },
-      scales:{
-        x:{grid:{color:gridColor()}, ticks:{callback:v=>v+"%"}, max:40},
-        y:{grid:{display:false}, ticks:{font:{size:11}}}
+  let distanceBandChartInstance = null;
+  function renderDistanceBandChart(source) {
+    const { counts, pct } = PEN_BY_DISTANCE_SOURCES[source];
+    // Kuster's is far more concentrated in one band (63.1% at 150-199 mi) than Cedar
+    // Crest or the combined view, so the axis max is computed per source (floor 40, to
+    // keep Cedar Crest/Both at their original scale) rather than fixed at 40 for all three.
+    const axisMax = Math.max(40, Math.ceil(Math.max(...pct) / 10) * 10);
+    if (distanceBandChartInstance) distanceBandChartInstance.destroy();
+    distanceBandChartInstance = new Chart(document.getElementById("marketPenetrationByDistanceChart"), {
+      type:"bar",
+      data:{
+        labels: DIST_BAND_LABELS,
+        datasets:[{
+          data: pct,
+          backgroundColor: pct.map(heatColor),
+          borderRadius:5, label:"% of Customers"
+        }]
+      },
+      options:{
+        indexAxis:"y", responsive:true, maintainAspectRatio:false,
+        plugins:{ legend:{display:false},
+          tooltip:{callbacks:{label: c => `${pct[c.dataIndex]}% of customers (${fmt(counts[c.dataIndex])})`}} },
+        scales:{
+          x:{grid:{color:gridColor()}, ticks:{callback:v=>v+"%"}, max:axisMax},
+          y:{grid:{display:false}, ticks:{font:{size:11}}}
+        }
       }
-    }
-  });
+    });
+  }
+  renderDistanceBandChart("cedar");
+  document.querySelectorAll(".js-distance-source-toggle button").forEach(btn =>
+    btn.addEventListener("click", () => {
+      const source = btn.dataset.source;
+      document.querySelectorAll(".js-distance-source-toggle button").forEach(b =>
+        b.classList.toggle("active", b.dataset.source === source));
+      renderDistanceBandChart(source);
+    }));
 
   // Same 7 distance bands as Customer Share by Distance Band above. "actual" is Country
   // Dairy's own customer count (from Customer Cases by Distance's own plotted points,

@@ -774,11 +774,16 @@
   <div class="grid-2">
     <div class="panel">
       <div class="panel-head">
-        <h3>Customer Share by Distance Band</h3>
-        <span class="hint">% of customers within each band</span>
+        <h3>Customer Share by Distance Band<sup>3</sup></h3>
+        <div class="unit-toggle js-distance-source-toggle" role="group" aria-label="Data source">
+          <button type="button" data-source="cedar" class="active">Cedar Crest</button>
+          <button type="button" data-source="kusters">Kuster's</button>
+          <button type="button" data-source="both">Both Combined</button>
+        </div>
       </div>
       <div class="panel-body">
         <div class="chart-box h480 connected"><canvas id="marketPenetrationByDistanceChart"></canvas></div>
+        <p class="panel-note">% of customers within each band, for whichever source is selected above.</p>
       </div>
     </div>
     <div class="panel">
@@ -841,6 +846,7 @@
     <div class="panel-body">
       <p class="panel-note"><sup>1</sup> Revenue is not tracked in this data table; case volume is shown instead. Y-axis is log-scaled: a small number of wholesale/distributor accounts move far more volume than typical retail customers. Click a category in the legend to show/hide it; the dashed red vertical line marks the average distance of whichever customers are currently shown, and the dashed horizontal lines mark each visible category's own average case volume. The 3 largest accounts are excluded from this chart to keep the scale readable for typical customers: all 3 are United Natural Foods distributor locations (119,928 / 54,864 / 34,536 cases). They're included in the "Other" total on Cedar Crest Only Case Volume by Channel above. Penetration figures on Customer Share by Distance Band include any customer of any size within each distance band.</p>
       <p class="panel-note"><sup>2</sup> Estimated Market Penetration by Distance &amp; Type is directional, not a measured figure, and mixes two very different kinds of numbers: the "actual customers" count is exact (it's Country Dairy's own sales data, the same customer points plotted on Cedar Crest Only Customer Cases by Distance, binned into the same 7 distance bands), but the "estimated total market" figure it's divided by is a rough desk estimate, not a GIS radius query or a real Google Maps count. Methodology: for each distance band, an approximate population was assigned to the land area that band covers, using Michigan (and, at longer distances, neighboring-state) counties actually reachable by road from New Era, MI &mdash; explicitly excluding Milwaukee/Chicago and the rest of Wisconsin/Illinois, which fall within some bands by straight-line distance across Lake Michigan but aren't a realistic delivery area. That population was then converted to an estimated business count per category using national businesses-per-capita benchmarks: convenience stores 1 per 2,204 people (NACS 2024 store count), grocery/supermarkets 1 per ~6,000 (blended from FMI's ~45,600-store supermarket definition and Census's broader ~66,000-store grocery count), K-12 schools 1 per 2,605 (NCES), coffee shops 1 per ~7,500 (industry estimates range 40,000&ndash;128,000 U.S. shops depending on definition; the middle of that range was used), and restaurants 1 per ~450 (National Restaurant Association's ~749,000 U.S. total). Two important caveats: (1) population-by-band and the density benchmarks are both approximations, not a precise radius calculation, so treat the resulting estimated-total figures &mdash; and the % figures computed from them &mdash; as order-of-magnitude, not exact; the true figure could reasonably be half to double what's shown. (2) National density benchmarks, especially for restaurants, count every establishment regardless of how it sources dairy; a large share of any category's raw count are chains supplied by broadline foodservice distributors, not realistic direct-from-Country-Dairy prospects, so the true penetration rate of the realistically addressable market is likely meaningfully higher than shown here, particularly for Restaurant/Food Service. 200&ndash;249 mi and 250&ndash;299 mi are included for consistency with the chart above, but actual customers = 0 for all 5 types at that distance; 300+ mi is omitted from the estimated-total calculation entirely, since it's an open-ended distance with no natural population boundary to estimate against (actual customers = 0 there too, for these 5 types).</p>
+      <p class="panel-note"><sup>3</sup> Cedar Crest reflects the same Weekly Sales Database customers as Cedar Crest Only Customer Cases by Distance above (1,502 with a mapped ZIP). Kuster's reflects <em>Kusters_Country_Dairy_Sales_by_ZIP.xlsx</em> (Aug 2026), one row per Ship-To customer: 135 total, 130 with a mapped ZIP (distance computed straight-line from Country Dairy's ZIP, 49446, to each destination ZIP's centroid); the 5 unmapped customers (ship to an unspecified/consolidated location or a ZIP not on file) are excluded from the percentages, the same treatment Cedar Crest's own unmapped customers get. "Both Combined" sums each band's customer count across the two sources (1,632 total) and recomputes the % against that combined total &mdash; it is not an average of the two sources' percentages.</p>
     </div>
   </div>
 </section>
