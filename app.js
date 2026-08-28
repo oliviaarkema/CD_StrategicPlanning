@@ -105,8 +105,15 @@ window.addEventListener("resize", () => {
 //  HOME
 // ═══════════════════════════════════════════════════════════════════════════════
 function initHome() {
-  document.getElementById("h-rev").textContent   = "$675,589";
-  document.getElementById("h-rev-d").textContent = "▲ 108.4% vs Annual Jul 2025";
+  // Net Income (all sources), per Business Overview - Stat Cards.xlsx. Shared by the
+  // stat card and the Executive Summary's opening line so the two can't drift apart --
+  // see footnote 4 for why this differs from the Financials table's net income below.
+  const homeNetIncome = 675589, homeNetIncomePrior = 324110.99;
+  const homeNetIncomeChg = (homeNetIncome-homeNetIncomePrior)/homeNetIncomePrior*100;
+  document.getElementById("h-rev").textContent   = fmtD(homeNetIncome);
+  document.getElementById("h-rev-d").textContent = `▲ ${homeNetIncomeChg.toFixed(1)}% vs Annual Jul 2025`;
+  document.getElementById("h-ni-cur").textContent = fmtD(homeNetIncome);
+  document.getElementById("h-ni-chg").textContent = homeNetIncomeChg.toFixed(1) + "%";
   document.getElementById("h-revenue").textContent   = "$25,483,840";
   document.getElementById("h-revenue-d").textContent = "▼ 2.3% vs Annual Jul 2025 ($26,079,541)";
   // Milk Sold = Raw Milk Production page's Annual Production, converted to cwt
