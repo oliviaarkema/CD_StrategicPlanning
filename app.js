@@ -199,24 +199,30 @@ function initHome() {
   // Operating Costs.xlsx (Revenue $, COGS, and Expenses columns, summed month by
   // month for each TTM window: TTM Jun'26 = Jul'25-Jun'26, TTM Jun'25 = Jul'24-Jun'25
   // — trailing 12 months before Jul 1, 2026, per Casey) rather than taken as given
-  // from Key Metrics at a Glance.xlsx. That workbook's Total Revenue/Total Costs
-  // cells reconcile with this (within ~$1, a rounding artifact), but its hardcoded
-  // Operating Margin (2.4% / 2.7%) does not; treating that as a data-entry error and
-  // using the recalculated figures below. Revenue and Total Costs for the Jul'25-
-  // Dec'25 months are taken from the "adj" sheet rather than "Data", matching the
-  // restated basis used in the chart above (see comment there) — Casey confirmed the
-  // COGS drop starting Jan 2026 is a reclassification (the Casey/Nate milk wash entry
-  // stopping), not a real cost reduction, so this table restates the full TTM window
-  // onto one consistent basis rather than mixing washed and un-washed months. COGS is
-  // unaffected by that reclassification either way (it's a straight column sum in
-  // both sheets). Operating Margin here reduces to Net Income / Revenue regardless of
-  // the COGS/Expenses split, so it isn't distorted by the reclassification.
+  // from Key Metrics at a Glance.xlsx, though that workbook's own Total Revenue/
+  // Total Costs/Operating Margin cells (formula-derived from those same two
+  // numbers) now reconcile with this within ~$1, a rounding artifact. Revenue and
+  // Total Costs for the Jul'25-Dec'25 months are taken from the "adj" sheet rather
+  // than "Data", matching the restated basis used in the chart above (see comment
+  // there) — Casey confirmed the COGS drop starting Jan 2026 is a reclassification
+  // (the Casey/Nate milk wash entry stopping), not a real cost reduction, so this
+  // table restates the full TTM window onto one consistent basis rather than mixing
+  // washed and un-washed months. COGS is unaffected by that reclassification either
+  // way (it's a straight column sum in both sheets). Operating Margin here reduces
+  // to Net Income / Revenue regardless of the COGS/Expenses split, so it isn't
+  // distorted by the reclassification.
   const finRevenue = 25483840, finRevenuePrior = 26079541;
   const finCogs = 4341828, finCogsPrior = 7826513;
   const finCosts = 24626078, finCostsPrior = 25656521;
   const pctChg = (cur,prior) => { const p = (cur-prior)/prior*100; return (p>=0?"+":"")+p.toFixed(1)+"%"; };
   const pctPts = (cur,prior) => { const p = cur-prior; return (p>=0?"+":"")+p.toFixed(1)+" pts"; };
   const om26 = (finRevenue-finCosts)/finRevenue*100, om25 = (finRevenuePrior-finCostsPrior)/finRevenuePrior*100;
+
+  // Executive Summary's operating-margin figures are the same om26/om25 shown in
+  // the Key Metrics table below, not a separately hand-typed pair of numbers, so
+  // the two can't drift out of sync.
+  document.getElementById("h-om-prior").textContent = om25.toFixed(1) + "%";
+  document.getElementById("h-om-cur").textContent   = om26.toFixed(1) + "%";
 
   document.getElementById("homeMetricTable").innerHTML =
     `<thead><tr><th>Area</th><th>Metric</th><th class="n">TTM Jul 2026</th><th class="n">TTM Jul 2025</th><th class="n">Change</th></tr></thead>
