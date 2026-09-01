@@ -64,7 +64,7 @@ document.addEventListener("keydown", e => { if (e.key === "Escape") closeNavMenu
 function initSection(name) {
   ({home:initHome, milk:initMilk, animals:initAnimals,
     rawmilk:initRawMilk, plant:initPlant, crops:initCrops, costs:initCosts,
-    market:initMarket, growth:initGrowth}[name] || (()=>{}))();
+    market:initMarket, growth:initGrowth, swot:initSwot}[name] || (()=>{}))();
 }
 
 // ─── Print / export current page as PDF ───────────────────────────────────────
@@ -1704,6 +1704,116 @@ function initGrowth() {
       saveRatings();
       refreshGrowthChart();
     });
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+//  TEAM SWOT ANALYSIS
+// ═══════════════════════════════════════════════════════════════════════════════
+// Raw team member responses, transcribed as-is from StrategicPlanningSWOT_Results.xlsx
+// (one sheet per SWOT category; each row is a team member, each column one of up to
+// three responses they gave for that category).
+const SWOT_DATA = {
+  strengths: [
+    "Produce milk", "growing cows", "half-pints", "future focusing", "great products",
+    "team and owner commitment to strive for success", "cows", "people", "land base",
+    "non-GMO", "leadership", "quality products", "milking cows",
+    "producing good quality products", "strong values that guide us", "reputation",
+    "ability to control the process - cow to bottle", "excellent products",
+    "brand/heritage", "ice cream",
+  ],
+  weaknesses: [
+    "facilities", "culture", "ability to produce more products", "plant restrictions",
+    "old equipment", "multiple locations", "facilities", "equipment (plant, crops)",
+    "marketing", "Lack of solid leadership", "plant size",
+    "maintenance/equipment inadequacies", "space", "old equipment", "inventory control",
+    "no direct customer relationships", "constraints in the plant (time & space)",
+    "milk is a commodity; consumers have a fixes WTP",
+  ],
+  opportunities: [
+    "producing more quantity of items at the same quantity",
+    "new plant, more efficient, more room", "ERP system",
+    "Eliminate low volume $ to improve on higher volume $",
+    "Finding alternative items to produce while using same distribution techniques",
+    "improving ice cream situation, running out of flavors", "expanding ice cream",
+    "expanding half pints", "expanding class II-IV product line",
+    "cheese & ice cream & other non-class I", "growing market share", "A2",
+    "production growth", "farm consolidation", "product mix", "butter",
+    "Chocolate milk", "Class II, III, IV", "A2", "Beef Sales",
+  ],
+  threats: [
+    "natural disasters, flooding, draught, tornado, excessive wind, snow, unstable environments for animals",
+    "competitors", "changing consumer preferences & expectations", "competitors",
+    "external political factors (tarriffs, FMMO, regulations, FDA)", "quality issues",
+    "weather", "supplier loss", "land loss", "weather", "loss of customers",
+    "loss of land base (rented)", "cedar crest", "cattle health/crop failure, weather",
+    "listeria", "recall", "conflict with CC", "cow virus",
+  ],
+};
+
+function initSwot() {
+  const CATS = [
+    { key: "strengths",     label: "Strengths",     color: C.kelly,               listId: "swot-strengths" },
+    { key: "weaknesses",    label: "Weaknesses",    color: "var(--swot-w)",       listId: "swot-weaknesses" },
+    { key: "opportunities", label: "Opportunities", color: "var(--swot-o)",       listId: "swot-opportunities" },
+    { key: "threats",       label: "Threats",       color: "var(--swot-t)",       listId: "swot-threats" },
+  ];
+
+  // Stat cards: total responses per category.
+  document.getElementById("swotStats").innerHTML = CATS.map(cat => `
+    <div class="stat">
+      <div class="num">${SWOT_DATA[cat.key].length}</div>
+      <div class="lbl">${cat.label} Responses</div>
+    </div>`).join("");
+
+  // Quadrant lists: every raw response, unedited, one per line.
+  CATS.forEach(cat => {
+    const ul = document.querySelector(`#${cat.listId} .swot-list`);
+    ul.innerHTML = SWOT_DATA[cat.key].map(item => `<li>${item}</li>`).join("");
+    document.querySelector(`#${cat.listId} .swot-count`).textContent =
+      `${SWOT_DATA[cat.key].length} response${SWOT_DATA[cat.key].length === 1 ? "" : "s"}`;
+  });
+
+  // Recurring themes: exact-phrase responses given by more than one team member,
+  // regardless of category.
+  const counts = {};
+  CATS.forEach(cat => SWOT_DATA[cat.key].forEach(item => {
+    const key = item.trim().toLowerCase();
+    counts[key] = counts[key] || { label: item.trim(), n: 0, cat };
+    counts[key].n++;
+  }));
+  const recurring = Object.values(counts).filter(v => v.n > 1).sort((a, b) => b.n - a.n);
+  const themesCallout = document.getElementById("swotThemesCallout");
+  if (recurring.length) {
+    document.getElementById("swotThemeTags").innerHTML = recurring.map(v => `
+      <span class="swot-theme-tag"><span class="n">${v.n}&times;</span>${v.label} <span style="color:${v.cat.color}">&middot; ${v.cat.label}</span></span>
+    `).join("");
+  } else {
+    themesCallout.hidden = true;
+  }
+
+  // Response-volume bar chart.
+  new Chart(document.getElementById("swotVolumeChart"), {
+    type: "bar",
+    data: {
+      labels: CATS.map(c => c.label),
+      datasets: [{
+        data: CATS.map(c => SWOT_DATA[c.key].length),
+        backgroundColor: [C.kelly, C.red, C.blue, C.amber],
+        borderRadius: 6,
+        maxBarThickness: 90,
+      }],
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: {
+        label: item => `${item.parsed.y} response${item.parsed.y === 1 ? "" : "s"}`,
+      }}},
+      scales: {
+        y: { beginAtZero: true, ticks: { precision: 0 } },
+        x: { grid: { display: false } },
+      },
+    },
   });
 }
 
