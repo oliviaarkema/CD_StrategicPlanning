@@ -1710,44 +1710,45 @@ function initGrowth() {
 // ═══════════════════════════════════════════════════════════════════════════════
 //  TEAM SWOT ANALYSIS
 // ═══════════════════════════════════════════════════════════════════════════════
-// Raw team member responses, transcribed as-is from StrategicPlanningSWOT_Results.xlsx
-// (one sheet per SWOT category; each row is a team member, each column one of up to
-// three responses they gave for that category).
+// Team member responses, transcribed from StrategicPlanningSWOT_Results.xlsx (one
+// sheet per SWOT category; each row is a team member, each column one of up to three
+// responses they gave for that category), title-cased for readability without
+// changing wording.
 const SWOT_DATA = {
   strengths: [
-    "Produce milk", "growing cows", "half-pints", "future focusing", "great products",
-    "team and owner commitment to strive for success", "cows", "people", "land base",
-    "non-GMO", "leadership", "quality products", "milking cows",
-    "producing good quality products", "strong values that guide us", "reputation",
-    "ability to control the process - cow to bottle", "excellent products",
-    "brand/heritage", "ice cream",
+    "Produce Milk", "Growing Cows", "Half-Pints", "Future Focusing", "Great Products",
+    "Team and Owner Commitment to Strive for Success", "Cows", "People", "Land Base",
+    "Non-GMO", "Leadership", "Quality Products", "Milking Cows",
+    "Producing Good Quality Products", "Strong Values That Guide Us", "Reputation",
+    "Ability to Control the Process - Cow to Bottle", "Excellent Products",
+    "Brand/Heritage", "Ice Cream",
   ],
   weaknesses: [
-    "facilities", "culture", "ability to produce more products", "plant restrictions",
-    "old equipment", "multiple locations", "facilities", "equipment (plant, crops)",
-    "marketing", "Lack of solid leadership", "plant size",
-    "maintenance/equipment inadequacies", "space", "old equipment", "inventory control",
-    "no direct customer relationships", "constraints in the plant (time & space)",
-    "milk is a commodity; consumers have a fixes WTP",
+    "Facilities", "Culture", "Ability to Produce More Products", "Plant Restrictions",
+    "Old Equipment", "Multiple Locations", "Facilities", "Equipment (Plant, Crops)",
+    "Marketing", "Lack of Solid Leadership", "Plant Size",
+    "Maintenance/Equipment Inadequacies", "Space", "Old Equipment", "Inventory Control",
+    "No Direct Customer Relationships", "Constraints in the Plant (Time & Space)",
+    "Milk Is a Commodity; Consumers Have a Fixes WTP",
   ],
   opportunities: [
-    "producing more quantity of items at the same quantity",
-    "new plant, more efficient, more room", "ERP system",
-    "Eliminate low volume $ to improve on higher volume $",
-    "Finding alternative items to produce while using same distribution techniques",
-    "improving ice cream situation, running out of flavors", "expanding ice cream",
-    "expanding half pints", "expanding class II-IV product line",
-    "cheese & ice cream & other non-class I", "growing market share", "A2",
-    "production growth", "farm consolidation", "product mix", "butter",
-    "Chocolate milk", "Class II, III, IV", "A2", "Beef Sales",
+    "Producing More Quantity of Items at the Same Quantity",
+    "New Plant, More Efficient, More Room", "ERP System",
+    "Eliminate Low Volume $ to Improve on Higher Volume $",
+    "Finding Alternative Items to Produce While Using Same Distribution Techniques",
+    "Improving Ice Cream Situation, Running Out of Flavors", "Expanding Ice Cream",
+    "Expanding Half Pints", "Expanding Class II-IV Product Line",
+    "Cheese & Ice Cream & Other Non-Class I", "Growing Market Share", "A2",
+    "Production Growth", "Farm Consolidation", "Product Mix", "Butter",
+    "Chocolate Milk", "Class II, III, IV", "A2", "Beef Sales",
   ],
   threats: [
-    "natural disasters, flooding, draught, tornado, excessive wind, snow, unstable environments for animals",
-    "competitors", "changing consumer preferences & expectations", "competitors",
-    "external political factors (tarriffs, FMMO, regulations, FDA)", "quality issues",
-    "weather", "supplier loss", "land loss", "weather", "loss of customers",
-    "loss of land base (rented)", "cedar crest", "cattle health/crop failure, weather",
-    "listeria", "recall", "conflict with CC", "cow virus",
+    "Natural Disasters, Flooding, Draught, Tornado, Excessive Wind, Snow, Unstable Environments for Animals",
+    "Competitors", "Changing Consumer Preferences & Expectations", "Competitors",
+    "External Political Factors (Tarriffs, FMMO, Regulations, FDA)", "Quality Issues",
+    "Weather", "Supplier Loss", "Land Loss", "Weather", "Loss of Customers",
+    "Loss of Land Base (Rented)", "Cedar Crest", "Cattle Health/Crop Failure, Weather",
+    "Listeria", "Recall", "Conflict With CC", "Cow Virus",
   ],
 };
 
@@ -1758,13 +1759,6 @@ function initSwot() {
     { key: "opportunities", label: "Opportunities", color: C.blue,  listId: "swot-opportunities" },
     { key: "threats",       label: "Threats",       color: C.amber, listId: "swot-threats" },
   ];
-
-  // Stat cards: total responses per category.
-  document.getElementById("swotStats").innerHTML = CATS.map(cat => `
-    <div class="stat">
-      <div class="num">${SWOT_DATA[cat.key].length}</div>
-      <div class="lbl">${cat.label} Responses</div>
-    </div>`).join("");
 
   // Quadrant lists: every raw response, unedited, one per line.
   CATS.forEach(cat => {
@@ -1783,39 +1777,16 @@ function initSwot() {
     counts[key].n++;
   }));
   const recurring = Object.values(counts).filter(v => v.n > 1).sort((a, b) => b.n - a.n);
-  const note = document.getElementById("swotThemesNote");
+  const themeStats = document.getElementById("swotThemeStats");
 
   if (recurring.length) {
-    note.textContent = "Counts the same exact phrase given by more than one team member, across all four categories.";
-    new Chart(document.getElementById("swotThemesChart"), {
-      type: "bar",
-      data: {
-        labels: recurring.map(v => v.label),
-        datasets: [{
-          data: recurring.map(v => v.n),
-          backgroundColor: recurring.map(v => v.cat.color),
-          borderRadius: 6,
-          maxBarThickness: 40,
-        }],
-      },
-      options: {
-        indexAxis: "y",
-        responsive: true, maintainAspectRatio: false,
-        plugins: {
-          legend: { display: false },
-          tooltip: { callbacks: {
-            label: item => `${item.parsed.x}× mentioned`,
-            afterLabel: item => recurring[item.dataIndex].cat.label,
-          }},
-        },
-        scales: {
-          x: { beginAtZero: true, ticks: { precision: 0 } },
-          y: { grid: { display: false } },
-        },
-      },
-    });
+    themeStats.innerHTML = recurring.map(v => `
+      <div class="stat">
+        <div class="num" style="color:${v.cat.color}">${v.n}&times;</div>
+        <div class="lbl">${v.label}<span class="sub">${v.cat.label}</span></div>
+      </div>`).join("");
   } else {
-    note.textContent = "No exact-phrase repeats across responses this cycle.";
+    themeStats.innerHTML = `<p class="panel-note">No exact-phrase repeats across responses this cycle.</p>`;
   }
 }
 
