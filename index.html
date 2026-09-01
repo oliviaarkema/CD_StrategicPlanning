@@ -56,7 +56,7 @@
     <button data-section="milk">Milk Products</button>
     <!-- <button data-section="costs">Fixed vs. Variable Costs</button> -->
     <button data-section="market">Market - Demand-Side Scan</button>
-    <button data-section="growth">Growth Opportunities</button>
+    <button data-section="growth" class="nav-disabled">Growth Opportunities</button>
     <button data-section="swot">Team SWOT Analysis</button>
     <button data-section="trends">Dairy Consumer Trends</button>
   </nav>
@@ -858,16 +858,78 @@
 <section id="sec-trends" class="page-section">
   <div class="sec-head">
     <h2>Dairy Consumer Trends</h2>
+    <p>Category growth outlook and consumer-demand signals from third-party industry research, for context alongside Country Dairy&rsquo;s own product mix.</p>
   </div>
-  <p><a href="https://docs.google.com/document/d/1WDTDRToX_VXNfPcSPKHOwnXU_7x05lmhOfK1r1j8Alw/edit?usp=sharing" target="_blank" rel="noopener">https://docs.google.com/document/d/1WDTDRToX_VXNfPcSPKHOwnXU_7x05lmhOfK1r1j8Alw/edit?usp=sharing</a></p>
+
+  <div class="callout">
+    <div class="eyebrow">McKinsey &amp; Company &middot; The Dairy Industry&rsquo;s 2026 Playbook</div>
+    <p>88% of US dairy executives cite protein as the single most influential consumer demand trend today &mdash; far ahead of convenience, premiumization, or plant-based alternatives.<sup>1</sup></p>
+  </div>
+
+  <div class="callout">
+    <div class="eyebrow">IFF &middot; 2026 Dairy Trends Report</div>
+    <p>Nearly 60% of consumers worldwide say they are actively adding more protein to their diets, one of five forces IFF flags as reshaping dairy purchasing in 2026.<sup>2</sup></p>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head">
+      <h3>10-Year Category Growth Outlook (CAGR)</h3>
+      <span class="hint">Third-party market research, forecast windows ~2025/26&ndash;2034/35</span>
+    </div>
+    <div class="panel-body">
+      <div class="chart-box h360 connected"><canvas id="trendsCagrChart"></canvas></div>
+      <p class="panel-note">Each bar is one third-party publisher&rsquo;s own market-sizing methodology and forecast window (see Appendix below); figures are not additive across categories and will differ from other publishers covering the same category. &ldquo;High-Protein Drinks&rdquo; refers to ready-to-drink (RTD) protein beverages.</p>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head"><h3>Appendix: Data Sources</h3></div>
+    <div class="panel-body">
+      <p class="panel-note">CAGR figures come from seven different research publishers, each with its own market definition, scope, and base year &mdash; dollar market sizes are noted for context only and are not comparable across categories. Pulled Sep 2026; these are frequently-updated commercial reports, so verify against the publisher&rsquo;s live page before citing externally.</p>
+
+      <p class="source-cat">Fluid Milk &mdash; 1.78% CAGR, 2026&ndash;2034 (IMARC Group: $191.8B &rarr; $226.4B)</p>
+      <ul class="source-list"><li><a href="https://www.imarcgroup.com/fluid-milk-market" target="_blank" rel="noopener">imarcgroup.com/fluid-milk-market</a></li></ul>
+
+      <p class="source-cat">High-Protein Drinks (RTD Protein Beverages) &mdash; 8.80% CAGR, 2026&ndash;2034 (Fortune Business Insights: $2.32B &rarr; $4.56B)</p>
+      <ul class="source-list"><li><a href="https://www.fortunebusinessinsights.com/rtd-protein-beverages-market-103179" target="_blank" rel="noopener">fortunebusinessinsights.com/rtd-protein-beverages-market-103179</a></li></ul>
+
+      <p class="source-cat">Yogurt &mdash; 5.4% CAGR, 2026&ndash;2035 (Global Market Insights: $144.3B &rarr; $245B)</p>
+      <ul class="source-list"><li><a href="https://www.gminsights.com/industry-analysis/yogurt-market" target="_blank" rel="noopener">gminsights.com/industry-analysis/yogurt-market</a></li></ul>
+
+      <p class="source-cat">Cottage Cheese &mdash; 3.57% CAGR, 2026&ndash;2034 (Verified Market Reports: $10.44B &rarr; $13.7B)</p>
+      <ul class="source-list"><li><a href="https://www.verifiedmarketreports.com/product/cottage-cheese-market-size-and-forecast/" target="_blank" rel="noopener">verifiedmarketreports.com/.../cottage-cheese-market-size-and-forecast</a></li></ul>
+
+      <p class="source-cat">Butter &mdash; 4.34% CAGR, 2026&ndash;2034 (Fortune Business Insights: $45.18B &rarr; $63.49B)</p>
+      <ul class="source-list"><li><a href="https://www.fortunebusinessinsights.com/butter-market-106457" target="_blank" rel="noopener">fortunebusinessinsights.com/butter-market-106457</a></li></ul>
+
+      <p class="source-cat">Sour Cream &mdash; 4.5% CAGR, 2025&ndash;2034 (Zion Market Research: $1.84B &rarr; $2.94B)</p>
+      <ul class="source-list"><li><a href="https://www.zionmarketresearch.com/report/sour-cream-market" target="_blank" rel="noopener">zionmarketresearch.com/report/sour-cream-market</a></li></ul>
+
+      <p class="source-cat">Specialty Cheese &mdash; 5.67% CAGR, 2026&ndash;2035 (Precedence Research: $41.13B &rarr; $71.39B)</p>
+      <ul class="source-list"><li><a href="https://www.precedenceresearch.com/specialty-cheese-market" target="_blank" rel="noopener">precedenceresearch.com/specialty-cheese-market</a></li></ul>
+
+      <p class="source-cat">Supporting consumer-trend research</p>
+      <ul class="source-list">
+        <li><sup>1</sup> <a href="https://www.mckinsey.com/industries/agriculture/our-insights/the-dairy-industrys-2026-playbook-protect-margins-pursue-growth" target="_blank" rel="noopener">mckinsey.com/.../the-dairy-industrys-2026-playbook-protect-margins-pursue-growth</a></li>
+        <li><sup>2</sup> <a href="https://www.iff.com/media/news/2026-dairy-trends-report/" target="_blank" rel="noopener">iff.com/media/news/2026-dairy-trends-report</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head"><h3>Additional Research</h3></div>
+    <div class="panel-body">
+      <p><a href="https://docs.google.com/document/d/1WDTDRToX_VXNfPcSPKHOwnXU_7x05lmhOfK1r1j8Alw/edit?usp=sharing" target="_blank" rel="noopener">Dairy Consumer Trends research doc (Google Docs)</a></p>
+    </div>
+  </div>
 </section>
 
 <!-- ════════════════════════════════════════════
      POTENTIAL GROWTH OPPORTUNITIES
 ══════════════════════════════════════════════ -->
-<section id="sec-growth" class="page-section">
+<section id="sec-growth" class="page-section section-disabled">
   <div class="sec-head">
-    <h2>Potential Growth Opportunities</h2>
+    <h2>Potential Growth Opportunities <span class="onhold-badge">On Hold</span></h2>
   </div>
 
   <div class="panel">

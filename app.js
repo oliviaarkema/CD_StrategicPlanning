@@ -64,7 +64,7 @@ document.addEventListener("keydown", e => { if (e.key === "Escape") closeNavMenu
 function initSection(name) {
   ({home:initHome, milk:initMilk, animals:initAnimals,
     rawmilk:initRawMilk, plant:initPlant, crops:initCrops, costs:initCosts,
-    market:initMarket, growth:initGrowth, swot:initSwot}[name] || (()=>{}))();
+    market:initMarket, growth:initGrowth, swot:initSwot, trends:initTrends}[name] || (()=>{}))();
 }
 
 // ─── Print / export current page as PDF ───────────────────────────────────────
@@ -1812,6 +1812,57 @@ function initSwot() {
       scales: {
         y: { beginAtZero: true, ticks: { precision: 0 } },
         x: { grid: { display: false } },
+      },
+    },
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+//  DAIRY CONSUMER TRENDS
+// ═══════════════════════════════════════════════════════════════════════════════
+// 10-year CAGR projections, one reputable third-party publisher per category
+// (chosen because each publishes a dedicated report for that exact category, not
+// a proxy). Full citations and $ market-size context are in the page's own
+// Appendix panel. Pulled Sep 2026 — these are commercial reports updated on
+// their own schedule, so figures will drift from the publishers' live pages.
+const TRENDS_CAGR_DATA = [
+  { label: "High-Protein Drinks", cagr: 8.80, years: "2026–2034", source: "Fortune Business Insights", color: C.amber },
+  { label: "Specialty Cheese",    cagr: 5.67, years: "2026–2035", source: "Precedence Research",       color: C.kelly },
+  { label: "Yogurt",              cagr: 5.4,  years: "2026–2035", source: "Global Market Insights",    color: C.mid },
+  { label: "Sour Cream",          cagr: 4.5,  years: "2025–2034", source: "Zion Market Research",      color: C.light },
+  { label: "Butter",              cagr: 4.34, years: "2026–2034", source: "Fortune Business Insights", color: C.green },
+  { label: "Cottage Cheese",      cagr: 3.57, years: "2026–2034", source: "Verified Market Reports",   color: C.blue },
+  { label: "Fluid Milk",          cagr: 1.78, years: "2026–2034", source: "IMARC Group",               color: C.muted },
+];
+
+function initTrends() {
+  new Chart(document.getElementById("trendsCagrChart"), {
+    type: "bar",
+    data: {
+      labels: TRENDS_CAGR_DATA.map(d => d.label),
+      datasets: [{
+        data: TRENDS_CAGR_DATA.map(d => d.cagr),
+        backgroundColor: TRENDS_CAGR_DATA.map(d => d.color),
+        borderRadius: 6,
+        maxBarThickness: 60,
+      }],
+    },
+    options: {
+      indexAxis: "y",
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: {
+          label: item => `${item.parsed.x}% CAGR`,
+          afterLabel: item => {
+            const d = TRENDS_CAGR_DATA[item.dataIndex];
+            return `${d.source}, ${d.years}`;
+          },
+        }},
+      },
+      scales: {
+        x: { beginAtZero: true, ticks: { callback: v => v + "%" }, title: { display: true, text: "10-Year CAGR" } },
+        y: { grid: { display: false } },
       },
     },
   });

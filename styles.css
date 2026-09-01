@@ -136,6 +136,9 @@ nav.topnav button{
 }
 nav.topnav button:hover{color:#fff;background:rgba(255,255,255,.08)}
 nav.topnav button.active{color:var(--kelly);border-left-color:var(--kelly);font-weight:600;background:rgba(61,174,43,.12)}
+nav.topnav button.nav-disabled{opacity:.4;filter:grayscale(1)}
+nav.topnav button.nav-disabled:hover{opacity:.6}
+nav.topnav button.nav-disabled.active{opacity:.7;color:var(--muted);border-left-color:var(--muted);background:rgba(255,255,255,.06)}
 
 /* ── Sections ── */
 .page-section{display:none;max-width:1200px;margin:0 auto;padding:28px 20px 60px}
@@ -143,8 +146,17 @@ nav.topnav button.active{color:var(--kelly);border-left-color:var(--kelly);font-
 
 /* ── Section header ── */
 .sec-head{margin-bottom:26px}
-.sec-head h2{margin:0 0 4px;font-size:1.45rem;color:var(--green-dark);font-weight:700}
+.sec-head h2{margin:0 0 4px;font-size:1.45rem;color:var(--green-dark);font-weight:700;display:flex;align-items:center;gap:10px}
 .sec-head p{margin:0;font-size:.9rem;color:var(--muted)}
+
+/* ── Disabled / on-hold sections ── */
+.onhold-badge{
+  font-size:.66rem;text-transform:uppercase;letter-spacing:.6px;font-weight:700;
+  color:var(--muted);background:var(--bg);border:1px solid var(--border);
+  padding:3px 10px;border-radius:999px;
+}
+.page-section.section-disabled{filter:grayscale(1);opacity:.55}
+.page-section.section-disabled .sec-head h2{color:var(--muted)}
 
 /* ── Stat cards ── */
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
