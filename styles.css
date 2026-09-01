@@ -332,13 +332,6 @@ table.dt th.col-ttm{color:var(--kelly)}
 }
 .swot-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;max-height:360px;overflow-y:auto}
 .swot-list li{font-size:.85rem;line-height:1.5;padding:9px 12px;background:var(--callout-bg);border-radius:8px}
-.swot-theme-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
-.swot-theme-tag{
-  display:inline-flex;align-items:center;gap:6px;font-size:.8rem;
-  padding:5px 12px;border-radius:999px;background:var(--panel);
-  border:1px solid var(--border);color:var(--ink);
-}
-.swot-theme-tag .n{font-weight:700;color:var(--green-mid)}
 
 /* ── Radius heatmap ── */
 .radius-heatmap{display:flex;align-items:center;gap:28px;flex-wrap:wrap}

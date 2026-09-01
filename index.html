@@ -1361,19 +1361,6 @@
 
   <div class="stats" id="swotStats"></div>
 
-  <div class="panel">
-    <div class="panel-head"><h3>Responses by Category</h3></div>
-    <div class="panel-body">
-      <div class="chart-box h280 connected"><canvas id="swotVolumeChart"></canvas></div>
-    </div>
-  </div>
-
-  <div class="callout" id="swotThemesCallout">
-    <div class="eyebrow">Recurring Themes</div>
-    <h4>Mentioned more than once, in team members&rsquo; own words</h4>
-    <div class="swot-theme-tags" id="swotThemeTags"></div>
-  </div>
-
   <div class="swot-grid">
     <div class="panel swot-panel swot-s" id="swot-strengths">
       <div class="panel-head"><h3>Strengths</h3><span class="swot-count"></span></div>
@@ -1390,6 +1377,17 @@
     <div class="panel swot-panel swot-t" id="swot-threats">
       <div class="panel-head"><h3>Threats</h3><span class="swot-count"></span></div>
       <div class="panel-body"><ul class="swot-list"></ul></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head">
+      <h3>Recurring Themes</h3>
+      <span class="hint">Mentioned by more than one team member, across all categories</span>
+    </div>
+    <div class="panel-body">
+      <div class="chart-box h280 connected"><canvas id="swotThemesChart"></canvas></div>
+      <p class="panel-note" id="swotThemesNote"></p>
     </div>
   </div>
 </section>

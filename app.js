@@ -1753,10 +1753,10 @@ const SWOT_DATA = {
 
 function initSwot() {
   const CATS = [
-    { key: "strengths",     label: "Strengths",     color: C.kelly,               listId: "swot-strengths" },
-    { key: "weaknesses",    label: "Weaknesses",    color: "var(--swot-w)",       listId: "swot-weaknesses" },
-    { key: "opportunities", label: "Opportunities", color: "var(--swot-o)",       listId: "swot-opportunities" },
-    { key: "threats",       label: "Threats",       color: "var(--swot-t)",       listId: "swot-threats" },
+    { key: "strengths",     label: "Strengths",     color: C.kelly, listId: "swot-strengths" },
+    { key: "weaknesses",    label: "Weaknesses",    color: C.red,   listId: "swot-weaknesses" },
+    { key: "opportunities", label: "Opportunities", color: C.blue,  listId: "swot-opportunities" },
+    { key: "threats",       label: "Threats",       color: C.amber, listId: "swot-threats" },
   ];
 
   // Stat cards: total responses per category.
@@ -1783,38 +1783,40 @@ function initSwot() {
     counts[key].n++;
   }));
   const recurring = Object.values(counts).filter(v => v.n > 1).sort((a, b) => b.n - a.n);
-  const themesCallout = document.getElementById("swotThemesCallout");
-  if (recurring.length) {
-    document.getElementById("swotThemeTags").innerHTML = recurring.map(v => `
-      <span class="swot-theme-tag"><span class="n">${v.n}&times;</span>${v.label} <span style="color:${v.cat.color}">&middot; ${v.cat.label}</span></span>
-    `).join("");
-  } else {
-    themesCallout.hidden = true;
-  }
+  const note = document.getElementById("swotThemesNote");
 
-  // Response-volume bar chart.
-  new Chart(document.getElementById("swotVolumeChart"), {
-    type: "bar",
-    data: {
-      labels: CATS.map(c => c.label),
-      datasets: [{
-        data: CATS.map(c => SWOT_DATA[c.key].length),
-        backgroundColor: [C.kelly, C.red, C.blue, C.amber],
-        borderRadius: 6,
-        maxBarThickness: 90,
-      }],
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false }, tooltip: { callbacks: {
-        label: item => `${item.parsed.y} response${item.parsed.y === 1 ? "" : "s"}`,
-      }}},
-      scales: {
-        y: { beginAtZero: true, ticks: { precision: 0 } },
-        x: { grid: { display: false } },
+  if (recurring.length) {
+    note.textContent = "Counts the same exact phrase given by more than one team member, across all four categories.";
+    new Chart(document.getElementById("swotThemesChart"), {
+      type: "bar",
+      data: {
+        labels: recurring.map(v => v.label),
+        datasets: [{
+          data: recurring.map(v => v.n),
+          backgroundColor: recurring.map(v => v.cat.color),
+          borderRadius: 6,
+          maxBarThickness: 40,
+        }],
       },
-    },
-  });
+      options: {
+        indexAxis: "y",
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: { callbacks: {
+            label: item => `${item.parsed.x}× mentioned`,
+            afterLabel: item => recurring[item.dataIndex].cat.label,
+          }},
+        },
+        scales: {
+          x: { beginAtZero: true, ticks: { precision: 0 } },
+          y: { grid: { display: false } },
+        },
+      },
+    });
+  } else {
+    note.textContent = "No exact-phrase repeats across responses this cycle.";
+  }
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
