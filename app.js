@@ -1822,13 +1822,17 @@ function initSwot() {
 // Appendix panel. Pulled Sep 2026 — these are commercial reports updated on
 // their own schedule, so figures will drift from the publishers' live pages.
 const TRENDS_CAGR_DATA = [
-  { label: "High-Protein Drinks", cagr: 8.80, years: "2026–2034", source: "Fortune Business Insights", color: C.amber },
-  { label: "Specialty Cheese",    cagr: 5.67, years: "2026–2035", source: "Precedence Research",       color: C.kelly },
-  { label: "Yogurt",              cagr: 5.4,  years: "2026–2035", source: "Global Market Insights",    color: C.mid },
-  { label: "Sour Cream",          cagr: 4.5,  years: "2025–2034", source: "Zion Market Research",      color: C.light },
-  { label: "Butter",              cagr: 4.34, years: "2026–2034", source: "Fortune Business Insights", color: C.green },
-  { label: "Cottage Cheese",      cagr: 3.57, years: "2026–2034", source: "Verified Market Reports",   color: C.blue },
-  { label: "Fluid Milk",          cagr: 1.78, years: "2026–2034", source: "IMARC Group",               color: C.muted },
+  { label: "A2 Milk",             cagr: 13.77, years: "2026–2034", source: "IMARC Group",               color: "#7c3aed" },
+  { label: "Non-GMO",             cagr: 10.8,  years: "2026–2034", source: "IMARC Group",               color: "#0d9488" },
+  { label: "High-Protein Drinks", cagr: 8.80,  years: "2026–2034", source: "Fortune Business Insights", color: C.amber },
+  { label: "Organic Dairy",       cagr: 8.18,  years: "2026–2035", source: "Precedence Research",       color: C.red },
+  { label: "Specialty Cheese",    cagr: 5.67,  years: "2026–2035", source: "Precedence Research",       color: C.kelly },
+  { label: "Yogurt",              cagr: 5.4,   years: "2026–2035", source: "Global Market Insights",    color: C.mid },
+  { label: "Dye-Free",            cagr: 4.86,  years: "2026–2034", source: "IMARC Group",               color: "#db2777" },
+  { label: "Sour Cream",          cagr: 4.5,   years: "2025–2034", source: "Zion Market Research",      color: C.light },
+  { label: "Butter",              cagr: 4.34,  years: "2026–2034", source: "Fortune Business Insights", color: C.green },
+  { label: "Cottage Cheese",      cagr: 3.57,  years: "2026–2034", source: "Verified Market Reports",   color: C.blue },
+  { label: "Fluid Milk",          cagr: 1.78,  years: "2026–2034", source: "IMARC Group",               color: C.muted },
 ];
 
 function initTrends() {
