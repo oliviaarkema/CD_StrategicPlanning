@@ -1713,81 +1713,104 @@ function initGrowth() {
 // Team member responses, transcribed from StrategicPlanningSWOT_Results.xlsx (one
 // sheet per SWOT category; each row is a team member, each column one of up to three
 // responses they gave for that category), title-cased for readability without
-// changing wording.
-const SWOT_DATA = {
+// changing wording. Grouped here into read-out themes (a qualitative read of the raw
+// responses, not something the spreadsheet labels) so related responses can be shaded
+// the same color; each theme's "weak" list holds responses that are only loosely tied
+// to it (e.g. Strengths' Product Quality theme is a strong 4-way match on "great/good
+// quality/excellent products", with Ice Cream and Non-GMO called out separately since
+// they're specific products/attributes rather than quality statements).
+const SWOT_THEMES = {
   strengths: [
-    "Produce Milk", "Growing Cows", "Half-Pints", "Future Focusing", "Great Products",
-    "Team and Owner Commitment to Strive for Success", "Cows", "People", "Land Base",
-    "Non-GMO", "Leadership", "Quality Products", "Milking Cows",
-    "Producing Good Quality Products", "Strong Values That Guide Us", "Reputation",
-    "Ability to Control the Process - Cow to Bottle", "Excellent Products",
-    "Brand/Heritage", "Ice Cream",
+    { name: "Product Quality", color: "#074d1a",
+      strong: ["Great Products", "Quality Products", "Producing Good Quality Products", "Excellent Products"],
+      weak: ["Ice Cream", "Non-GMO"] },
+    { name: "People & Culture", color: "#1a6b35",
+      strong: ["Team and Owner Commitment to Strive for Success", "People", "Leadership", "Strong Values That Guide Us"] },
+    { name: "Herd & Land", color: "#3dae2b",
+      strong: ["Growing Cows", "Cows", "Milking Cows"],
+      weak: ["Land Base"] },
+    { name: "Brand & Trust", color: "#5ab547",
+      strong: ["Reputation", "Brand/Heritage"] },
+    { name: "Vision & Core Business", color: "#8fcf7f",
+      strong: ["Produce Milk", "Half-Pints", "Ability to Control the Process - Cow to Bottle"],
+      weak: ["Future Focusing"] },
   ],
   weaknesses: [
-    "Facilities", "Culture", "Ability to Produce More Products", "Plant Restrictions",
-    "Old Equipment", "Multiple Locations", "Facilities", "Equipment (Plant, Crops)",
-    "Marketing", "Lack of Solid Leadership", "Plant Size",
-    "Maintenance/Equipment Inadequacies", "Space", "Old Equipment", "Inventory Control",
-    "No Direct Customer Relationships", "Constraints in the Plant (Time & Space)",
-    "Milk Is a Commodity; Consumers Have a Fixes WTP",
+    { name: "Facilities & Plant Capacity", color: "#7f1d1d",
+      strong: ["Facilities", "Facilities", "Plant Restrictions", "Multiple Locations", "Plant Size", "Space", "Constraints in the Plant (Time & Space)"] },
+    { name: "Equipment", color: "#b91c1c",
+      strong: ["Old Equipment", "Old Equipment", "Equipment (Plant, Crops)", "Maintenance/Equipment Inadequacies"] },
+    { name: "Leadership & Culture", color: "#dc2626",
+      strong: ["Culture", "Lack of Solid Leadership"] },
+    { name: "Commercial & Market Weaknesses", color: "#f87171",
+      strong: ["Ability to Produce More Products", "Marketing", "Inventory Control", "No Direct Customer Relationships"],
+      weak: ["Milk Is a Commodity; Consumers Have a Fixes WTP"] },
   ],
   opportunities: [
-    "Producing More Quantity of Items at the Same Quantity",
-    "New Plant, More Efficient, More Room", "ERP System",
-    "Eliminate Low Volume $ to Improve on Higher Volume $",
-    "Finding Alternative Items to Produce While Using Same Distribution Techniques",
-    "Improving Ice Cream Situation, Running Out of Flavors", "Expanding Ice Cream",
-    "Expanding Half Pints", "Expanding Class II-IV Product Line",
-    "Cheese & Ice Cream & Other Non-Class I", "Growing Market Share", "A2",
-    "Production Growth", "Farm Consolidation", "Product Mix", "Butter",
-    "Chocolate Milk", "Class II, III, IV", "A2", "Beef Sales",
+    { name: "New & Expanded Products", color: "#1e3a8a",
+      strong: ["Expanding Ice Cream", "Expanding Half Pints", "Butter", "Chocolate Milk", "Beef Sales"],
+      weak: ["Improving Ice Cream Situation, Running Out of Flavors"] },
+    { name: "Higher-Value Product Mix", color: "#2563eb",
+      strong: ["Expanding Class II-IV Product Line", "Cheese & Ice Cream & Other Non-Class I", "Class II, III, IV"],
+      weak: ["Eliminate Low Volume $ to Improve on Higher Volume $"] },
+    { name: "Operational Efficiency & Infrastructure", color: "#3b82f6",
+      strong: ["New Plant, More Efficient, More Room", "ERP System", "Producing More Quantity of Items at the Same Quantity"],
+      weak: ["Finding Alternative Items to Produce While Using Same Distribution Techniques"] },
+    { name: "Market & Growth Strategy", color: "#60a5fa",
+      strong: ["Growing Market Share", "Production Growth", "Product Mix"],
+      weak: ["Farm Consolidation"] },
+    { name: "A2 Genetics", color: "#93c5fd",
+      strong: ["A2", "A2"] },
   ],
   threats: [
-    "Natural Disasters, Flooding, Draught, Tornado, Excessive Wind, Snow, Unstable Environments for Animals",
-    "Competitors", "Changing Consumer Preferences & Expectations", "Competitors",
-    "External Political Factors (Tarriffs, FMMO, Regulations, FDA)", "Quality Issues",
-    "Weather", "Supplier Loss", "Land Loss", "Weather", "Loss of Customers",
-    "Loss of Land Base (Rented)", "Cedar Crest", "Cattle Health/Crop Failure, Weather",
-    "Listeria", "Recall", "Conflict With CC", "Cow Virus",
+    { name: "Weather & Natural Risk", color: "#78350f",
+      strong: ["Natural Disasters, Flooding, Draught, Tornado, Excessive Wind, Snow, Unstable Environments for Animals", "Weather", "Weather", "Cattle Health/Crop Failure, Weather"] },
+    { name: "Land & Supply Loss", color: "#b45309",
+      strong: ["Land Loss", "Loss of Land Base (Rented)", "Supplier Loss"] },
+    { name: "Market & Regulatory Pressure", color: "#d97706",
+      strong: ["Competitors", "Competitors", "Changing Consumer Preferences & Expectations", "Loss of Customers"],
+      weak: ["External Political Factors (Tarriffs, FMMO, Regulations, FDA)"] },
+    { name: "Food Safety & Quality Risk", color: "#f59e0b",
+      strong: ["Quality Issues", "Listeria", "Recall", "Cow Virus"] },
+    { name: "Cedar Crest Relationship", color: "#fbbf24",
+      strong: ["Cedar Crest", "Conflict With CC"] },
   ],
+};
+
+const hexToRgba = (hex, a) => {
+  const n = parseInt(hex.slice(1), 16);
+  return `rgba(${(n >> 16) & 255},${(n >> 8) & 255},${n & 255},${a})`;
 };
 
 function initSwot() {
   const CATS = [
-    { key: "strengths",     label: "Strengths",     color: C.kelly, listId: "swot-strengths" },
-    { key: "weaknesses",    label: "Weaknesses",    color: C.red,   listId: "swot-weaknesses" },
-    { key: "opportunities", label: "Opportunities", color: C.blue,  listId: "swot-opportunities" },
-    { key: "threats",       label: "Threats",       color: C.amber, listId: "swot-threats" },
+    { key: "strengths",     quadId: "swot-strengths" },
+    { key: "weaknesses",    quadId: "swot-weaknesses" },
+    { key: "opportunities", quadId: "swot-opportunities" },
+    { key: "threats",       quadId: "swot-threats" },
   ];
 
-  // Quadrant lists: every raw response, unedited, one per line.
   CATS.forEach(cat => {
-    const ul = document.querySelector(`#${cat.listId} .swot-list`);
-    ul.innerHTML = SWOT_DATA[cat.key].map(item => `<li>${item}</li>`).join("");
-    document.querySelector(`#${cat.listId} .swot-count`).textContent =
-      `${SWOT_DATA[cat.key].length} response${SWOT_DATA[cat.key].length === 1 ? "" : "s"}`;
+    const themes = SWOT_THEMES[cat.key];
+    const quad = document.getElementById(cat.quadId);
+    let total = 0;
+
+    quad.querySelector(".swot-legend").innerHTML = themes.map(t => {
+      const n = t.strong.length + (t.weak ? t.weak.length : 0);
+      total += n;
+      return `<span class="swot-legend-item"><span class="swatch" style="background:${t.color}"></span>${t.name} (${n})</span>`;
+    }).join("");
+
+    quad.querySelector(".swot-count").textContent = `${total} response${total === 1 ? "" : "s"}`;
+
+    quad.querySelector(".swot-chips").innerHTML = themes.map(t => {
+      const strongChips = t.strong.map(item => `
+        <span class="swot-chip" style="background:${hexToRgba(t.color, .16)};border-left-color:${t.color}">${item}</span>`).join("");
+      const weakChips = (t.weak || []).map(item => `
+        <span class="swot-chip weak" style="background:${hexToRgba(t.color, .07)};border-left-color:${hexToRgba(t.color, .6)}">${item}</span>`).join("");
+      return strongChips + weakChips;
+    }).join("");
   });
-
-  // Recurring themes: exact-phrase responses given by more than one team member,
-  // regardless of category.
-  const counts = {};
-  CATS.forEach(cat => SWOT_DATA[cat.key].forEach(item => {
-    const key = item.trim().toLowerCase();
-    counts[key] = counts[key] || { label: item.trim(), n: 0, cat };
-    counts[key].n++;
-  }));
-  const recurring = Object.values(counts).filter(v => v.n > 1).sort((a, b) => b.n - a.n);
-  const themeStats = document.getElementById("swotThemeStats");
-
-  if (recurring.length) {
-    themeStats.innerHTML = recurring.map(v => `
-      <div class="stat">
-        <div class="num" style="color:${v.cat.color}">${v.n}&times;</div>
-        <div class="lbl">${v.label}<span class="sub">${v.cat.label}</span></div>
-      </div>`).join("");
-  } else {
-    themeStats.innerHTML = `<p class="panel-note">No exact-phrase repeats across responses this cycle.</p>`;
-  }
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════

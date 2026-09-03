@@ -316,22 +316,56 @@ table.dt th.col-ttm{color:var(--kelly)}
 .growth-include input:checked + .switch::after{left:16px}
 .growth-include input:focus-visible + .switch{outline:2px solid var(--kelly);outline-offset:2px}
 
-/* ── Team SWOT Analysis ── */
-.swot-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
-.swot-panel{border-top:4px solid var(--kelly)}
-.swot-panel.swot-w{border-top-color:var(--swot-w)}
-.swot-panel.swot-o{border-top-color:var(--swot-o)}
-.swot-panel.swot-t{border-top-color:var(--swot-t)}
-.swot-panel.swot-s .panel-head h3{color:var(--kelly)}
-.swot-panel.swot-w .panel-head h3{color:var(--swot-w)}
-.swot-panel.swot-o .panel-head h3{color:var(--swot-o)}
-.swot-panel.swot-t .panel-head h3{color:var(--swot-t)}
+/* ── Team SWOT Analysis: Cartesian quadrant map ── */
+.swot-cartesian{
+  display:grid;
+  grid-template-columns:96px 1fr 1fr;
+  grid-template-rows:28px 1fr 1fr;
+  gap:8px;
+}
+.swot-col-label{
+  grid-row:1;align-self:end;text-align:center;padding-bottom:4px;
+  font-size:.72rem;text-transform:uppercase;letter-spacing:.6px;font-weight:700;color:var(--muted);
+}
+.swot-col-helpful{grid-column:2}
+.swot-col-harmful{grid-column:3}
+.swot-row-label{
+  display:flex;align-items:center;justify-content:center;text-align:center;
+  font-size:.72rem;text-transform:uppercase;letter-spacing:.6px;font-weight:700;color:var(--muted);
+  grid-column:1;
+}
+.swot-row-internal{grid-row:2}
+.swot-row-external{grid-row:3}
+.swot-quad{
+  background:var(--panel);border:1px solid var(--border);border-radius:10px;
+  padding:16px;min-width:0;
+}
+.swot-q-s{grid-row:2;grid-column:2;border-right:2px solid var(--ink);border-bottom:2px solid var(--ink)}
+.swot-q-w{grid-row:2;grid-column:3;border-bottom:2px solid var(--ink)}
+.swot-q-o{grid-row:3;grid-column:2;border-right:2px solid var(--ink)}
+.swot-q-t{grid-row:3;grid-column:3}
+.swot-quad-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.swot-quad-head h3{margin:0;font-size:1rem;font-weight:700}
+.swot-q-s .swot-quad-head h3{color:var(--kelly)}
+.swot-q-w .swot-quad-head h3{color:var(--swot-w)}
+.swot-q-o .swot-quad-head h3{color:var(--swot-o)}
+.swot-q-t .swot-quad-head h3{color:var(--swot-t)}
 .swot-count{
   margin-left:auto;font-size:.72rem;font-weight:700;color:var(--muted);
-  background:var(--bg);padding:3px 10px;border-radius:999px;
+  background:var(--bg);padding:3px 10px;border-radius:999px;flex-shrink:0;
 }
-.swot-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;max-height:360px;overflow-y:auto}
-.swot-list li{font-size:.85rem;line-height:1.5;padding:9px 12px;background:var(--callout-bg);border-radius:8px}
+.swot-legend{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.swot-legend-item{
+  display:inline-flex;align-items:center;gap:5px;font-size:.7rem;color:var(--muted);
+  background:var(--bg);border-radius:999px;padding:3px 9px 3px 6px;
+}
+.swot-legend-item .swatch{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.swot-chips{display:flex;flex-wrap:wrap;gap:7px;align-content:flex-start}
+.swot-chip{
+  font-size:.82rem;line-height:1.4;padding:7px 11px;border-radius:8px;
+  border-left:3px solid transparent;color:var(--ink);
+}
+.swot-chip.weak{border-left-style:dashed;color:var(--muted)}
 
 /* ── Radius heatmap ── */
 .radius-heatmap{display:flex;align-items:center;gap:28px;flex-wrap:wrap}
@@ -353,9 +387,16 @@ footer{max-width:1200px;margin:0 auto;padding:0 20px 50px;color:var(--muted);fon
 
 @media(max-width:860px){
   .stats{grid-template-columns:repeat(2,1fr)}
-  .grid-2,.grid-3,.swot-grid{grid-template-columns:1fr}
+  .grid-2,.grid-3{grid-template-columns:1fr}
   .span-2{grid-column:auto}
   header{flex-wrap:wrap}
+  .swot-cartesian{grid-template-columns:1fr;grid-template-rows:auto}
+  .swot-col-label,.swot-row-label{display:none}
+  .swot-q-s,.swot-q-w,.swot-q-o,.swot-q-t{grid-column:1;border:1px solid var(--border)}
+  .swot-q-s{grid-row:1}
+  .swot-q-w{grid-row:2}
+  .swot-q-o{grid-row:3}
+  .swot-q-t{grid-row:4}
 }
 @media(max-width:480px){
   .stats{grid-template-columns:repeat(2,1fr)}
@@ -374,8 +415,8 @@ footer{max-width:1200px;margin:0 auto;padding:0 20px 50px;color:var(--muted);fon
   .page-section{padding:0 0 20px;max-width:none}
   .panel,.stat,.callout{box-shadow:none;break-inside:avoid;page-break-inside:avoid}
   .tbl-wrap{break-inside:auto;page-break-inside:auto;overflow:visible!important}
-  .grid-2,.grid-3,.swot-grid{break-inside:avoid}
-  .swot-list{max-height:none;overflow:visible}
+  .grid-2,.grid-3{break-inside:avoid}
+  .swot-quad{break-inside:avoid}
   a{color:inherit;text-decoration:none}
   a[href]::after{content:none}
 

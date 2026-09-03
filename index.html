@@ -1356,35 +1356,38 @@
 <section id="sec-swot" class="page-section">
   <div class="sec-head">
     <h2>Team SWOT Analysis</h2>
-    <p>Aggregated from individual team member responses (StrategicPlanningSWOT_Results.xlsx) &mdash; each entry below is one team member&rsquo;s response, capitalization normalized for readability.</p>
-  </div>
-
-  <div class="swot-grid">
-    <div class="panel swot-panel swot-s" id="swot-strengths">
-      <div class="panel-head"><h3>Strengths</h3><span class="swot-count"></span></div>
-      <div class="panel-body"><ul class="swot-list"></ul></div>
-    </div>
-    <div class="panel swot-panel swot-w" id="swot-weaknesses">
-      <div class="panel-head"><h3>Weaknesses</h3><span class="swot-count"></span></div>
-      <div class="panel-body"><ul class="swot-list"></ul></div>
-    </div>
-    <div class="panel swot-panel swot-o" id="swot-opportunities">
-      <div class="panel-head"><h3>Opportunities</h3><span class="swot-count"></span></div>
-      <div class="panel-body"><ul class="swot-list"></ul></div>
-    </div>
-    <div class="panel swot-panel swot-t" id="swot-threats">
-      <div class="panel-head"><h3>Threats</h3><span class="swot-count"></span></div>
-      <div class="panel-body"><ul class="swot-list"></ul></div>
-    </div>
+    <p>Aggregated from individual team member responses (StrategicPlanningSWOT_Results.xlsx), plotted on the standard SWOT axes &mdash; helpful vs. harmful, internal vs. external origin. Within each quadrant, responses are shaded by underlying theme: solid color = a strong tie to that theme, lighter/dashed = loosely related.</p>
   </div>
 
   <div class="panel">
-    <div class="panel-head">
-      <h3>Recurring Themes</h3>
-      <span class="hint">Mentioned by more than one team member, across all categories</span>
-    </div>
     <div class="panel-body">
-      <div class="stats stats-5" id="swotThemeStats"></div>
+      <div class="swot-cartesian">
+        <span class="swot-col-label swot-col-helpful">Helpful</span>
+        <span class="swot-col-label swot-col-harmful">Harmful</span>
+        <span class="swot-row-label swot-row-internal">Internal Origin</span>
+        <span class="swot-row-label swot-row-external">External Origin</span>
+
+        <div class="swot-quad swot-q-s" id="swot-strengths">
+          <div class="swot-quad-head"><h3>Strengths</h3><span class="swot-count"></span></div>
+          <div class="swot-legend"></div>
+          <div class="swot-chips"></div>
+        </div>
+        <div class="swot-quad swot-q-w" id="swot-weaknesses">
+          <div class="swot-quad-head"><h3>Weaknesses</h3><span class="swot-count"></span></div>
+          <div class="swot-legend"></div>
+          <div class="swot-chips"></div>
+        </div>
+        <div class="swot-quad swot-q-o" id="swot-opportunities">
+          <div class="swot-quad-head"><h3>Opportunities</h3><span class="swot-count"></span></div>
+          <div class="swot-legend"></div>
+          <div class="swot-chips"></div>
+        </div>
+        <div class="swot-quad swot-q-t" id="swot-threats">
+          <div class="swot-quad-head"><h3>Threats</h3><span class="swot-count"></span></div>
+          <div class="swot-legend"></div>
+          <div class="swot-chips"></div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
