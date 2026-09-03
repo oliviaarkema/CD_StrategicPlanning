@@ -316,11 +316,14 @@ table.dt th.col-ttm{color:var(--kelly)}
 .growth-include input:checked + .switch::after{left:16px}
 .growth-include input:focus-visible + .switch{outline:2px solid var(--kelly);outline-offset:2px}
 
-/* ── Team SWOT Analysis: Cartesian quadrant map ── */
+/* ── Team SWOT Analysis: Cartesian quadrant map ──
+   Each column (Strengths+Opportunities, Weaknesses+Threats) stacks and sizes
+   independently, so a short quadrant doesn't get stretched to match a taller
+   one in the other column -- it just takes the height its own responses need. */
 .swot-cartesian{
   display:grid;
   grid-template-columns:96px 1fr 1fr;
-  grid-template-rows:28px 1fr 1fr;
+  grid-template-rows:28px auto;
   gap:8px;
 }
 .swot-col-label{
@@ -329,21 +332,21 @@ table.dt th.col-ttm{color:var(--kelly)}
 }
 .swot-col-helpful{grid-column:2}
 .swot-col-harmful{grid-column:3}
-.swot-row-label{
-  display:flex;align-items:center;justify-content:center;text-align:center;
-  font-size:.72rem;text-transform:uppercase;letter-spacing:.6px;font-weight:700;color:var(--muted);
-  grid-column:1;
+.swot-row-labels{
+  grid-row:2;grid-column:1;
+  display:flex;flex-direction:column;justify-content:space-between;align-items:center;
 }
-.swot-row-internal{grid-row:2}
-.swot-row-external{grid-row:3}
+.swot-row-label{
+  text-align:center;font-size:.72rem;text-transform:uppercase;letter-spacing:.6px;
+  font-weight:700;color:var(--muted);
+}
+.swot-col{grid-row:2;display:flex;flex-direction:column;gap:20px;min-width:0}
+.swot-col-left{grid-column:2}
+.swot-col-right{grid-column:3}
 .swot-quad{
   background:var(--panel);border:1px solid var(--border);border-radius:10px;
   padding:16px;min-width:0;
 }
-.swot-q-s{grid-row:2;grid-column:2;border-right:2px solid var(--ink);border-bottom:2px solid var(--ink)}
-.swot-q-w{grid-row:2;grid-column:3;border-bottom:2px solid var(--ink)}
-.swot-q-o{grid-row:3;grid-column:2;border-right:2px solid var(--ink)}
-.swot-q-t{grid-row:3;grid-column:3}
 .swot-quad-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
 .swot-quad-head h3{margin:0;font-size:1rem;font-weight:700}
 .swot-q-s .swot-quad-head h3{color:var(--kelly)}
@@ -390,13 +393,8 @@ footer{max-width:1200px;margin:0 auto;padding:0 20px 50px;color:var(--muted);fon
   .grid-2,.grid-3{grid-template-columns:1fr}
   .span-2{grid-column:auto}
   header{flex-wrap:wrap}
-  .swot-cartesian{grid-template-columns:1fr;grid-template-rows:auto}
-  .swot-col-label,.swot-row-label{display:none}
-  .swot-q-s,.swot-q-w,.swot-q-o,.swot-q-t{grid-column:1;border:1px solid var(--border)}
-  .swot-q-s{grid-row:1}
-  .swot-q-w{grid-row:2}
-  .swot-q-o{grid-row:3}
-  .swot-q-t{grid-row:4}
+  .swot-cartesian{display:flex;flex-direction:column;gap:20px}
+  .swot-col-label,.swot-row-labels{display:none}
 }
 @media(max-width:480px){
   .stats{grid-template-columns:repeat(2,1fr)}
