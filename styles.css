@@ -216,6 +216,7 @@ nav.topnav button.nav-disabled.active{opacity:.7;color:var(--muted);border-left-
 .chart-box.h360{height:360px}
 .chart-box.h420{height:420px}
 .chart-box.h480{height:480px}
+.chart-box.h560{height:560px}
 .chart-box.chart-scroll{overflow-y:auto;overflow-x:hidden}
 .chart-inner{position:relative;width:100%}
 .chart-box canvas{filter:grayscale(1);opacity:.35}

@@ -1827,10 +1827,13 @@ const TRENDS_CAGR_DATA = [
   { label: "Organic Dairy",       cagr: 8.18,  years: "2026–2035", source: "Precedence Research",       color: C.red },
   { label: "Specialty Cheese",    cagr: 5.67,  years: "2026–2035", source: "Precedence Research",       color: C.kelly },
   { label: "Yogurt",              cagr: 5.4,   years: "2026–2035", source: "Global Market Insights",    color: C.mid },
+  { label: "UHT / Extended Shelf-Life Milk", cagr: 5.28, years: "2026–2034", source: "Fortune Business Insights", color: "#475569" },
   { label: "Dye-Free",            cagr: 4.86,  years: "2026–2034", source: "IMARC Group",               color: "#db2777" },
   { label: "Sour Cream",          cagr: 4.5,   years: "2025–2034", source: "Zion Market Research",      color: C.light },
   { label: "Butter",              cagr: 4.34,  years: "2026–2034", source: "Fortune Business Insights", color: C.green },
+  { label: "Frozen Yogurt",       cagr: 3.60,  years: "2026–2034", source: "Fortune Business Insights", color: "#06b6d4" },
   { label: "Cottage Cheese",      cagr: 3.57,  years: "2026–2034", source: "Verified Market Reports",   color: C.blue },
+  { label: "Ice Cream",           cagr: 2.90,  years: "2026–2034", source: "IMARC Group",               color: "#38bdf8" },
   { label: "Fluid Milk",          cagr: 1.78,  years: "2026–2034", source: "IMARC Group",               color: C.muted },
 ];
 
