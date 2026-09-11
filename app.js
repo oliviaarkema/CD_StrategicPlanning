@@ -1628,7 +1628,7 @@ function initCompetitive() {
 
   // --- Leaflet map ---
   const map = L.map("compMap", { scrollWheelZoom:false }).setView([44.3,-85.0], 6);
-  L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png?key=CARTO_KEY_PLACEHOLDER", {
+  L.tileLayer(`https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png?key=${CARTO_KEY}`, {
     attribution:'&copy; OpenStreetMap &copy; CARTO', maxZoom:19
   }).addTo(map);
 
