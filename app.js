@@ -1528,6 +1528,8 @@ function initCompetitive() {
       locations:[
         { label:"Nashville", addr:"5875 S M-66 Hwy, Nashville, MI 49073", lat:42.598, lng:-85.088 },
         { label:"Ionia (The Udder Store)", addr:"162 E Tuttle Rd, Ionia, MI 48846", lat:42.981, lng:-85.052 },
+        { label:"Zeeland (MOO-ville West)", addr:"6420 Byron Rd, Zeeland, MI 49464", lat:42.8113, lng:-85.9407 },
+        { label:"Eaton Rapids", addr:"142 S Main St, Eaton Rapids, MI 48827", lat:42.5120, lng:-84.6561 },
       ] },
     { id:"guernsey", name:"Guernsey Farms Dairy", color:"#2b83ba", primary:true,
       fb:28269, ig:9515,
@@ -1548,18 +1550,10 @@ function initCompetitive() {
         { label:"Carleton (farm)", addr:"9334 Finzel Rd, Carleton, MI 48117", lat:42.0503, lng:-83.3946 },
         { label:"Lincoln Park (store)", addr:"1020 Southfield Rd, Lincoln Park, MI 48146", lat:42.2503, lng:-83.1783 },
       ] },
-    { id:"crookedcreek", name:"Crooked Creek Farm Dairy", color:"#6a51a3", primary:false,
-      fb:10192, ig:627,
-      products:["Milk", "Beef", "Ice Cream", "Honey", "Maple Syrup", "Eggs"],
-      locations:[{ label:"Bruce Township", addr:"75960 Brown Rd, Romeo, MI 48065", lat:42.85, lng:-83.03 }] },
     { id:"shuler", name:"Shuler Dairy Farms", color:"#ce6dbd", primary:false,
       fb:3400, ig:315,
       products:["Milk", "Soft Serve"],
       locations:[{ label:"Baroda", addr:"10823 Date Rd, Baroda, MI 49101", lat:41.9639, lng:-86.4833 }] },
-    { id:"ankley", name:"Ankley Family Farm", color:"#b15928", primary:false,
-      fb:12541, ig:2540,
-      products:["Produce", "Flowers", "Baked Goods", "Ice Cream Sandwiches", "Beef", "Eggs", "Honey", "Maple Syrup"],
-      locations:[{ label:"Imlay City (seasonal)", addr:"6767 Clear Lake Rd, Imlay City, MI 48444", lat:43.06, lng:-83.09 }] },
   ];
   const NOTE_FIELDS = [
     ["sales","Sales"], ["strategies","Strategies"], ["mission","Mission / Purpose"],
