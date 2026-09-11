@@ -64,7 +64,8 @@ document.addEventListener("keydown", e => { if (e.key === "Escape") closeNavMenu
 function initSection(name) {
   ({home:initHome, milk:initMilk, animals:initAnimals,
     rawmilk:initRawMilk, plant:initPlant, crops:initCrops, costs:initCosts,
-    market:initMarket, growth:initGrowth, swot:initSwot, trends:initTrends}[name] || (()=>{}))();
+    market:initMarket, competitive:initCompetitive, growth:initGrowth, swot:initSwot,
+    trends:initTrends}[name] || (()=>{}))();
 }
 
 // ─── Print / export current page as PDF ───────────────────────────────────────
@@ -1499,6 +1500,193 @@ function initMarket() {
       <td>${drv}</td><td>${pos}</td></tr>`
     ).join("")}
     </tbody>`;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+//  COMPETITIVE LANDSCAPE
+// ═══════════════════════════════════════════════════════════════════════════════
+function initCompetitive() {
+  // Country Dairy's home base -- 3476 S 80th Ave, New Era, MI 49446.
+  const CD_HOME = { lat: 43.343, lng: -86.345 };
+
+  // Michigan dairy farms/creameries with their own dairy herd AND a dedicated
+  // farm-store or scoop-shop retail location -- not just wholesale/grocery
+  // distribution. Hudsonville is deliberately excluded: it sells only through
+  // third-party retailers (Kroger, Meijer, etc.), with no retail location of
+  // its own. Addresses researched from each business's public listings, Sep 2026.
+  const RETAILERS = [
+    { id:"moomers", name:"Moomers Homemade Ice Cream", color:"#d7191c", primary:true,
+      locations:[{ label:"Traverse City", addr:"7263 N Long Lake Rd, Traverse City, MI 49685", lat:44.746, lng:-85.716 }] },
+    { id:"mooville", name:"Moo-Ville Creamery", color:"#fdae61", primary:true,
+      locations:[{ label:"Nashville", addr:"5875 S M-66 Hwy, Nashville, MI 49073", lat:42.598, lng:-85.088 }] },
+    { id:"guernsey", name:"Guernsey Farms Dairy", color:"#2b83ba", primary:true,
+      locations:[{ label:"Northville", addr:"21300 Novi Rd, Northville, MI 48167", lat:42.4306, lng:-83.483 }] },
+    { id:"houseofflavors", name:"House of Flavors", color:"#8b3fa8", primary:true,
+      locations:[{ label:"Ludington", addr:"402 W Ludington Ave, Ludington, MI 49431", lat:43.955, lng:-86.453 }] },
+    { id:"cooksfarm", name:"Cook's Farm Dairy", color:"#e377c2", primary:true,
+      locations:[{ label:"Ortonville", addr:"2950 E Seymour Lake Rd, Ortonville, MI 48462", lat:42.85, lng:-83.446 }] },
+    { id:"calder", name:"Calder Dairy & Farm", color:"#2ca25f", primary:false,
+      locations:[
+        { label:"Carleton (farm)", addr:"9334 Finzel Rd, Carleton, MI 48117", lat:42.0503, lng:-83.3946 },
+        { label:"Lincoln Park (store)", addr:"1020 Southfield Rd, Lincoln Park, MI 48146", lat:42.2503, lng:-83.1783 },
+      ] },
+    { id:"crookedcreek", name:"Crooked Creek Farm Dairy", color:"#6a51a3", primary:false,
+      locations:[{ label:"Bruce Township", addr:"75960 Brown Rd, Romeo, MI 48065", lat:42.85, lng:-83.03 }] },
+    { id:"shuler", name:"Shuler Dairy Farms", color:"#ce6dbd", primary:false,
+      locations:[{ label:"Baroda", addr:"10823 Date Rd, Baroda, MI 49101", lat:41.9639, lng:-86.4833 }] },
+    { id:"ankley", name:"Ankley Family Farm", color:"#b15928", primary:false,
+      locations:[{ label:"Imlay City (seasonal)", addr:"6767 Clear Lake Rd, Imlay City, MI 48444", lat:43.06, lng:-83.09 }] },
+  ];
+  const NOTE_FIELDS = [
+    ["sales","Sales"], ["strategies","Strategies"], ["mission","Mission / Purpose"],
+    ["differentiators","Differentiators"], ["beatcd","How CD Can Beat Them"],
+  ];
+
+  function haversineMi(lat1, lon1, lat2, lon2) {
+    const R = 3958.8, toRad = d => d*Math.PI/180;
+    const dphi = toRad(lat2-lat1), dlmb = toRad(lon2-lon1);
+    const a = Math.sin(dphi/2)**2 + Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dlmb/2)**2;
+    return 2*R*Math.asin(Math.sqrt(a));
+  }
+  RETAILERS.forEach(r => {
+    r.avgDist = r.locations.reduce((s,l)=> s + haversineMi(CD_HOME.lat, CD_HOME.lng, l.lat, l.lng), 0) / r.locations.length;
+  });
+
+  // --- Toggle chips ---
+  const chips = document.getElementById("compChips");
+  chips.innerHTML = RETAILERS.map(r =>
+    `<button type="button" class="comp-chip active" data-id="${r.id}" style="--chip-color:${r.color}">`+
+      `<span class="dot" style="background:${r.color}"></span>${r.name}</button>`
+  ).join("") +
+    `<div class="comp-chip-actions">`+
+      `<button type="button" id="compChipsAll">All</button>`+
+      `<button type="button" id="compChipsNone">None</button>`+
+    `</div>`;
+
+  // --- Key table ---
+  document.getElementById("compKeyTable").innerHTML =
+    `<thead><tr><th></th><th>Retailer</th><th class="n">Locations</th><th class="n">Avg. distance</th></tr></thead>
+    <tbody>${RETAILERS.map(r => `
+      <tr class="${r.primary ? "" : "comp-other"}">
+        <td><span class="comp-swatch" style="background:${r.color}"></span></td>
+        <td><div class="comp-rname">${r.name}</div><div class="comp-rsub">${r.locations.map(l=>l.label).join(", ")}</div></td>
+        <td class="n">${r.locations.length}</td>
+        <td class="n">${r.avgDist.toFixed(0)} mi</td>
+      </tr>`).join("")}
+    </tbody>`;
+
+  // --- Notes cards (Sales / Strategies / Mission-Purpose / Differentiators / How CD Can Beat Them) ---
+  document.getElementById("compCards").innerHTML = RETAILERS.map(r => `
+    <details class="comp-card" ${r.primary ? "open" : ""}>
+      <summary>
+        <span class="caret"></span>
+        <span class="dot" style="background:${r.color}"></span>
+        <span class="comp-name">${r.name}</span>
+        <span class="comp-meta">${r.locations.length} location${r.locations.length===1?"":"s"} &middot; ${r.avgDist.toFixed(0)} mi from CD</span>
+      </summary>
+      <div class="comp-body">
+        <div class="comp-addrs">${r.locations.map(l=>`<div><b>${l.label}:</b> ${l.addr}</div>`).join("")}</div>
+        <div class="comp-notes-grid">
+          ${NOTE_FIELDS.map(([key,label]) => `
+            <div class="comp-note-block">
+              <h4>${label}</h4>
+              <ul class="comp-note-list" contenteditable="true" data-retailer="${r.id}" data-field="${key}"></ul>
+            </div>`).join("")}
+        </div>
+      </div>
+    </details>
+  `).join("");
+  initCompNotes();
+
+  // --- Leaflet map ---
+  const map = L.map("compMap", { scrollWheelZoom:false }).setView([44.3,-85.0], 6);
+  L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+    attribution:'&copy; OpenStreetMap &copy; CARTO', maxZoom:19
+  }).addTo(map);
+
+  L.circleMarker([CD_HOME.lat, CD_HOME.lng], {
+    radius:9, color:"#fff", weight:2, fillColor:"#074d1a", fillOpacity:1
+  }).bindPopup(`<b>Country Dairy</b><br>New Era, MI &mdash; home base`).addTo(map);
+
+  const layers = {};
+  const allPts = [[CD_HOME.lat, CD_HOME.lng]];
+  RETAILERS.forEach(r => {
+    const group = L.layerGroup();
+    r.locations.forEach(loc => {
+      allPts.push([loc.lat, loc.lng]);
+      L.circleMarker([loc.lat, loc.lng], {
+        radius:7, color:"#fff", weight:1.6, fillColor:r.color, fillOpacity:.9
+      }).bindPopup(
+        `<b>${r.name}</b><br>${loc.label}<br>${loc.addr}<br>`+
+        `<b>${haversineMi(CD_HOME.lat, CD_HOME.lng, loc.lat, loc.lng).toFixed(0)} mi</b> from Country Dairy`
+      ).addTo(group);
+    });
+    group.addTo(map);
+    layers[r.id] = group;
+  });
+
+  setTimeout(() => { map.invalidateSize(); map.fitBounds(L.latLngBounds(allPts).pad(0.12)); }, 60);
+  window.addEventListener("resize", () => map.invalidateSize());
+
+  const legend = L.control({ position:"bottomright" });
+  legend.onAdd = () => {
+    const d = L.DomUtil.create("div","legend");
+    d.innerHTML = `<b>Country Dairy</b>`+
+      `<span style="display:inline-block;width:10px;height:10px;border-radius:50%;`+
+      `background:#074d1a;margin-right:6px;vertical-align:middle"></span>home base`;
+    return d;
+  };
+  legend.addTo(map);
+
+  chips.addEventListener("click", e => {
+    const chip = e.target.closest(".comp-chip[data-id]");
+    if (chip) {
+      const id = chip.dataset.id;
+      const on = chip.classList.toggle("active");
+      chip.classList.toggle("off", !on);
+      if (on) layers[id].addTo(map); else map.removeLayer(layers[id]);
+      return;
+    }
+    if (e.target.id === "compChipsAll" || e.target.id === "compChipsNone") {
+      const show = e.target.id === "compChipsAll";
+      chips.querySelectorAll(".comp-chip[data-id]").forEach(c => {
+        c.classList.toggle("active", show);
+        c.classList.toggle("off", !show);
+        const id = c.dataset.id;
+        if (show) layers[id].addTo(map); else map.removeLayer(layers[id]);
+      });
+    }
+  });
+}
+
+// --- Competitive Landscape notes: contenteditable bullet lists, autosaved
+//     to localStorage so they survive a reload (same pattern as cd_growth_ratings).
+function initCompNotes() {
+  const noteKey = (retailer, field) => `cd_comp_notes_${retailer}_${field}`;
+  document.querySelectorAll(".comp-note-list").forEach(el => {
+    const key = noteKey(el.dataset.retailer, el.dataset.field);
+    const saved = localStorage.getItem(key);
+    if (saved) {
+      el.innerHTML = saved;
+    } else {
+      el.innerHTML = "<li>Click to add a note&hellip;</li>";
+      el.classList.add("placeholder");
+    }
+    el.addEventListener("focus", () => {
+      if (el.classList.contains("placeholder")) {
+        el.innerHTML = "<li></li>";
+        el.classList.remove("placeholder");
+      }
+    });
+    el.addEventListener("input", () => localStorage.setItem(key, el.innerHTML));
+    el.addEventListener("blur", () => {
+      if (el.textContent.trim() === "") {
+        el.innerHTML = "<li>Click to add a note&hellip;</li>";
+        el.classList.add("placeholder");
+        localStorage.removeItem(key);
+      }
+    });
+  });
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════

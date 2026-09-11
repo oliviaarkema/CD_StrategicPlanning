@@ -5,8 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Country Dairy — Strategic Planning</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<!-- Leaflet (Competitive Landscape map) -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <!-- Cache-busting: bump ?v= on this line whenever styles.css changes, so browsers/CDN don't keep serving a stale cached copy after a deploy. -->
-<link rel="stylesheet" href="styles.css?v=5">
+<link rel="stylesheet" href="styles.css?v=6">
 </head>
 <body>
 
@@ -57,6 +62,7 @@
     <button data-section="milk">Milk Products</button>
     <!-- <button data-section="costs">Fixed vs. Variable Costs</button> -->
     <button data-section="market">Market - Demand-Side Scan</button>
+    <button data-section="competitive">Competitive Landscape</button>
     <button data-section="growth" class="nav-disabled">Growth Opportunities</button>
     <button data-section="swot">Team SWOT Analysis</button>
     <button data-section="trends">Dairy Consumer Trends</button>
@@ -854,6 +860,49 @@
 </section>
 
 <!-- ════════════════════════════════════════════
+     COMPETITIVE LANDSCAPE
+══════════════════════════════════════════════ -->
+<section id="sec-competitive" class="page-section">
+  <div class="sec-head">
+    <h2>Competitive Landscape</h2>
+    <p>Michigan dairy farms &amp; creameries with their own dedicated retail location.</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="panel">
+      <div class="panel-head">
+        <h3>Retail locations</h3>
+        <span class="hint">click a chip to show/hide a competitor</span>
+      </div>
+      <div class="comp-chips" id="compChips"></div>
+      <div class="panel-body" style="padding:0">
+        <div id="compMap" class="comp-map"></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head"><h3>Key</h3><span class="hint">locations &amp; distance from Country Dairy</span></div>
+      <div class="panel-body">
+        <div class="tbl-wrap">
+          <table class="dt comp-key-table" id="compKeyTable"></table>
+        </div>
+        <p class="panel-note">Distances are approximate straight-line miles from Country Dairy (3476 S 80th Ave, New Era, MI). &ldquo;Other Michigan dairy farms&rdquo; are creameries with their own dairy herd and a dedicated farm-store or scoop-shop location &mdash; not just wholesale/grocery distribution (e.g. Hudsonville is excluded: it sells only through third-party retailers, with no retail location of its own).</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head">
+      <h3>Competitor notes</h3>
+      <span class="hint">click into a list to add bullet points &mdash; saved in this browser</span>
+    </div>
+    <div class="panel-body">
+      <div id="compCards"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════
      DAIRY CONSUMER TRENDS
 ══════════════════════════════════════════════ -->
 <section id="sec-trends" class="page-section">
@@ -1482,6 +1531,6 @@
 </footer>
 
 <!-- Cache-busting: bump ?v= on this line whenever app.js changes, so browsers/CDN don't keep serving a stale cached copy after a deploy. -->
-<script src="app.js?v=2"></script>
+<script src="app.js?v=3"></script>
 </body>
 </html>
