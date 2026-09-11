@@ -435,6 +435,15 @@ table.dt th.col-ttm{color:var(--kelly)}
 .comp-body{border-top:1px solid var(--border);padding:16px 18px 18px}
 .comp-body .comp-addrs{font-size:.82rem;color:var(--muted);margin:0 0 14px}
 .comp-body .comp-addrs div{margin-bottom:2px}
+.comp-products{margin:0 0 16px}
+.comp-products h4{
+  margin:0 0 6px;font-size:.72rem;text-transform:uppercase;letter-spacing:.5px;color:var(--green-mid);
+}
+.comp-product-tags{display:flex;flex-wrap:wrap;gap:6px}
+.comp-product-tag{
+  font-size:.76rem;padding:3px 10px;border-radius:999px;
+  background:var(--bg);border:1px solid var(--border);color:var(--ink);white-space:nowrap;
+}
 .comp-notes-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
 .comp-note-block h4{
   margin:0 0 6px;font-size:.72rem;text-transform:uppercase;letter-spacing:.5px;color:var(--green-mid);
