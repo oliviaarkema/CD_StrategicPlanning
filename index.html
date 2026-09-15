@@ -618,7 +618,7 @@
     <p>2,500 acres farmed, owned &amp; rented</p>
   </div>
 
-  <div class="stats stats-5">
+  <div class="stats stats-7">
     <div class="stat">
       <div class="num">15</div>
       <div class="lbl">Corn Silage Yield<span class="sub">tons / acre<sup>1</sup></span></div>
@@ -642,6 +642,15 @@
       <div class="lbl">Crops Labor $/cwt<sup>2</sup><span class="sub">TTM Jul 2026 avg &middot; hourly labor only</span></div>
       <div class="delta neu">+1.6% vs TTM Jul 2025 ($0.64)</div>
     </div>
+    <div class="stat">
+      <div class="num">TBD</div>
+      <div class="lbl">Irrigated Acreage<span class="sub">% of total fields</span></div>
+    </div>
+    <div class="stat">
+      <div class="num">2,335</div>
+      <div class="lbl">Acres Needed for Cow Feed<span class="sub">at average yields, per Casey&rsquo;s cow-needs math</span></div>
+      <div class="delta neu">Not much room for error in a bad year</div>
+    </div>
   </div>
 
   <div class="callout">
@@ -650,13 +659,25 @@
     <p>The Michigan state average overstates our gaps: against Oceana County, wheat (60 bu/a) runs 4.3% above the county's 57.5 bu/a average, and grain corn (~150 bu/a, a rough estimate) is within 2% of the county's 152.8 bu/a average, not the double-digit shortfalls the state comparison implied. Corn silage and alfalfa don't have a published county-level yield, so no comparison is shown for those. Crops labor cost holds essentially flat at $0.65/cwt (TTM Jul 2026 vs. $0.64 a year ago).</p>
   </div>
 
-  <div class="panel">
-    <div class="panel-head">
-      <h3>Yield vs Oceana County Benchmark<sup>1</sup></h3>
-      <span class="hint">tons / acre</span>
+  <div class="grid-2">
+    <div class="panel">
+      <div class="panel-head">
+        <h3>Yield vs Oceana County Benchmark<sup>1</sup></h3>
+        <span class="hint">tons / acre</span>
+      </div>
+      <div class="panel-body">
+        <div class="chart-box h260 connected"><canvas id="cropYieldChart"></canvas></div>
+      </div>
     </div>
-    <div class="panel-body">
-      <div class="chart-box h260 connected"><canvas id="cropYieldChart"></canvas></div>
+    <div class="panel">
+      <div class="panel-head">
+        <h3>Crop Acreage Breakdown</h3>
+        <span class="hint">approximate acres by crop</span>
+      </div>
+      <div class="panel-body">
+        <div class="chart-box h260 connected"><canvas id="cropAcreageChart"></canvas></div>
+        <p class="panel-note">Approximate figures: ~1,450 acres corn, ~800 acres alfalfa, 150&ndash;200 acres wheat (shown at the 175-acre midpoint). &ldquo;Other&rdquo; is the remainder against the 2,500 total farmed acres (owned &amp; rented) and isn&rsquo;t its own tracked crop.</p>
+      </div>
     </div>
   </div>
 

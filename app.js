@@ -1026,6 +1026,29 @@ function initCrops() {
       }
     }
   });
+
+  // Approximate acres by crop, per Casey: ~1,450 corn, ~800 alfalfa, 150-200
+  // wheat (midpoint 175 used here). "Other" is the residual against the
+  // section's 2,500 total farmed acres (owned & rented), not a tracked crop.
+  new Chart(document.getElementById("cropAcreageChart"), {
+    type:"pie",
+    data:{
+      labels:["Corn","Alfalfa","Wheat","Other"],
+      datasets:[{
+        data:[1450, 800, 175, 75],
+        backgroundColor:[C.amber, C.kelly, C.mid, C.muted],
+        borderWidth:2,
+        borderColor: getComputedStyle(document.documentElement).getPropertyValue("--panel").trim()
+      }]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{
+        legend:{position:"right"},
+        tooltip:{callbacks:{label: c => `${c.label}: ~${fmt(c.parsed)} acres`}}
+      }
+    }
+  });
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
