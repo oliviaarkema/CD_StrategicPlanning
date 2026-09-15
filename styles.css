@@ -217,6 +217,7 @@ nav.topnav button.nav-disabled.active{opacity:.7;color:var(--muted);border-left-
 .chart-box.h420{height:420px}
 .chart-box.h480{height:480px}
 .chart-box.h560{height:560px}
+.chart-box.h760{height:760px}
 .chart-box.chart-scroll{overflow-y:auto;overflow-x:hidden}
 .chart-inner{position:relative;width:100%}
 .chart-box canvas{filter:grayscale(1);opacity:.35}
@@ -318,14 +319,15 @@ table.dt th.col-ttm{color:var(--kelly)}
 .growth-include input:focus-visible + .switch{outline:2px solid var(--kelly);outline-offset:2px}
 
 /* ── Team SWOT Analysis: Cartesian quadrant map ──
-   Each column (Strengths+Opportunities, Weaknesses+Threats) stacks and sizes
-   independently, so a short quadrant doesn't get stretched to match a taller
-   one in the other column -- it just takes the height its own responses need. */
+   A true 2x2 grid -- Strengths/Weaknesses in row 1, Opportunities/Threats in
+   row 2 -- so all four quadrant cards render at the same size regardless of
+   how much content each one holds. */
 .swot-cartesian{
   display:grid;
   grid-template-columns:96px 1fr 1fr;
-  grid-template-rows:28px auto;
-  gap:8px;
+  grid-template-rows:28px 1fr 1fr;
+  gap:24px 8px;
+  align-items:stretch;
 }
 .swot-col-label{
   grid-row:1;align-self:end;text-align:center;padding-bottom:4px;
@@ -334,19 +336,21 @@ table.dt th.col-ttm{color:var(--kelly)}
 .swot-col-helpful{grid-column:2}
 .swot-col-harmful{grid-column:3}
 .swot-row-labels{
-  grid-row:2;grid-column:1;
+  grid-row:2 / span 2;grid-column:1;
   display:flex;flex-direction:column;justify-content:space-between;align-items:center;
 }
 .swot-row-label{
   text-align:center;font-size:.72rem;text-transform:uppercase;letter-spacing:.6px;
   font-weight:700;color:var(--muted);
 }
-.swot-col{grid-row:2;display:flex;flex-direction:column;gap:20px;min-width:0}
-.swot-col-left{grid-column:2}
-.swot-col-right{grid-column:3}
+.swot-col{display:contents}
+.swot-q-s{grid-row:2;grid-column:2}
+.swot-q-w{grid-row:2;grid-column:3}
+.swot-q-o{grid-row:3;grid-column:2}
+.swot-q-t{grid-row:3;grid-column:3}
 .swot-quad{
   background:var(--panel);border:1px solid var(--border);border-radius:10px;
-  padding:16px;min-width:0;
+  padding:16px;min-width:0;display:flex;flex-direction:column;
 }
 .swot-quad-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
 .swot-quad-head h3{margin:0;font-size:1rem;font-weight:700}

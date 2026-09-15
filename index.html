@@ -63,9 +63,9 @@
     <!-- <button data-section="costs">Fixed vs. Variable Costs</button> -->
     <button data-section="market">Market - Demand-Side Scan</button>
     <button data-section="competitive">Competitive Landscape</button>
-    <button data-section="growth" class="nav-disabled">Growth Opportunities</button>
     <button data-section="swot">Team SWOT Analysis</button>
     <button data-section="trends">Dairy Consumer Trends</button>
+    <button data-section="growth">Growth Opportunities</button>
   </nav>
 </div>
 
@@ -892,7 +892,7 @@
   <div class="panel">
     <div class="panel-head">
       <h3>Competitor notes</h3>
-      <span class="hint">click into a list to add bullet points &mdash; saved in this browser</span>
+      <span class="hint">click into a list to add bullet points &mdash; saved only in the browser; closing or refreshing clears it</span>
     </div>
     <div class="panel-body">
       <div id="compCards"></div>
@@ -915,8 +915,19 @@
       <span class="hint">Third-party market research, forecast windows ~2025/26&ndash;2034/35</span>
     </div>
     <div class="panel-body">
-      <div class="chart-box h560 connected"><canvas id="trendsCagrChart"></canvas></div>
-      <p class="panel-note">Each bar is one third-party publisher&rsquo;s own market-sizing methodology and forecast window (see Appendix below); figures are not additive across categories and will differ from other publishers covering the same category. &ldquo;High-Protein Drinks&rdquo; refers to ready-to-drink (RTD) protein beverages; &ldquo;Non-GMO&rdquo; and &ldquo;Organic Dairy&rdquo; are attribute/label call-outs that cut across several of Country Dairy&rsquo;s existing product lines rather than separate products; &ldquo;Dye-Free&rdquo; is proxied by the natural (non-synthetic) food colors market, the closest tracked category to a no-artificial-dyes claim; &ldquo;UHT / Extended Shelf-Life Milk&rdquo; covers ultra-pasteurized, longer-dated fluid milk as its own tracked category, distinct from the conventional Fluid Milk market below.</p>
+      <div class="chart-box h760 connected"><canvas id="trendsCagrChart"></canvas></div>
+      <p class="panel-note">Each bar is one third-party publisher&rsquo;s own market-sizing methodology and forecast window (see Appendix below); figures are not additive across categories and will differ from other publishers covering the same category. &ldquo;High-Protein Drinks&rdquo; refers to ready-to-drink (RTD) protein beverages, distinct from &ldquo;Protein-Enhanced Milk&rdquo; below, which covers non-single-serve protein/ultra-filtered milk (e.g. Fairlife-style); &ldquo;Non-GMO&rdquo; and &ldquo;Organic Dairy&rdquo; are attribute/label call-outs that cut across several of Country Dairy&rsquo;s existing product lines rather than separate products; &ldquo;Dye-Free&rdquo; is proxied by the natural (non-synthetic) food colors market, the closest tracked category to a no-artificial-dyes claim; &ldquo;Hispanic Cheese&rdquo; is proxied by the broader Hispanic Foods market, the closest tracked category since no publisher issues a dedicated Hispanic-cheese report; &ldquo;Cheese (Commodity/General)&rdquo; is the overall global cheese market, distinct from Specialty Cheese above; &ldquo;UHT / Extended Shelf-Life Milk&rdquo; covers ultra-pasteurized, longer-dated fluid milk as its own tracked category, distinct from the conventional Fluid Milk market below.</p>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head">
+      <h3>How the Typical American Splits Their Dairy Dollar</h3>
+      <span class="hint">Share of per-capita consumption by category</span>
+    </div>
+    <div class="panel-body">
+      <div class="chart-box h360 connected"><canvas id="trendsShareChart"></canvas></div>
+      <p class="panel-note">Share of total U.S. per-capita dairy consumption across these six major categories, based on 2024 USDA Economic Research Service data (127 lbs milk, 41.9 lbs cheese, 14.5 lbs yogurt, 12 lbs ice cream, 6.8 lbs butter, 2.4 lbs cottage cheese per person &mdash; measured in actual product-weight pounds, not milk-equivalent). See Appendix below for source.</p>
     </div>
   </div>
 
@@ -933,7 +944,7 @@
   <div class="panel">
     <div class="panel-head"><h3>Appendix: Data Sources</h3></div>
     <div class="panel-body">
-      <p class="panel-note">CAGR figures come from fourteen different research publishers/reports, each with its own market definition, scope, and base year &mdash; dollar market sizes are noted for context only and are not comparable across categories. Pulled Sep 2026; these are frequently-updated commercial reports, so verify against the publisher&rsquo;s live page before citing externally.</p>
+      <p class="panel-note">CAGR figures come from nineteen different research publishers/reports, each with its own market definition, scope, and base year &mdash; dollar market sizes are noted for context only and are not comparable across categories. Pulled Sep 2026; these are frequently-updated commercial reports, so verify against the publisher&rsquo;s live page before citing externally.</p>
 
       <p class="source-cat">A2 Milk &mdash; 13.77% CAGR, 2026&ndash;2034 (IMARC Group: $17.6B &rarr; $59.5B)</p>
       <ul class="source-list"><li><a href="https://www.imarcgroup.com/a2-milk-market" target="_blank" rel="noopener">imarcgroup.com/a2-milk-market</a></li></ul>
@@ -947,17 +958,32 @@
       <p class="source-cat">Organic Dairy &mdash; 8.18% CAGR, 2026&ndash;2035 (Precedence Research: $34.34B &rarr; $75.38B)</p>
       <ul class="source-list"><li><a href="https://www.precedenceresearch.com/organic-dairy-market" target="_blank" rel="noopener">precedenceresearch.com/organic-dairy-market</a></li></ul>
 
+      <p class="source-cat">Hispanic Cheese (proxied by Hispanic Foods) &mdash; 6.14% CAGR, 2026&ndash;2034 (Fortune Business Insights: $52.80B &rarr; $85.07B)</p>
+      <ul class="source-list"><li><a href="https://www.fortunebusinessinsights.com/hispanic-foods-market-112170" target="_blank" rel="noopener">fortunebusinessinsights.com/hispanic-foods-market-112170</a></li></ul>
+
       <p class="source-cat">Specialty Cheese &mdash; 5.67% CAGR, 2026&ndash;2035 (Precedence Research: $41.13B &rarr; $71.39B)</p>
       <ul class="source-list"><li><a href="https://www.precedenceresearch.com/specialty-cheese-market" target="_blank" rel="noopener">precedenceresearch.com/specialty-cheese-market</a></li></ul>
+
+      <p class="source-cat">Half and Half &mdash; 5.5% CAGR, 2026&ndash;2034 (Verified Market Reports: $2.5B &rarr; $4.0B)</p>
+      <ul class="source-list"><li><a href="https://www.verifiedmarketreports.com/product/half-and-half-cream-market/" target="_blank" rel="noopener">verifiedmarketreports.com/product/half-and-half-cream-market</a></li></ul>
 
       <p class="source-cat">Yogurt &mdash; 5.4% CAGR, 2026&ndash;2035 (Global Market Insights: $144.3B &rarr; $245B)</p>
       <ul class="source-list"><li><a href="https://www.gminsights.com/industry-analysis/yogurt-market" target="_blank" rel="noopener">gminsights.com/industry-analysis/yogurt-market</a></li></ul>
 
+      <p class="source-cat">Coffee Creamer &mdash; 5.37% CAGR, 2026&ndash;2034 (Fortune Business Insights: $5.57B &rarr; $8.47B)</p>
+      <ul class="source-list"><li><a href="https://www.fortunebusinessinsights.com/coffee-creamer-market-116928" target="_blank" rel="noopener">fortunebusinessinsights.com/coffee-creamer-market-116928</a></li></ul>
+
       <p class="source-cat">UHT / Extended Shelf-Life Milk &mdash; 5.28% CAGR, 2026&ndash;2034 (Fortune Business Insights: $82.86B &rarr; $127.86B)</p>
       <ul class="source-list"><li><a href="https://www.fortunebusinessinsights.com/uht-milk-market-116147" target="_blank" rel="noopener">fortunebusinessinsights.com/uht-milk-market-116147</a></li></ul>
 
+      <p class="source-cat">Cheese (Commodity/General) &mdash; 5.00% CAGR, 2026&ndash;2034 (IMARC Group: $98.0B &rarr; $154.4B)</p>
+      <ul class="source-list"><li><a href="https://www.imarcgroup.com/global-cheese-market" target="_blank" rel="noopener">imarcgroup.com/global-cheese-market</a></li></ul>
+
       <p class="source-cat">Dye-Free (proxied by Natural Food Colors) &mdash; 4.86% CAGR, 2026&ndash;2034 (IMARC Group: $2.20B &rarr; $3.50B)</p>
       <ul class="source-list"><li><a href="https://www.imarcgroup.com/natural-food-colors-market" target="_blank" rel="noopener">imarcgroup.com/natural-food-colors-market</a></li></ul>
+
+      <p class="source-cat">Protein-Enhanced Milk (proxied by Ultra-Filtered Milk) &mdash; 4.6% CAGR, 2026&ndash;2032 (Maximize Market Research: $8.74B &rarr; $11.99B)</p>
+      <ul class="source-list"><li><a href="https://www.maximizemarketresearch.com/market-report/global-ultrafiltered-milk-market/69717/" target="_blank" rel="noopener">maximizemarketresearch.com/.../global-ultrafiltered-milk-market</a></li></ul>
 
       <p class="source-cat">Sour Cream &mdash; 4.5% CAGR, 2025&ndash;2034 (Zion Market Research: $1.84B &rarr; $2.94B)</p>
       <ul class="source-list"><li><a href="https://www.zionmarketresearch.com/report/sour-cream-market" target="_blank" rel="noopener">zionmarketresearch.com/report/sour-cream-market</a></li></ul>
@@ -976,6 +1002,9 @@
 
       <p class="source-cat">Fluid Milk &mdash; 1.78% CAGR, 2026&ndash;2034 (IMARC Group: $191.8B &rarr; $226.4B)</p>
       <ul class="source-list"><li><a href="https://www.imarcgroup.com/fluid-milk-market" target="_blank" rel="noopener">imarcgroup.com/fluid-milk-market</a></li></ul>
+
+      <p class="source-cat">How the Typical American Splits Their Dairy Dollar &mdash; 2024 per-capita consumption by category (IDFA, citing USDA Economic Research Service)</p>
+      <ul class="source-list"><li><a href="https://www.idfa.org/news/you-butter-believe-it-butter-consumption-hits-historic-high-as-yogurt-cottage-cheese-and-ice-cream-notch-growth-in-2024" target="_blank" rel="noopener">idfa.org/.../you-butter-believe-it-butter-consumption-hits-historic-high</a></li></ul>
 
       <p class="source-cat">Supporting consumer-trend research</p>
       <ul class="source-list">
@@ -996,9 +1025,9 @@
 <!-- ════════════════════════════════════════════
      POTENTIAL GROWTH OPPORTUNITIES
 ══════════════════════════════════════════════ -->
-<section id="sec-growth" class="page-section section-disabled">
+<section id="sec-growth" class="page-section">
   <div class="sec-head">
-    <h2>Potential Growth Opportunities <span class="onhold-badge">On Hold</span></h2>
+    <h2>Potential Growth Opportunities</h2>
   </div>
 
   <div class="panel">

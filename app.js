@@ -653,8 +653,8 @@ function initAnimals() {
       labels: quarters,
       datasets:[
         {label:"Cows Under 5 MOS", data:calves, backgroundColor:C.kelly,  borderRadius:4},
-        {label:"Cows Over 2 Years", data:culls,  backgroundColor:C.green,  borderRadius:4},
         {label:"Cows 5-24 MOS",    data:steers, backgroundColor:C.muted,  borderRadius:4},
+        {label:"Cows Over 2 Years", data:culls,  backgroundColor:C.green,  borderRadius:4},
       ]
     },
     options:{
@@ -1682,12 +1682,12 @@ function initCompetitive() {
 }
 
 // --- Competitive Landscape notes: contenteditable bullet lists, autosaved
-//     to localStorage so they survive a reload (same pattern as cd_growth_ratings).
+//     to sessionStorage only — cleared on tab close or refresh, never persisted.
 function initCompNotes() {
   const noteKey = (retailer, field) => `cd_comp_notes_${retailer}_${field}`;
   document.querySelectorAll(".comp-note-list").forEach(el => {
     const key = noteKey(el.dataset.retailer, el.dataset.field);
-    const saved = localStorage.getItem(key);
+    const saved = sessionStorage.getItem(key);
     if (saved) {
       el.innerHTML = saved;
     } else {
@@ -1700,12 +1700,12 @@ function initCompNotes() {
         el.classList.remove("placeholder");
       }
     });
-    el.addEventListener("input", () => localStorage.setItem(key, el.innerHTML));
+    el.addEventListener("input", () => sessionStorage.setItem(key, el.innerHTML));
     el.addEventListener("blur", () => {
       if (el.textContent.trim() === "") {
         el.innerHTML = "<li>Click to add a note&hellip;</li>";
         el.classList.add("placeholder");
-        localStorage.removeItem(key);
+        sessionStorage.removeItem(key);
       }
     });
   });
@@ -2035,16 +2035,34 @@ const TRENDS_CAGR_DATA = [
   { label: "Non-GMO",             cagr: 10.8,  years: "2026–2034", source: "IMARC Group",               color: "#0d9488" },
   { label: "High-Protein Drinks", cagr: 8.80,  years: "2026–2034", source: "Fortune Business Insights", color: C.amber },
   { label: "Organic Dairy",       cagr: 8.18,  years: "2026–2035", source: "Precedence Research",       color: C.red },
+  { label: "Hispanic Cheese",     cagr: 6.14,  years: "2026–2034", source: "Fortune Business Insights", color: "#f43f5e" },
   { label: "Specialty Cheese",    cagr: 5.67,  years: "2026–2035", source: "Precedence Research",       color: C.kelly },
+  { label: "Half and Half",       cagr: 5.5,   years: "2026–2034", source: "Verified Market Reports",   color: "#eab308" },
   { label: "Yogurt",              cagr: 5.4,   years: "2026–2035", source: "Global Market Insights",    color: C.mid },
+  { label: "Coffee Creamer",      cagr: 5.37,  years: "2026–2034", source: "Fortune Business Insights", color: "#84cc16" },
   { label: "UHT / Extended Shelf-Life Milk", cagr: 5.28, years: "2026–2034", source: "Fortune Business Insights", color: "#475569" },
+  { label: "Cheese (Commodity/General)", cagr: 5.00, years: "2026–2034", source: "IMARC Group",         color: "#f97316" },
   { label: "Dye-Free",            cagr: 4.86,  years: "2026–2034", source: "IMARC Group",               color: "#db2777" },
+  { label: "Protein-Enhanced Milk", cagr: 4.6, years: "2026–2032", source: "Maximize Market Research",  color: "#a855f7" },
   { label: "Sour Cream",          cagr: 4.5,   years: "2025–2034", source: "Zion Market Research",      color: C.light },
   { label: "Butter",              cagr: 4.34,  years: "2026–2034", source: "Fortune Business Insights", color: C.green },
   { label: "Frozen Yogurt",       cagr: 3.60,  years: "2026–2034", source: "Fortune Business Insights", color: "#06b6d4" },
   { label: "Cottage Cheese",      cagr: 3.57,  years: "2026–2034", source: "Verified Market Reports",   color: C.blue },
   { label: "Ice Cream",           cagr: 2.90,  years: "2026–2034", source: "IMARC Group",               color: "#38bdf8" },
   { label: "Fluid Milk",          cagr: 1.78,  years: "2026–2034", source: "IMARC Group",               color: C.muted },
+];
+
+// U.S. per-capita dairy consumption share by category, 2024 (USDA Economic
+// Research Service data, cited via IDFA's Dec 2025 press release). Figures
+// are actual product-weight pounds per person, not milk-equivalent — see the
+// page's own Appendix panel for the source and the underlying pound values.
+const TRENDS_SHARE_DATA = [
+  { label: "Milk",           lbs: 127.0, color: C.kelly },
+  { label: "Cheese",         lbs: 41.9,  color: C.amber },
+  { label: "Yogurt",         lbs: 14.5,  color: C.blue },
+  { label: "Ice Cream",      lbs: 12.0,  color: "#38bdf8" },
+  { label: "Butter",         lbs: 6.8,   color: C.red },
+  { label: "Cottage Cheese", lbs: 2.4,   color: C.muted },
 ];
 
 function initTrends() {
@@ -2075,6 +2093,34 @@ function initTrends() {
       scales: {
         x: { beginAtZero: true, ticks: { callback: v => v + "%" }, title: { display: true, text: "10-Year CAGR" } },
         y: { grid: { display: false } },
+      },
+    },
+  });
+
+  const shareTotal = TRENDS_SHARE_DATA.reduce((sum, d) => sum + d.lbs, 0);
+  new Chart(document.getElementById("trendsShareChart"), {
+    type: "bar",
+    data: {
+      labels: TRENDS_SHARE_DATA.map(d => d.label),
+      datasets: [{
+        data: TRENDS_SHARE_DATA.map(d => (d.lbs / shareTotal * 100)),
+        backgroundColor: TRENDS_SHARE_DATA.map(d => d.color),
+        borderRadius: 6,
+        maxBarThickness: 60,
+      }],
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: {
+          label: item => `${item.parsed.y.toFixed(1)}% of dairy consumption`,
+          afterLabel: item => `${TRENDS_SHARE_DATA[item.dataIndex].lbs} lbs/person, 2024`,
+        }},
+      },
+      scales: {
+        y: { beginAtZero: true, ticks: { callback: v => v + "%" }, title: { display: true, text: "Share of per-capita consumption" } },
+        x: { grid: { display: false } },
       },
     },
   });
