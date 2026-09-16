@@ -115,6 +115,38 @@ header .header-right b{color:#fff}
 .menu-btn:hover,.menu-btn[aria-expanded="true"]{background:rgba(255,255,255,.24)}
 .menu-btn svg{pointer-events:none}
 
+/* ── Category nav (always-visible strip below the header) ── */
+nav.catnav{
+  display:flex;gap:2px;background:var(--nav-bg);
+  padding:0 28px;
+}
+.catnav-item{position:relative}
+.catnav-btn{
+  border:0;background:transparent;color:rgba(255,255,255,.7);
+  padding:13px 16px;font-size:.8rem;font-weight:700;cursor:pointer;
+  text-transform:uppercase;letter-spacing:.5px;
+  border-bottom:3px solid transparent;
+  transition:color .14s,background .14s,border-color .14s;
+}
+.catnav-btn:hover{color:#fff;background:rgba(255,255,255,.08)}
+.catnav-item.open .catnav-btn,
+.catnav-item.cat-active .catnav-btn{color:#fff;border-bottom-color:var(--kelly)}
+.catnav-sub{
+  position:absolute;top:100%;left:0;
+  background-color:var(--nav-bg);border:1px solid rgba(255,255,255,.1);
+  border-radius:0 0 12px 12px;box-shadow:0 16px 32px rgba(0,0,0,.35);
+  display:flex;flex-direction:column;gap:2px;
+  min-width:240px;max-width:min(280px,calc(100vw - 56px));padding:8px;
+  opacity:0;visibility:hidden;transform:translateY(-6px);
+  transition:opacity .15s ease,transform .15s ease,visibility .15s;
+  z-index:500;
+}
+.catnav-item:last-child .catnav-sub{left:auto;right:0}
+.catnav-item.open .catnav-sub{opacity:1;visibility:visible;transform:translateY(0)}
+@media(hover:hover){
+  .catnav-item:hover .catnav-sub{opacity:1;visibility:visible;transform:translateY(0)}
+}
+
 /* ── Navbar (popout menu, opened from the hamburger button) ── */
 nav.topnav{
   position:absolute;top:calc(100% + 8px);left:28px;
@@ -127,15 +159,18 @@ nav.topnav{
   z-index:500;
 }
 nav.topnav.open{opacity:1;visibility:visible;transform:translateY(0)}
-nav.topnav button{
+nav.topnav button,
+.catnav-sub button{
   border:0;background:transparent;color:rgba(255,255,255,.65);
   padding:11px 14px;font-size:.86rem;font-weight:500;cursor:pointer;
   text-align:left;letter-spacing:.2px;border-radius:7px;
   border-left:3px solid transparent;
   transition:color .14s,background .14s,border-color .14s;
 }
-nav.topnav button:hover{color:#fff;background:rgba(255,255,255,.08)}
-nav.topnav button.active{color:var(--kelly);border-left-color:var(--kelly);font-weight:600;background:rgba(61,174,43,.12)}
+nav.topnav button:hover,
+.catnav-sub button:hover{color:#fff;background:rgba(255,255,255,.08)}
+nav.topnav button.active,
+.catnav-sub button.active{color:var(--kelly);border-left-color:var(--kelly);font-weight:600;background:rgba(61,174,43,.12)}
 nav.topnav button.nav-disabled{opacity:.4;filter:grayscale(1)}
 nav.topnav button.nav-disabled:hover{opacity:.6}
 nav.topnav button.nav-disabled.active{opacity:.7;color:var(--muted);border-left-color:var(--muted);background:rgba(255,255,255,.06)}
@@ -492,6 +527,8 @@ footer{max-width:1200px;margin:0 auto;padding:0 20px 50px;color:var(--muted);fon
   .stat .num{font-size:1.4rem}
   header .header-right .period-badge,header .header-right .print-btn{display:none}
   .panel{scroll-margin-top:190px}
+  nav.catnav{padding:0 10px}
+  .catnav-btn{padding:12px 10px;font-size:.72rem}
 }
 
 /* ── Print / PDF export ── */

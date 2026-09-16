@@ -30,15 +30,17 @@ const sectionInit = {};
 function showSection(name) {
   document.querySelectorAll(".page-section").forEach(s =>
     s.classList.toggle("active", s.id === "sec-" + name));
-  document.querySelectorAll("nav.topnav button").forEach(b =>
+  document.querySelectorAll("nav.topnav button, .catnav-sub button").forEach(b =>
     b.classList.toggle("active", b.dataset.section === name));
+  document.querySelectorAll(".catnav-item").forEach(item =>
+    item.classList.toggle("cat-active", !!item.querySelector(`.catnav-sub button[data-section="${name}"]`)));
   if (!sectionInit[name]) {
     sectionInit[name] = true;
     initSection(name);
   }
 }
-document.querySelectorAll("nav.topnav button").forEach(b =>
-  b.addEventListener("click", () => { showSection(b.dataset.section); closeNavMenu(); }));
+document.querySelectorAll("nav.topnav button, .catnav-sub button").forEach(b =>
+  b.addEventListener("click", () => { closeNavMenu(); closeCatMenus(); showSection(b.dataset.section); }));
 
 // ─── Section nav: hamburger popout menu ────────────────────────────────────────
 const menuBtn = document.getElementById("menuBtn");
@@ -58,7 +60,30 @@ menuBtn.addEventListener("click", e => {
 document.addEventListener("click", e => {
   if (!topnavEl.contains(e.target) && e.target !== menuBtn) closeNavMenu();
 });
-document.addEventListener("keydown", e => { if (e.key === "Escape") closeNavMenu(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") { closeNavMenu(); closeCatMenus(); } });
+
+// ─── Section nav: category popout menu (External / Internal / Future Planning) ──
+const catItems = document.querySelectorAll(".catnav-item");
+function closeCatMenus(except) {
+  catItems.forEach(item => {
+    if (item === except) return;
+    item.classList.remove("open");
+    item.querySelector(".catnav-btn")?.setAttribute("aria-expanded", "false");
+  });
+}
+catItems.forEach(item => {
+  const btn = item.querySelector(".catnav-btn");
+  btn.addEventListener("click", e => {
+    e.stopPropagation();
+    const willOpen = !item.classList.contains("open");
+    closeCatMenus();
+    item.classList.toggle("open", willOpen);
+    btn.setAttribute("aria-expanded", String(willOpen));
+  });
+});
+document.addEventListener("click", e => {
+  if (![...catItems].some(item => item.contains(e.target))) closeCatMenus();
+});
 
 // ─── Init dispatcher ─────────────────────────────────────────────────────────
 function initSection(name) {
