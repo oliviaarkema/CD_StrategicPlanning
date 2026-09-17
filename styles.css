@@ -298,6 +298,11 @@ table.dt.eval-matrix td.eval-cell{text-align:center}
 .eval-swatch[data-state="green"]{background:#3dae2b;border-color:#2f9123}
 .eval-swatch[data-state="yellow"]{background:#eab308;border-color:#ca9006}
 .eval-swatch[data-state="red"]{background:#dc2626;border-color:#b91c1c}
+.eval-clear-btn{
+  border:1px solid var(--border);background:var(--panel);color:var(--green);
+  border-radius:8px;padding:6px 12px;font-size:.8rem;cursor:pointer;
+}
+.eval-clear-btn:hover{background:var(--bg)}
 
 #marketRadiusHeatmap{position:relative;min-height:80px}
 #marketRadiusHeatmap>*{filter:grayscale(1);opacity:.35}

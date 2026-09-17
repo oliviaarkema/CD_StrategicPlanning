@@ -1832,6 +1832,12 @@ function renderIdeaEvalMatrix(ideas) {
       save();
     });
   });
+
+  document.getElementById("evalClearBtn").onclick = () => {
+    document.querySelectorAll("#ideaEvalTable .eval-swatch").forEach(btn => delete btn.dataset.state);
+    for (const idx in evalData) delete evalData[idx];
+    save();
+  };
 }
 
 function initGrowth() {
