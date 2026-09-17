@@ -187,7 +187,7 @@ function initHome() {
         tooltip:{callbacks:{label: c => c.dataset.label + ": " + fmtD(c.parsed.y)}} },
       scales: {
         x: { grid:{color:gridColor()} },
-        y: { grid:{color:gridColor()}, ticks:{callback: v => fmtM(v)}, title:{display:true, text:"Revenue & Costs"} },
+        y: { min:0, grid:{color:gridColor()}, ticks:{callback: v => fmtM(v)}, title:{display:true, text:"Revenue & Costs"} },
         yNet: {
           position:"right", grid:{drawOnChartArea:false},
           ticks:{callback: v => fmtM(v), color:C.blue},
