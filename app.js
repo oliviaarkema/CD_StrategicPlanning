@@ -2271,7 +2271,7 @@ const GANTT_TASKS_BY_AREA = {
     { label:"Launch A2 Milk into key customers (target 20% of CL1)", start:2027, end:2027 },
   ],
   "Regular (GMO) Milk": [
-    { label:"Establish non-GMO feed source(s)", start:2027, end:2027 },
+    { label:"Establish non-non GMO feed source(s)", start:2027, end:2027 },
   ],
   "Expand Ice Cream": [
     { label:"Add cows & milking (120 cows, 2 robots)", start:2026, end:2026 },
@@ -2285,15 +2285,14 @@ const GANTT_TASKS_BY_AREA = {
     { label:"Improve plant efficiency and crop/cow efficiency by 5% (of total cost)", start:2027, end:2027 },
   ],
 };
-// Flatten into rows top-to-bottom, each area preceded by its own header row (no bar).
+// Flatten into rows top-to-bottom, each area preceded by its own header row (no
+// bar) -- Chart.js renders a horizontal bar chart's category index 0 at the
+// top, so this array's order is already the chart's visual top-to-bottom order.
 const GANTT_ROWS = [];
 Object.entries(GANTT_TASKS_BY_AREA).forEach(([area, tasks]) => {
   GANTT_ROWS.push({ area, label:area, isHeader:true });
   tasks.forEach(t => GANTT_ROWS.push({ area, label:"  " + t.label, start:t.start, end:t.end }));
 });
-// Chart.js renders rows bottom-to-top on a horizontal bar chart, so reverse the
-// array to make the areas read top-to-bottom in the order defined above.
-GANTT_ROWS.reverse();
 function initProforma() {
   new Chart(document.getElementById("proformaGanttChart"), {
     type:"bar",
