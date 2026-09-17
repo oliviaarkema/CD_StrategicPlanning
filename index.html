@@ -11,7 +11,7 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <!-- Cache-busting: bump ?v= on this line whenever styles.css changes, so browsers/CDN don't keep serving a stale cached copy after a deploy. -->
-<link rel="stylesheet" href="styles.css?v=12">
+<link rel="stylesheet" href="styles.css?v=13">
 </head>
 <body>
 
@@ -151,7 +151,13 @@
       <span class="hint">Jan 2023 &ndash; Aug 2026</span>
     </div>
     <div class="panel-body">
-      <div class="chart-box h360 connected"><canvas id="homePnlChart"></canvas></div>
+      <div class="pnl-wrap">
+        <div class="chart-box h360 connected"><canvas id="homePnlChart"></canvas></div>
+        <div class="pnl-sidebar">
+          <div class="pnl-year-list" id="pnlYearList"></div>
+          <div class="pnl-streak" id="pnlStreak"></div>
+        </div>
+      </div>
       <p class="panel-note">Monthly net income, green above the line for a profit month and red below for a loss month. 2026 runs through August only (year in progress).</p>
     </div>
   </div>
@@ -1711,6 +1717,6 @@
 
 <!-- Cache-busting: bump ?v= on this line whenever app.js changes, so browsers/CDN don't keep serving a stale cached copy after a deploy. -->
 <script src="carto-key.js?v=1"></script>
-<script src="app.js?v=18"></script>
+<script src="app.js?v=19"></script>
 </body>
 </html>

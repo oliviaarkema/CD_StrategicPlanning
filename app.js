@@ -226,6 +226,24 @@ function initHome() {
     },
   });
 
+  // Net gain/loss per calendar year, summed straight from the monthly figures
+  // above (2026 is a 8-month partial-year total, labeled YTD).
+  const pnlYearGroups = [["2023", 0, 12], ["2024", 12, 24], ["2025", 24, 36], ["2026 YTD", 36, 44]];
+  document.getElementById("pnlYearList").innerHTML = pnlYearGroups.map(([label, start, end]) => {
+    const total = pnlNetIncome.slice(start, end).reduce((s, v) => s + v, 0);
+    const cls = total >= 0 ? "pos" : "neg";
+    const sign = total >= 0 ? "+" : "−";
+    return `<div class="pnl-year-row"><span class="yr">${label}</span><span class="amt ${cls}">${sign}${fmtD(Math.round(Math.abs(total)))}</span></div>`;
+  }).join("");
+
+  // Current profitability streak: consecutive profitable months counting back
+  // from the most recent month on file.
+  let pnlStreak = 0;
+  for (let i = pnlNetIncome.length - 1; i >= 0 && pnlNetIncome[i] >= 0; i--) pnlStreak++;
+  document.getElementById("pnlStreak").textContent = pnlStreak > 0
+    ? `${pnlStreak} month${pnlStreak === 1 ? "" : "s"} and counting of profitability`
+    : "Currently in a loss month";
+
   // Revenue by Source.xlsx — Data sheet, % of Revenue column, TTM Jul 2026.
   new Chart(document.getElementById("homeRevMixChart"), {
     type:"doughnut",
