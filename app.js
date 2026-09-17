@@ -2161,39 +2161,59 @@ function initTrends() {
 // ═══════════════════════════════════════════════════════════════════════════════
 //  STRATEGIC PLAN PRO FORMA
 // ═══════════════════════════════════════════════════════════════════════════════
-// Placeholder/example project roadmap, not a committed plan. One row per task,
-// grouped and colored by project area; [start,end] gives each bar's calendar-year
-// span (a single year if start===end). Calendar Year 2026 = Plan Year 0 (current
-// planning year); Plan Year 1 = 2027, ... Plan Year 5 = 2031.
+// Placeholder/example project roadmap, not a committed plan. Rows are grouped
+// under a bold, colored header row per project area (no bar of its own), with
+// that area's tasks indented underneath; [start,end] gives each bar's calendar-
+// year span (a single year if start===end). Calendar Year 2026 = Plan Year 0
+// (current planning year); Plan Year 1 = 2027, ... Plan Year 5 = 2031.
 const GANTT_AREAS = {
   "Raw Milk":               C.blue,
   "A2 Milk":                C.kelly,
-  "Non-GMO Milk":           C.amber,
+  "Regular (GMO) Milk":     C.amber,
   "Expand Ice Cream":       "#8b5cf6",
   "Efficiency Improvements":"#0d9488",
 };
-const GANTT_TASKS = [
-  { area:"Raw Milk", label:"Add cows & milking (120 cows, 2 robots; ~1,250 total milking cows)", start:2026, end:2026 },
-  { area:"Raw Milk", label:"Add 500 cows + new barn & efficient milking parlor in Montague", start:2028, end:2029 },
-  { area:"A2 Milk", label:"A2 market tests", start:2026, end:2026 },
-  { area:"A2 Milk", label:"Launch A2 Milk into key customers (target 20% of CL1)", start:2027, end:2027 },
-  { area:"Non-GMO Milk", label:"Establish non-GMO feed source(s)", start:2027, end:2027 },
-  { area:"Expand Ice Cream", label:"Add cows & milking (120 cows, 2 robots)", start:2026, end:2026 },
-  { area:"Expand Ice Cream", label:"Research new store/shoppe locations; consider switching ice cream to A2", start:2027, end:2027 },
-  { area:"Expand Ice Cream", label:"Expand CD ice cream retail distribution via CC by 25%", start:2027, end:2027 },
-  { area:"Expand Ice Cream", label:"Establish 2 new farm store/ice cream shoppe locations", start:2028, end:2028 },
-  { area:"Expand Ice Cream", label:"Expand distribution by another 25% (~55% total)", start:2028, end:2028 },
-  { area:"Expand Ice Cream", label:"Establish 2 more (4 total) new locations", start:2029, end:2029 },
-  { area:"Efficiency Improvements", label:"Improve plant efficiency and crop/cow efficiency by 5% (of total cost)", start:2027, end:2027 },
-];
+const GANTT_TASKS_BY_AREA = {
+  "Raw Milk": [
+    { label:"Add cows & milking (120 cows, 2 robots; ~1,250 total milking cows)", start:2026, end:2026 },
+    { label:"Add 500 cows + new barn & efficient milking parlor in Montague", start:2028, end:2029 },
+  ],
+  "A2 Milk": [
+    { label:"A2 market tests", start:2026, end:2026 },
+    { label:"Launch A2 Milk into key customers (target 20% of CL1)", start:2027, end:2027 },
+  ],
+  "Regular (GMO) Milk": [
+    { label:"Establish non-GMO feed source(s)", start:2027, end:2027 },
+  ],
+  "Expand Ice Cream": [
+    { label:"Add cows & milking (120 cows, 2 robots)", start:2026, end:2026 },
+    { label:"Research new store/shoppe locations; consider switching ice cream to A2", start:2027, end:2027 },
+    { label:"Expand CD ice cream retail distribution via CC by 25%", start:2027, end:2027 },
+    { label:"Establish 2 new farm store/ice cream shoppe locations", start:2028, end:2028 },
+    { label:"Expand distribution by another 25% (~55% total)", start:2028, end:2028 },
+    { label:"Establish 2 more (4 total) new locations", start:2029, end:2029 },
+  ],
+  "Efficiency Improvements": [
+    { label:"Improve plant efficiency and crop/cow efficiency by 5% (of total cost)", start:2027, end:2027 },
+  ],
+};
+// Flatten into rows top-to-bottom, each area preceded by its own header row (no bar).
+const GANTT_ROWS = [];
+Object.entries(GANTT_TASKS_BY_AREA).forEach(([area, tasks]) => {
+  GANTT_ROWS.push({ area, label:area, isHeader:true });
+  tasks.forEach(t => GANTT_ROWS.push({ area, label:"  " + t.label, start:t.start, end:t.end }));
+});
+// Chart.js renders rows bottom-to-top on a horizontal bar chart, so reverse the
+// array to make the areas read top-to-bottom in the order defined above.
+GANTT_ROWS.reverse();
 function initProforma() {
   new Chart(document.getElementById("proformaGanttChart"), {
     type:"bar",
     data:{
-      labels: GANTT_TASKS.map(t => t.label),
+      labels: GANTT_ROWS.map(r => r.label),
       datasets: Object.entries(GANTT_AREAS).map(([area,color]) => ({
         label: area,
-        data: GANTT_TASKS.map(t => t.area === area ? [t.start, t.end + 1] : null),
+        data: GANTT_ROWS.map(r => (!r.isHeader && r.area === area) ? [r.start, r.end + 1] : null),
         backgroundColor: color,
         borderRadius: 4,
         barPercentage: 0.6,
@@ -2205,11 +2225,11 @@ function initProforma() {
       plugins:{
         legend:{position:"top"},
         tooltip:{callbacks:{
-          title: items => GANTT_AREAS[items[0].dataset.label] ? items[0].dataset.label : "",
+          title: items => items[0] ? GANTT_ROWS[items[0].dataIndex].area : "",
           label: item => {
-            const t = GANTT_TASKS[item.dataIndex];
-            const yr = t.start === t.end ? `${t.start}` : `${t.start}–${t.end}`;
-            return `${t.label} (${yr})`;
+            const r = GANTT_ROWS[item.dataIndex];
+            const yr = r.start === r.end ? `${r.start}` : `${r.start}–${r.end}`;
+            return `${r.label.trim()} (${yr})`;
           },
         }},
       },
@@ -2220,7 +2240,14 @@ function initProforma() {
           grid:{color:gridColor()},
           title:{display:true, text:"Calendar Year"},
         },
-        y:{grid:{display:false}, ticks:{autoSkip:false}},
+        y:{
+          grid:{display:false},
+          ticks:{
+            autoSkip:false,
+            font: ctx => ({ weight: GANTT_ROWS[ctx.index]?.isHeader ? "700" : "400" }),
+            color: ctx => GANTT_ROWS[ctx.index]?.isHeader ? GANTT_AREAS[GANTT_ROWS[ctx.index].area] : textColor(),
+          },
+        },
       },
     },
   });
