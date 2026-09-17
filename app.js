@@ -2303,7 +2303,8 @@ function initProforma() {
         data: GANTT_ROWS.map(r => (!r.isHeader && r.area === area) ? [r.start, r.end + 1] : null),
         backgroundColor: color,
         borderRadius: 4,
-        barPercentage: 0.6,
+        barPercentage: 0.9,
+        categoryPercentage: 0.9,
       })),
     },
     options:{
