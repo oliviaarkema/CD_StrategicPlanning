@@ -163,22 +163,17 @@ function initHome() {
     2585382, 2303469, 2303836, 2609718, 2088374, 2216423,
     1608831, 1584523, 1734346, 1971756, 1830498, 1891915,
   ];
-  const netIncome = rev.map((r,i) => r - cost[i]);
-
   new Chart(document.getElementById("homeRevChart"), {
     type: "line",
     data: {
       labels: months,
       datasets: [
-        { label:"Revenue", data: rev, yAxisID:"y",
+        { label:"Revenue", data: rev,
           borderColor: C.kelly, backgroundColor:"rgba(61,174,43,0.12)",
           fill: true, tension:.35, pointRadius:3, pointHoverRadius:5 },
-        { label:"Costs", data: cost, yAxisID:"y",
+        { label:"Costs", data: cost,
           borderColor: C.muted, backgroundColor:"transparent",
           borderDash:[5,4], tension:.35, pointRadius:3, pointHoverRadius:5 },
-        { label:"Net Income", data: netIncome, yAxisID:"yNet",
-          borderColor: C.blue, backgroundColor:"rgba(37,99,235,0.15)",
-          fill:"origin", tension:.35, pointRadius:3, pointHoverRadius:5 },
       ]
     },
     options: {
@@ -187,14 +182,48 @@ function initHome() {
         tooltip:{callbacks:{label: c => c.dataset.label + ": " + fmtD(c.parsed.y)}} },
       scales: {
         x: { grid:{color:gridColor()} },
-        y: { min:0, grid:{color:gridColor()}, ticks:{callback: v => fmtM(v)}, title:{display:true, text:"Revenue & Costs"} },
-        yNet: {
-          position:"right", grid:{drawOnChartArea:false},
-          ticks:{callback: v => fmtM(v), color:C.blue},
-          title:{display:true, text:"Net Income", color:C.blue},
-        },
+        y: { min:0, grid:{color:gridColor()}, ticks:{callback: v => fmtM(v)} },
       }
     }
+  });
+
+  // CD Total Revenue and Net Income 2023 - 2026.xlsx, monthly Net Income, Jan
+  // 2023 - Aug 2026 (2026 stops at Aug, the year still in progress). Separate
+  // source file/basis from the Monthly Revenue vs. Operating Costs chart above
+  // -- see footnote 7.
+  const pnlMonths = [
+    "Jan '23","Feb '23","Mar '23","Apr '23","May '23","Jun '23","Jul '23","Aug '23","Sep '23","Oct '23","Nov '23","Dec '23",
+    "Jan '24","Feb '24","Mar '24","Apr '24","May '24","Jun '24","Jul '24","Aug '24","Sep '24","Oct '24","Nov '24","Dec '24",
+    "Jan '25","Feb '25","Mar '25","Apr '25","May '25","Jun '25","Jul '25","Aug '25","Sep '25","Oct '25","Nov '25","Dec '25",
+    "Jan '26","Feb '26","Mar '26","Apr '26","May '26","Jun '26","Jul '26","Aug '26",
+  ];
+  const pnlNetIncome = [
+    178562.86, 77744.12, 120717.06, 6054.27, 3565.93, -884771.40, 37075.40, 64933.06, -171858.89, -30190.65, 599148.06, -149132.48,
+    24499.94, -36419.00, -96321.94, 32644.96, 82970.92, -236364.37, 206345.39, -41770.50, -93689.06, 147767.62, 7977.36, -88376.86,
+    -71399.92, -63833.04, 144666.02, 72507.15, 36346.24, 67570.59, 12334.43, 127204.00, -75242.33, -225159.00, -166455.00, 176125.13,
+    129029.30, 31617.16, 186850.85, 65938.00, 166727.00, 181125.00, 256858.00, 83671.00,
+  ];
+  new Chart(document.getElementById("homePnlChart"), {
+    type:"bar",
+    data:{
+      labels: pnlMonths,
+      datasets:[{
+        label:"Net Income", data: pnlNetIncome,
+        backgroundColor: pnlNetIncome.map(v => v >= 0 ? C.kelly : C.red),
+        borderRadius:3,
+      }],
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{label: c => "Net Income: " + fmtD(c.parsed.y)}},
+      },
+      scales:{
+        x:{grid:{display:false}, ticks:{autoSkip:true, maxRotation:0}},
+        y:{grid:{color:gridColor()}, ticks:{callback: v => (v<0?"-$":"$") + (Math.abs(v)/1000).toFixed(0) + "K"}},
+      },
+    },
   });
 
   // Revenue by Source.xlsx — Data sheet, % of Revenue column, TTM Jul 2026.

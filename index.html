@@ -146,6 +146,17 @@
   </div>
 
   <div class="panel">
+    <div class="panel-head">
+      <h3>Profit &amp; Loss by Month<sup>7</sup></h3>
+      <span class="hint">Jan 2023 &ndash; Aug 2026</span>
+    </div>
+    <div class="panel-body">
+      <div class="chart-box h360 connected"><canvas id="homePnlChart"></canvas></div>
+      <p class="panel-note">Monthly net income, green above the line for a profit month and red below for a loss month. 2026 runs through August only (year in progress).</p>
+    </div>
+  </div>
+
+  <div class="panel">
     <div class="panel-head"><h3>Key Metrics at a Glance</h3></div>
     <div class="panel-body">
       <div class="tbl-wrap">
@@ -170,6 +181,7 @@
   <p class="panel-note"><sup>4</sup> Net Income (all sources) includes Other Income and Other Expenses (e.g. interest payments and patronage dividends from Greenstone) that Revenue (Ordinary Income) does not, so the two stat cards above aren't on the same basis and shouldn't be netted against each other; the Executive Summary's net income figure uses this same all-sources basis. Revenue (Ordinary Income) matches the Total Revenue figure in the Key Metrics table below; Net Income (all sources) does not match that table's Total Revenue &minus; Total Costs, which is Ordinary-Income-basis net income ($857,762).</p>
   <p class="panel-note"><sup>5</sup> 0.191 hrs/cwt, TTM Jul 2026 (63,209 plant hours &divide; 330,273 cwt processed). No prior-year figure available yet: the only 2024 data on file is a single blended "2024 average," not actual month-by-month figures. Source: Paul, Aug 2026 (Monthly Gallons Produced &amp; Monthly Plant Hours).</p>
   <p class="panel-note"><sup>6</sup> Most of the gross-margin improvement is a bookkeeping change, not new efficiency: through December 2025 the books credited Casey for raw milk production and debited Nate for the cost as an offsetting wash entry that inflated Revenue and COGS equally; that practice stopped in January 2026, which is why COGS appears to drop sharply and gross margin appears to jump (70.0% to 83.0%). Operating margin isn't distorted by this, since it reduces to net income &divide; revenue regardless of classification.</p>
+  <p class="panel-note"><sup>7</sup> From <em>CD Total Revenue and Net Income 2023 - 2026.xlsx</em>. This is a longer, straight monthly net-income history (Jan 2023 &ndash; Aug 2026) on its own basis from a separate source file, so individual months won't necessarily match the Monthly Revenue vs. Operating Costs chart above (a shorter TTM Jul 2024&ndash;Jun 2026 window built from <em>Monthly Revenue vs. Operating Costs.xlsx</em>, with its own wash-entry restatement noted there).</p>
 </section>
 
 
@@ -1699,6 +1711,6 @@
 
 <!-- Cache-busting: bump ?v= on this line whenever app.js changes, so browsers/CDN don't keep serving a stale cached copy after a deploy. -->
 <script src="carto-key.js?v=1"></script>
-<script src="app.js?v=17"></script>
+<script src="app.js?v=18"></script>
 </body>
 </html>
