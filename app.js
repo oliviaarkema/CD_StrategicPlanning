@@ -30,7 +30,7 @@ const sectionInit = {};
 function showSection(name) {
   document.querySelectorAll(".page-section").forEach(s =>
     s.classList.toggle("active", s.id === "sec-" + name));
-  document.querySelectorAll("nav.topnav button, .catnav-sub button").forEach(b =>
+  document.querySelectorAll(".catnav-sub button").forEach(b =>
     b.classList.toggle("active", b.dataset.section === name));
   document.querySelectorAll(".catnav-item").forEach(item =>
     item.classList.toggle("cat-active", !!item.querySelector(`.catnav-sub button[data-section="${name}"]`)));
@@ -39,28 +39,10 @@ function showSection(name) {
     initSection(name);
   }
 }
-document.querySelectorAll("nav.topnav button, .catnav-sub button").forEach(b =>
-  b.addEventListener("click", () => { closeNavMenu(); closeCatMenus(); showSection(b.dataset.section); }));
+document.querySelectorAll(".catnav-sub button").forEach(b =>
+  b.addEventListener("click", () => { closeCatMenus(); showSection(b.dataset.section); }));
 
-// ─── Section nav: hamburger popout menu ────────────────────────────────────────
-const menuBtn = document.getElementById("menuBtn");
-const topnavEl = document.getElementById("topnav");
-function closeNavMenu() {
-  topnavEl.classList.remove("open");
-  menuBtn.setAttribute("aria-expanded", "false");
-}
-function openNavMenu() {
-  topnavEl.classList.add("open");
-  menuBtn.setAttribute("aria-expanded", "true");
-}
-menuBtn.addEventListener("click", e => {
-  e.stopPropagation();
-  topnavEl.classList.contains("open") ? closeNavMenu() : openNavMenu();
-});
-document.addEventListener("click", e => {
-  if (!topnavEl.contains(e.target) && e.target !== menuBtn) closeNavMenu();
-});
-document.addEventListener("keydown", e => { if (e.key === "Escape") { closeNavMenu(); closeCatMenus(); } });
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeCatMenus(); });
 
 // ─── Section nav: category popout menu (External / Internal / Future Planning) ──
 const catItems = document.querySelectorAll(".catnav-item");

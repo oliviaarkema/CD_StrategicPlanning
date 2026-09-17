@@ -106,15 +106,6 @@ header .header-right b{color:#fff}
 .print-btn:hover{background:rgba(255,255,255,.24)}
 .print-btn svg{pointer-events:none}
 
-.menu-btn{
-  display:flex;align-items:center;justify-content:center;
-  width:32px;height:32px;padding:0;border:0;border-radius:8px;
-  background:rgba(255,255,255,.12);color:#fff;cursor:pointer;
-  transition:background .15s ease;
-}
-.menu-btn:hover,.menu-btn[aria-expanded="true"]{background:rgba(255,255,255,.24)}
-.menu-btn svg{pointer-events:none}
-
 /* ── Category nav (always-visible strip below the header) ── */
 nav.catnav{
   display:flex;gap:2px;background:var(--nav-bg);
@@ -147,19 +138,6 @@ nav.catnav{
   .catnav-item:hover .catnav-sub{opacity:1;visibility:visible;transform:translateY(0)}
 }
 
-/* ── Navbar (popout menu, opened from the hamburger button) ── */
-nav.topnav{
-  position:absolute;top:calc(100% + 8px);left:28px;
-  background-color:var(--nav-bg);border:1px solid rgba(255,255,255,.1);
-  border-radius:12px;box-shadow:0 16px 32px rgba(0,0,0,.35);
-  display:flex;flex-direction:column;gap:2px;
-  min-width:230px;padding:8px;
-  opacity:0;visibility:hidden;transform:translateY(-6px);
-  transition:opacity .15s ease,transform .15s ease,visibility .15s;
-  z-index:500;
-}
-nav.topnav.open{opacity:1;visibility:visible;transform:translateY(0)}
-nav.topnav button,
 .catnav-sub button{
   border:0;background:transparent;color:rgba(255,255,255,.65);
   padding:11px 14px;font-size:.86rem;font-weight:500;cursor:pointer;
@@ -167,13 +145,8 @@ nav.topnav button,
   border-left:3px solid transparent;
   transition:color .14s,background .14s,border-color .14s;
 }
-nav.topnav button:hover,
 .catnav-sub button:hover{color:#fff;background:rgba(255,255,255,.08)}
-nav.topnav button.active,
 .catnav-sub button.active{color:var(--kelly);border-left-color:var(--kelly);font-weight:600;background:rgba(61,174,43,.12)}
-nav.topnav button.nav-disabled{opacity:.4;filter:grayscale(1)}
-nav.topnav button.nav-disabled:hover{opacity:.6}
-nav.topnav button.nav-disabled.active{opacity:.7;color:var(--muted);border-left-color:var(--muted);background:rgba(255,255,255,.06)}
 
 /* ── Sections ── */
 .page-section{display:none;max-width:1200px;margin:0 auto;padding:28px 20px 60px}
