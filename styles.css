@@ -217,6 +217,7 @@ nav.catnav{
 .source-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:.85rem}
 .source-list a{color:var(--kelly);text-decoration:none;font-weight:600}
 .source-list a:hover{text-decoration:underline}
+.value-text{font-size:.875rem;color:var(--ink);line-height:1.65;margin:0}
 .chart-box{position:relative}
 .chart-box.h240{height:240px}
 .chart-box.h280{height:280px}
