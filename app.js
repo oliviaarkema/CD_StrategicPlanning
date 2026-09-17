@@ -34,6 +34,8 @@ function showSection(name) {
     b.classList.toggle("active", b.dataset.section === name));
   document.querySelectorAll(".catnav-item").forEach(item =>
     item.classList.toggle("cat-active", !!item.querySelector(`.catnav-sub button[data-section="${name}"]`)));
+  const footerPeriod = document.getElementById("footerPeriod");
+  if (footerPeriod) footerPeriod.hidden = (name === "proforma");
   if (!sectionInit[name]) {
     sectionInit[name] = true;
     initSection(name);
@@ -72,7 +74,7 @@ function initSection(name) {
   ({home:initHome, milk:initMilk, animals:initAnimals,
     rawmilk:initRawMilk, plant:initPlant, crops:initCrops, costs:initCosts,
     market:initMarket, competitive:initCompetitive, growth:initGrowth, swot:initSwot,
-    trends:initTrends}[name] || (()=>{}))();
+    trends:initTrends, proforma:initProforma}[name] || (()=>{}))();
 }
 
 // ─── Print / export current page as PDF ───────────────────────────────────────
@@ -2151,6 +2153,74 @@ function initTrends() {
       scales: {
         y: { beginAtZero: true, ticks: { callback: v => v + "%" }, title: { display: true, text: "Share of per-capita consumption" } },
         x: { grid: { display: false } },
+      },
+    },
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+//  STRATEGIC PLAN PRO FORMA
+// ═══════════════════════════════════════════════════════════════════════════════
+// Placeholder/example project roadmap, not a committed plan. One row per task,
+// grouped and colored by project area; [start,end] gives each bar's calendar-year
+// span (a single year if start===end). Calendar Year 2026 = Plan Year 0 (current
+// planning year); Plan Year 1 = 2027, ... Plan Year 5 = 2031.
+const GANTT_AREAS = {
+  "Raw Milk":               C.blue,
+  "A2 Milk":                C.kelly,
+  "Non-GMO Milk":           C.amber,
+  "Expand Ice Cream":       "#8b5cf6",
+  "Efficiency Improvements":"#0d9488",
+};
+const GANTT_TASKS = [
+  { area:"Raw Milk", label:"Add cows & milking (120 cows, 2 robots; ~1,250 total milking cows)", start:2026, end:2026 },
+  { area:"Raw Milk", label:"Add 500 cows + new barn & efficient milking parlor in Montague", start:2028, end:2029 },
+  { area:"A2 Milk", label:"A2 market tests", start:2026, end:2026 },
+  { area:"A2 Milk", label:"Launch A2 Milk into key customers (target 20% of CL1)", start:2027, end:2027 },
+  { area:"Non-GMO Milk", label:"Establish non-GMO feed source(s)", start:2027, end:2027 },
+  { area:"Expand Ice Cream", label:"Add cows & milking (120 cows, 2 robots)", start:2026, end:2026 },
+  { area:"Expand Ice Cream", label:"Research new store/shoppe locations; consider switching ice cream to A2", start:2027, end:2027 },
+  { area:"Expand Ice Cream", label:"Expand CD ice cream retail distribution via CC by 25%", start:2027, end:2027 },
+  { area:"Expand Ice Cream", label:"Establish 2 new farm store/ice cream shoppe locations", start:2028, end:2028 },
+  { area:"Expand Ice Cream", label:"Expand distribution by another 25% (~55% total)", start:2028, end:2028 },
+  { area:"Expand Ice Cream", label:"Establish 2 more (4 total) new locations", start:2029, end:2029 },
+  { area:"Efficiency Improvements", label:"Improve plant efficiency and crop/cow efficiency by 5% (of total cost)", start:2027, end:2027 },
+];
+function initProforma() {
+  new Chart(document.getElementById("proformaGanttChart"), {
+    type:"bar",
+    data:{
+      labels: GANTT_TASKS.map(t => t.label),
+      datasets: Object.entries(GANTT_AREAS).map(([area,color]) => ({
+        label: area,
+        data: GANTT_TASKS.map(t => t.area === area ? [t.start, t.end + 1] : null),
+        backgroundColor: color,
+        borderRadius: 4,
+        barPercentage: 0.6,
+      })),
+    },
+    options:{
+      indexAxis:"y",
+      responsive:true, maintainAspectRatio:false,
+      plugins:{
+        legend:{position:"top"},
+        tooltip:{callbacks:{
+          title: items => GANTT_AREAS[items[0].dataset.label] ? items[0].dataset.label : "",
+          label: item => {
+            const t = GANTT_TASKS[item.dataIndex];
+            const yr = t.start === t.end ? `${t.start}` : `${t.start}–${t.end}`;
+            return `${t.label} (${yr})`;
+          },
+        }},
+      },
+      scales:{
+        x:{
+          min:2026, max:2032,
+          ticks:{ stepSize:1, callback:v => Number.isInteger(v) ? String(v) : "" },
+          grid:{color:gridColor()},
+          title:{display:true, text:"Calendar Year"},
+        },
+        y:{grid:{display:false}, ticks:{autoSkip:false}},
       },
     },
   });
