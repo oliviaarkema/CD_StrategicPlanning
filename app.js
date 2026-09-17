@@ -30,10 +30,10 @@ const sectionInit = {};
 function showSection(name) {
   document.querySelectorAll(".page-section").forEach(s =>
     s.classList.toggle("active", s.id === "sec-" + name));
-  document.querySelectorAll(".catnav-sub button").forEach(b =>
+  document.querySelectorAll(".catnav-sub button, .catnav-link").forEach(b =>
     b.classList.toggle("active", b.dataset.section === name));
   document.querySelectorAll(".catnav-item").forEach(item =>
-    item.classList.toggle("cat-active", !!item.querySelector(`.catnav-sub button[data-section="${name}"]`)));
+    item.classList.toggle("cat-active", !!item.querySelector(`[data-section="${name}"]`)));
   const footerPeriod = document.getElementById("footerPeriod");
   if (footerPeriod) footerPeriod.hidden = (name === "proforma");
   if (!sectionInit[name]) {
@@ -41,12 +41,12 @@ function showSection(name) {
     initSection(name);
   }
 }
-document.querySelectorAll(".catnav-sub button").forEach(b =>
+document.querySelectorAll(".catnav-sub button, .catnav-link").forEach(b =>
   b.addEventListener("click", () => { closeCatMenus(); showSection(b.dataset.section); }));
 
 document.addEventListener("keydown", e => { if (e.key === "Escape") closeCatMenus(); });
 
-// ─── Section nav: category popout menu (External / Internal / Future Planning) ──
+// ─── Section nav: category popout menu (Internal / External / Future Planning) ──
 const catItems = document.querySelectorAll(".catnav-item");
 function closeCatMenus(except) {
   catItems.forEach(item => {
@@ -56,6 +56,8 @@ function closeCatMenus(except) {
   });
 }
 catItems.forEach(item => {
+  const sub = item.querySelector(".catnav-sub");
+  if (!sub) return; // standalone link (Business Overview) -- no dropdown to toggle
   const btn = item.querySelector(".catnav-btn");
   btn.addEventListener("click", e => {
     e.stopPropagation();
@@ -126,10 +128,10 @@ function initHome() {
   document.getElementById("h-ni-chg").textContent = homeNetIncomeChg.toFixed(1) + "%";
   document.getElementById("h-revenue").textContent   = "$25,483,840";
   document.getElementById("h-revenue-d").textContent = "▼ 2.3% vs Annual Jul 2025 ($26,079,541)";
-  // Milk Sold = Raw Milk Production page's Annual Production, converted to cwt
-  // (4,200,548 / 4,020,672 gal at 8.6 lbs/gal, same TTM windows).
-  document.getElementById("h-cwt").textContent   = "361,247";
-  document.getElementById("h-cwt-d").textContent = "▲ 4.5% vs TTM Jul 2025 (345,778)";
+  // Milk Produced = Raw Milk Production page's Annual Production stat card,
+  // same figures/TTM windows, shown in gallons for consistency across pages.
+  document.getElementById("h-gal").textContent   = "4,200,548";
+  document.getElementById("h-gal-d").textContent = "▲ 4.5% vs TTM Jul 2025 (4,020,672)";
   document.getElementById("h-cows").textContent  = "1,085";
   document.getElementById("h-cows-d").textContent= "▲ 7.5% vs year ago (1,009)";
   document.getElementById("h-acres").textContent = "2,500";
@@ -168,13 +170,13 @@ function initHome() {
     data: {
       labels: months,
       datasets: [
-        { label:"Revenue", data: rev,
+        { label:"Revenue", data: rev, yAxisID:"y",
           borderColor: C.kelly, backgroundColor:"rgba(61,174,43,0.12)",
           fill: true, tension:.35, pointRadius:3, pointHoverRadius:5 },
-        { label:"Costs", data: cost,
+        { label:"Costs", data: cost, yAxisID:"y",
           borderColor: C.muted, backgroundColor:"transparent",
           borderDash:[5,4], tension:.35, pointRadius:3, pointHoverRadius:5 },
-        { label:"Net Income", data: netIncome,
+        { label:"Net Income", data: netIncome, yAxisID:"yNet",
           borderColor: C.blue, backgroundColor:"rgba(37,99,235,0.15)",
           fill:"origin", tension:.35, pointRadius:3, pointHoverRadius:5 },
       ]
@@ -185,7 +187,12 @@ function initHome() {
         tooltip:{callbacks:{label: c => c.dataset.label + ": " + fmtD(c.parsed.y)}} },
       scales: {
         x: { grid:{color:gridColor()} },
-        y: { grid:{color:gridColor()}, ticks:{callback: v => fmtM(v)} }
+        y: { grid:{color:gridColor()}, ticks:{callback: v => fmtM(v)}, title:{display:true, text:"Revenue & Costs"} },
+        yNet: {
+          position:"right", grid:{drawOnChartArea:false},
+          ticks:{callback: v => fmtM(v), color:C.blue},
+          title:{display:true, text:"Net Income", color:C.blue},
+        },
       }
     }
   });
@@ -229,7 +236,6 @@ function initHome() {
   // to Net Income / Revenue regardless of the COGS/Expenses split, so it isn't
   // distorted by the reclassification.
   const finRevenue = 25483840, finRevenuePrior = 26079541;
-  const finCogs = 4341828, finCogsPrior = 7826513;
   const finCosts = 24626078, finCostsPrior = 25656521;
   const pctChg = (cur,prior) => { const p = (cur-prior)/prior*100; return (p>=0?"+":"")+p.toFixed(1)+"%"; };
   const pctPts = (cur,prior) => { const p = cur-prior; return (p>=0?"+":"")+p.toFixed(1)+" pts"; };
@@ -262,7 +268,6 @@ function initHome() {
       ["Plant","Labor Hrs/cwt<sup>5</sup>", "0.191"],
       // Confirmed against Casey's TTM Ordinary Income/COGS/Expenses figures.
       ["Financials","Total Revenue (Ordinary Income)", fmtM(finRevenue), fmtM(finRevenuePrior), pctChg(finRevenue,finRevenuePrior)],
-      ["Financials","COGS", fmtM(finCogs), fmtM(finCogsPrior), pctChg(finCogs,finCogsPrior)],
       ["Financials","Total Costs (COGS + OPEx)", fmtM(finCosts), fmtM(finCostsPrior), pctChg(finCosts,finCostsPrior)],
       ["Financials","Operating Margin", om26.toFixed(1)+"%", om25.toFixed(1)+"%", pctPts(om26,om25)],
     ].map(([a,m,cur,prior,chg,pending]) =>
@@ -451,9 +456,20 @@ const COPACK_SKUS = [
   { name:"Vara Juice 2.5 GAL CAN Premium Vanilla Soft Serve Mix, price/unit", qty:792, rev:13519.41, sizeGal:2.5 },
 ];
 
+// USDA Federal Milk Marketing Order class, tagged per SKU for the All Dairy
+// Products chart. Assigned by source category, with two name-based overrides:
+// whipping cream in MILK_SKUS is a cream product (Class II), not drinking
+// milk, and eggnog in COPACK_SKUS is Class I like the rest of the eggnog
+// line, unlike the dips/mixes that make up the rest of that category.
+const MILK_CLASS_COLORS = { I:C.blue, II:C.kelly, III:C.amber, IV:"#8b5cf6" };
 const ALL_DAIRY_SKUS = [
-  ...MILK_SKUS, ...ICE_CREAM_SKUS, ...SOURCREAM_SKUS, ...SOFTSERVE_SKUS,
-  ...BUTTER_SKUS, ...OTHER_DAIRY_SKUS, ...COPACK_SKUS,
+  ...MILK_SKUS.map(s => ({ ...s, milkClass: /WHIP|WHP CRM/i.test(s.name) ? "II" : "I" })),
+  ...ICE_CREAM_SKUS.map(s => ({ ...s, milkClass:"II" })),
+  ...SOURCREAM_SKUS.map(s => ({ ...s, milkClass:"II" })),
+  ...SOFTSERVE_SKUS.map(s => ({ ...s, milkClass:"II" })),
+  ...BUTTER_SKUS.map(s => ({ ...s, milkClass:"IV" })),
+  ...OTHER_DAIRY_SKUS.map(s => ({ ...s, milkClass:"I" })),
+  ...COPACK_SKUS.map(s => ({ ...s, milkClass: /EGG ?NOG/i.test(s.name) ? "I" : "II" })),
 ];
 
 // Monthly Revenue of milk products only (the "Milk Products" category above, i.e.
@@ -527,11 +543,14 @@ function productChartValue(sku, rankBy) {
 // Shared by the milk-only and all-dairy-products charts (same rankings/calcs);
 // state is {canvasId, innerId, instance} so each chart keeps its own Chart.js
 // instance to destroy/redraw on toggle.
-function renderProductChart(state, skus, rankBy) {
+// colorBySkus: pass ALL_DAIRY_SKUS (or any SKU list carrying a .milkClass) to
+// color each bar by its USDA milk class instead of the flat default color.
+function renderProductChart(state, skus, rankBy, colorByClass) {
   const eligible = rankBy === "ppg" ? skus.filter(s => s.sizeGal != null) : skus;
   const sorted = [...eligible].sort((a,b) => productChartValue(b,rankBy) - productChartValue(a,rankBy));
   const labels = sorted.map(p => p.name);
   const data   = sorted.map(p => productChartValue(p, rankBy));
+  const colors = colorByClass ? sorted.map(p => MILK_CLASS_COLORS[p.milkClass] || C.green) : C.green;
 
   // Inner container is taller than its scrolling wrapper so every SKU stays
   // legible; the wrapper (h420, overflow-y:auto) turns that into a scrollable window.
@@ -544,7 +563,7 @@ function renderProductChart(state, skus, rankBy) {
     type:"bar",
     data:{
       labels, datasets:[{
-        data, backgroundColor: C.green, borderRadius:5,
+        data, backgroundColor: colors, borderRadius:5,
         label: datasetLabel
       }]
     },
@@ -558,6 +577,7 @@ function renderProductChart(state, skus, rankBy) {
               `Price/Unit: $${(sku.rev/sku.qty).toFixed(2)}${sku.sizeGal ? ` (${sku.sizeGal} gal)` : ""}`];
             if (sku.sizeGal) lines.push(`Price/Gallon: $${((sku.rev/sku.qty)/sku.sizeGal).toFixed(3)}`);
             else lines.push("Price/Gallon: n/a (no reliable pack size)");
+            if (sku.milkClass) lines.push(`Milk Class: ${sku.milkClass}`);
             return lines;
           }
         }} },
@@ -572,7 +592,7 @@ function renderProductChart(state, skus, rankBy) {
 const milkProdChartState = {canvasId:"milkProdChart", innerId:"milkProdChartInner", instance:null};
 const allProdChartState  = {canvasId:"allProdChart",  innerId:"allProdChartInner",  instance:null};
 const renderMilkProdChart = rankBy => renderProductChart(milkProdChartState, MILK_SKUS, rankBy);
-const renderAllProdChart  = rankBy => renderProductChart(allProdChartState, ALL_DAIRY_SKUS, rankBy);
+const renderAllProdChart  = rankBy => renderProductChart(allProdChartState, ALL_DAIRY_SKUS, rankBy, true);
 
 function initMilk() {
   renderMilkProdChart("qty");
@@ -634,12 +654,37 @@ function initMilk() {
 
   // Customer names per Sheet1's "Name" column; Cedar Crest's milk and ice-cream
   // invoices ("2803-Cedar Crest Dairy" / "2802-Cedar Crest (ICE CREAM)") are combined
-  // as one account. Revenue is real; profit margin isn't in this file — pending.
-  // showSharePct (last arg): hover a bar to see that customer's % of total revenue.
+  // as one account. Revenue only -- profit margin isn't in this file, see footnote 2
+  // on the Product chart above.
   const CUSTOMER_NAMES = ["Cedar Crest","Quality Dairy (QD)","Kuster's Dairy","Country Dairy Farm Store","Other"];
   const CUSTOMER_REV   = [15.44, 1.66, 1.10, 0.17, 0.60];
-  const CUSTOMER_PCT   = [0, 0, 0, 0, 0];
-  renderMarginChart("customerMarginChart", CUSTOMER_NAMES, CUSTOMER_REV, CUSTOMER_PCT, 18, true);
+  renderCustomerRevenueChart("customerMarginChart", CUSTOMER_NAMES, CUSTOMER_REV);
+}
+
+// Single-series revenue-by-customer chart, with each customer's % of total
+// revenue baked into the x-axis label (not just the tooltip) since profit
+// margin isn't available per customer to show as a second series.
+function renderCustomerRevenueChart(canvasId, labels, revData) {
+  const total = revData.reduce((s,v) => s+v, 0);
+  const pctOf = v => (v/total*100).toFixed(1) + "%";
+  new Chart(document.getElementById(canvasId), {
+    type:"bar",
+    data:{
+      labels,
+      datasets:[{ label:"Revenue ($M)", data:revData, backgroundColor:C.green, borderRadius:4 }],
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{label: c => `$${c.parsed.y}M (${pctOf(c.parsed.y)} of revenue)`}},
+      },
+      scales:{
+        x:{grid:{display:false}, ticks:{callback:(v,i) => `${labels[i]} (${pctOf(revData[i])})`}},
+        y:{grid:{color:gridColor()}, min:0, ticks:{callback:v=>"$"+v+"M"}, title:{display:true, text:"Revenue ($M)"}},
+      },
+    },
+  });
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -908,15 +953,27 @@ function initPlant() {
     }
   });
 
-  renderPlantMetricTable("cwt");
+  renderPlantMetricChart("cwt");
   renderPlantMarginTable();
   document.querySelectorAll(".js-plant-unit-toggle button").forEach(btn =>
     btn.addEventListener("click", () => {
       const unit = btn.dataset.unit;
       document.querySelectorAll(".js-plant-unit-toggle button").forEach(b =>
         b.classList.toggle("active", b.dataset.unit === unit));
-      renderPlantMetricTable(unit);
+      renderPlantMetricChart(unit);
     }));
+}
+
+// Simple least-squares linear regression, used for the Monthly Operating
+// Metrics trendline — returns one fitted y-value per input index.
+function linearTrend(values) {
+  const n = values.length;
+  const xMean = (n - 1) / 2;
+  const yMean = values.reduce((a, b) => a + b, 0) / n;
+  let num = 0, den = 0;
+  values.forEach((v, x) => { num += (x - xMean) * (v - yMean); den += (x - xMean) ** 2; });
+  const slope = num / den, intercept = yMean - slope * xMean;
+  return values.map((_, x) => slope * x + intercept);
 }
 
 // Jul '25-Jun '26 (dashboard fiscal year), from Plant_Production_Headcount_MonthlyGallons.xlsx.
@@ -938,19 +995,53 @@ const PLANT_MONTHS = [
   ["Jun '26", 373172, 32093, 0.184, 0.0158],
 ];
 
-function renderPlantMetricTable(unit) {
-  const volLabel    = unit === "gal" ? "Gallons Processed" : "cwt Processed";
-  const laborLabel  = unit === "gal" ? "Labor Hrs/gal" : "Labor Hrs/cwt";
-  document.getElementById("plantMetricTable").innerHTML =
-    `<thead><tr><th>Month</th><th class="n">${volLabel}</th>
-    <th class="n">${laborLabel}</th></tr></thead>
-    <tbody>${PLANT_MONTHS.map(([m, gal, cwt, hrsPerCwt, hrsPerGal]) => {
-      const vol   = unit === "gal" ? fmt(gal) : fmt(cwt);
-      const labor = unit === "gal" ? hrsPerGal : hrsPerCwt;
-      return `<tr><td>${m}</td><td class="n">${vol}</td>
-      <td class="n">${labor}</td></tr>`;
-    }).join("")}
-    </tbody>`;
+let plantMetricChartInstance = null;
+function renderPlantMetricChart(unit) {
+  const volLabel   = unit === "gal" ? "Gallons Processed" : "cwt Processed";
+  const laborLabel = unit === "gal" ? "Labor Hrs/gal" : "Labor Hrs/cwt";
+  const vol   = PLANT_MONTHS.map(([, gal, cwt]) => unit === "gal" ? gal : cwt);
+  const labor = PLANT_MONTHS.map(([, , , hrsPerCwt, hrsPerGal]) => unit === "gal" ? hrsPerGal : hrsPerCwt);
+  const trend = linearTrend(labor);
+
+  if (plantMetricChartInstance) plantMetricChartInstance.destroy();
+  plantMetricChartInstance = new Chart(document.getElementById("plantMetricChart"), {
+    data:{
+      labels: PLANT_MONTHS.map(([m]) => m),
+      datasets:[
+        { type:"bar", label:volLabel, data:vol, yAxisID:"y",
+          backgroundColor:"rgba(61,174,43,.25)", borderRadius:4, order:3 },
+        { type:"line", label:laborLabel, data:labor, yAxisID:"yLabor",
+          borderColor:C.blue, backgroundColor:C.blue, tension:.3,
+          pointRadius:3, pointHoverRadius:5, order:1 },
+        { type:"line", label:"Trend", data:trend, yAxisID:"yLabor",
+          borderColor:C.red, borderDash:[6,4], borderWidth:2,
+          pointRadius:0, fill:false, tension:0, order:2 },
+      ],
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{
+        legend:{position:"top"},
+        tooltip:{callbacks:{
+          label: c => c.dataset.label === volLabel
+            ? `${c.dataset.label}: ${fmt(c.parsed.y)}`
+            : `${c.dataset.label}: ${c.parsed.y.toFixed(3)}`,
+        }},
+      },
+      scales:{
+        x:{grid:{display:false}},
+        y:{
+          position:"left", grid:{color:gridColor()},
+          ticks:{callback:v=>fmt(v)}, title:{display:true, text:volLabel},
+        },
+        yLabor:{
+          position:"right", grid:{drawOnChartArea:false},
+          ticks:{callback:v=>v.toFixed(2), color:C.blue},
+          title:{display:true, text:laborLabel, color:C.blue},
+        },
+      },
+    },
+  });
 }
 
 // Per Paul, Aug 2026 — directional summary from Plant Costs - Margin Directional
@@ -1189,17 +1280,21 @@ function initCosts() {
 function initMarket() {
   // Cedar Crest Weekly Sales Database - April2025-March2026.xlsx, 'Summary - All Weeks' tab,
   // customers with Weeks Ordered >= 3, summed Total Cases per category (same name-based categories
-  // as 'Customer Cases by Distance'). Unlike that scatter, totals here include all customers --
-  // 'Other' includes the 3 United Natural Foods distributor accounts (209,328 of its 270,063 cases).
+  // as 'Customer Cases by Distance'). Unlike that scatter, totals here include all customers.
+  // The former catch-all "Other" bucket (270,063 cases / 281 customers) is split here: its 3
+  // United Natural Foods distributor accounts (209,328 cases) are broken out as their own "Whole
+  // Foods" category, since UNFI is Whole Foods Market's primary distributor; the remaining 278
+  // small/miscellaneous customers (60,735 cases) stay in a much smaller "Other" bucket.
   // customerCount is the number of distinct customers plotted for that category in 'Customer Cases
-  // by Distance' (Weeks Ordered >= 3, mapped ZIP), +3 for Other's UNFI accounts (not plotted there,
-  // per that chart's own note). It therefore slightly undercounts categories that also have
+  // by Distance' (Weeks Ordered >= 3, mapped ZIP), +3 for Whole Foods' UNFI accounts (not plotted
+  // there, per that chart's own note). It therefore slightly undercounts categories that also have
   // customers below the 3-week threshold, who still contribute to the case totals above -- treat
   // Avg Cases/Customer as directional, not exact.
   const CASES_BY_CHANNEL = [
-    {label:"Other", cases:270063, customerCount:281, color:C.muted},
+    {label:"Whole Foods", cases:209328, customerCount:3, color:"#7c3aed"},
     {label:"Convenience Store / Gas", cases:226221, customerCount:548, color:C.amber},
     {label:"Supermarket / Grocery", cases:62206, customerCount:108, color:C.blue},
+    {label:"Other", cases:60735, customerCount:278, color:C.muted},
     {label:"Ice Cream / Dessert Shop", cases:52832, customerCount:180, color:C.green},
     {label:"School / Institutional", cases:47833, customerCount:207, color:C.kelly},
     {label:"Coffee Shop", cases:15882, customerCount:146, color:C.mid},
@@ -1587,10 +1682,6 @@ function initCompetitive() {
       products:["Milk", "Soft Serve"],
       locations:[{ label:"Baroda", addr:"10823 Date Rd, Baroda, MI 49101", lat:41.9639, lng:-86.4833 }] },
   ];
-  const NOTE_FIELDS = [
-    ["sales","Sales"], ["strategies","Strategies"], ["mission","Mission / Purpose"],
-    ["differentiators","Differentiators"], ["beatcd","How CD Can Beat Them"],
-  ];
   const fmtSocial = n => n == null ? "&mdash;" : n >= 1000 ? (n/1000).toFixed(1).replace(/\.0$/,"") + "K" : String(n);
 
   function haversineMi(lat1, lon1, lat2, lon2) {
@@ -1628,29 +1719,13 @@ function initCompetitive() {
       </tr>`).join("")}
     </tbody>`;
 
-  // --- Notes cards (Sales / Strategies / Mission-Purpose / Differentiators / How CD Can Beat Them) ---
-  document.getElementById("compCards").innerHTML = RETAILERS.map(r => `
-    <details class="comp-card" ${r.primary ? "open" : ""}>
-      <summary>
-        <span class="caret"></span>
-        <span class="dot" style="background:${r.color}"></span>
-        <span class="comp-name">${r.name}</span>
-        <span class="comp-meta">${r.locations.length} location${r.locations.length===1?"":"s"} &middot; ${r.avgDist.toFixed(0)} mi from CD &middot; ${fmtSocial(r.fb)} FB &middot; ${fmtSocial(r.ig)} IG</span>
-      </summary>
-      <div class="comp-body">
-        <div class="comp-addrs">${r.locations.map(l=>`<div><b>${l.label}:</b> ${l.addr}</div>`).join("")}</div>
-        <div class="comp-products"><h4>Products</h4><div class="comp-product-tags">${r.products.map(p=>`<span class="comp-product-tag">${p}</span>`).join("")}</div></div>
-        <div class="comp-notes-grid">
-          ${NOTE_FIELDS.map(([key,label]) => `
-            <div class="comp-note-block">
-              <h4>${label}</h4>
-              <ul class="comp-note-list" contenteditable="true" data-retailer="${r.id}" data-field="${key}"></ul>
-            </div>`).join("")}
-        </div>
-      </div>
-    </details>
-  `).join("");
-  initCompNotes();
+  // --- Placeholder tables: to be filled in ---
+  document.getElementById("mDairiesTable").innerHTML =
+    `<thead><tr><th>Dairy</th><th class="n">Herd Size</th><th class="n">Annual Production</th></tr></thead>
+    <tbody><tr class="row-pending" title="Pending review"><td colspan="3">Placeholder &mdash; to be filled in</td></tr></tbody>`;
+  document.getElementById("mHandlersTable").innerHTML =
+    `<thead><tr><th>Producer Handler</th><th class="n">Volume</th><th class="n">Market Share</th></tr></thead>
+    <tbody><tr class="row-pending" title="Pending review"><td colspan="3">Placeholder &mdash; to be filled in</td></tr></tbody>`;
 
   // --- Leaflet map ---
   const map = L.map("compMap", { scrollWheelZoom:false }).setView([44.3,-85.0], 6);
@@ -1713,36 +1788,6 @@ function initCompetitive() {
   });
 }
 
-// --- Competitive Landscape notes: contenteditable bullet lists, autosaved
-//     to sessionStorage only — cleared on tab close or refresh, never persisted.
-function initCompNotes() {
-  const noteKey = (retailer, field) => `cd_comp_notes_${retailer}_${field}`;
-  document.querySelectorAll(".comp-note-list").forEach(el => {
-    const key = noteKey(el.dataset.retailer, el.dataset.field);
-    const saved = sessionStorage.getItem(key);
-    if (saved) {
-      el.innerHTML = saved;
-    } else {
-      el.innerHTML = "<li>Click to add a note&hellip;</li>";
-      el.classList.add("placeholder");
-    }
-    el.addEventListener("focus", () => {
-      if (el.classList.contains("placeholder")) {
-        el.innerHTML = "<li></li>";
-        el.classList.remove("placeholder");
-      }
-    });
-    el.addEventListener("input", () => sessionStorage.setItem(key, el.innerHTML));
-    el.addEventListener("blur", () => {
-      if (el.textContent.trim() === "") {
-        el.innerHTML = "<li>Click to add a note&hellip;</li>";
-        el.classList.add("placeholder");
-        sessionStorage.removeItem(key);
-      }
-    });
-  });
-}
-
 // ═══════════════════════════════════════════════════════════════════════════════
 //  GROWTH OPPORTUNITIES
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -1750,7 +1795,7 @@ function initGrowth() {
   const GROWTH_IDEAS = [
     "Expand Ice Cream",
     "Expand Half Pints/Schools",
-    "Competitive Product Line in High End Grocers",
+    "Comprehensive Product Line in High End Grocers",
     "Expand Raw Milk Production & Sell to Co-Ops/Large Contracts",
     "A2/Grocery Expansion",
     "Expand Animal Breeding/Calves",
@@ -2067,7 +2112,6 @@ const TRENDS_CAGR_DATA = [
   { label: "Non-GMO",             cagr: 10.8,  years: "2026–2034", source: "IMARC Group",               color: "#0d9488" },
   { label: "High-Protein Drinks", cagr: 8.80,  years: "2026–2034", source: "Fortune Business Insights", color: C.amber },
   { label: "Organic Dairy",       cagr: 8.18,  years: "2026–2035", source: "Precedence Research",       color: C.red },
-  { label: "Hispanic Cheese",     cagr: 6.14,  years: "2026–2034", source: "Fortune Business Insights", color: "#f43f5e" },
   { label: "Specialty Cheese",    cagr: 5.67,  years: "2026–2035", source: "Precedence Research",       color: C.kelly },
   { label: "Half and Half",       cagr: 5.5,   years: "2026–2034", source: "Verified Market Reports",   color: "#eab308" },
   { label: "Yogurt",              cagr: 5.4,   years: "2026–2035", source: "Global Market Insights",    color: C.mid },

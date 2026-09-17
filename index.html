@@ -11,7 +11,7 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <!-- Cache-busting: bump ?v= on this line whenever styles.css changes, so browsers/CDN don't keep serving a stale cached copy after a deploy. -->
-<link rel="stylesheet" href="styles.css?v=9">
+<link rel="stylesheet" href="styles.css?v=10">
 </head>
 <body>
 
@@ -48,23 +48,25 @@
 
   <nav class="catnav" id="catnav" aria-label="Section categories">
     <div class="catnav-item">
-      <button type="button" class="catnav-btn" aria-haspopup="true" aria-expanded="false">External</button>
-      <div class="catnav-sub">
-        <button data-section="market">Market - Demand-Side Scan</button>
-        <button data-section="competitive">Competitive Landscape</button>
-        <button data-section="trends">Dairy Consumer Trends</button>
-      </div>
+      <button type="button" class="catnav-btn catnav-link" data-section="home">Business Overview</button>
     </div>
     <div class="catnav-item">
       <button type="button" class="catnav-btn" aria-haspopup="true" aria-expanded="false">Internal</button>
       <div class="catnav-sub">
-        <button data-section="home">Business Overview</button>
         <button data-section="vision">Vision, Mission, and Values</button>
         <button data-section="crops">Crop Efficiency</button>
         <button data-section="animals">Animal Sales</button>
         <button data-section="rawmilk">Raw Milk Production</button>
         <button data-section="plant">Plant Efficiency</button>
         <button data-section="milk">Milk Products</button>
+      </div>
+    </div>
+    <div class="catnav-item">
+      <button type="button" class="catnav-btn" aria-haspopup="true" aria-expanded="false">External</button>
+      <div class="catnav-sub">
+        <button data-section="market">Market - Demand-Side Scan</button>
+        <button data-section="competitive">Competitive Landscape</button>
+        <button data-section="trends">Dairy Consumer Trends</button>
       </div>
     </div>
     <div class="catnav-item">
@@ -100,9 +102,9 @@
       <div class="delta dn" id="h-revenue-d">—</div>
     </div>
     <div class="stat">
-      <div class="num" id="h-cwt">—</div>
-      <div class="lbl">Milk Produced<span class="sub">hundredweight (cwt)</span></div>
-      <div class="delta up" id="h-cwt-d">—</div>
+      <div class="num" id="h-gal">—</div>
+      <div class="lbl">Milk Produced<span class="sub">gallons</span></div>
+      <div class="delta up" id="h-gal-d">—</div>
     </div>
     <div class="stat">
       <div class="num" id="h-cows">—</div>
@@ -295,10 +297,16 @@
       </div>
     </div>
     <div class="panel-body">
+      <div class="chip-legend" id="allProdClassKey">
+        <span class="chip-legend-item"><span class="swatch" style="background:#2563eb"></span><b>Class I</b>&nbsp;&mdash; fluid milk (whole, lowfat, skim, flavored, eggnog)</span>
+        <span class="chip-legend-item"><span class="swatch" style="background:#3dae2b"></span><b>Class II</b>&nbsp;&mdash; soft products (yogurt, ice cream, sour cream, cottage cheese, creamers)</span>
+        <span class="chip-legend-item"><span class="swatch" style="background:#d97706"></span><b>Class III</b>&nbsp;&mdash; hard/spreadable cheese &amp; whey</span>
+        <span class="chip-legend-item"><span class="swatch" style="background:#8b5cf6"></span><b>Class IV</b>&nbsp;&mdash; butter &amp; dry milk powders</span>
+      </div>
       <div class="chart-box chart-scroll h420 connected">
         <div class="chart-inner" id="allProdChartInner"><canvas id="allProdChart"></canvas></div>
       </div>
-      <p class="panel-note">Every dairy product line (milk, ice cream, soft serve mix, sour cream/dip, butter, eggnog, and co-packing), ranked high to low; scroll for the full list.</p>
+      <p class="panel-note">Every dairy product line (milk, ice cream, soft serve mix, sour cream/dip, butter, eggnog, and co-packing), ranked high to low and colored by USDA Federal Milk Marketing Order class (above); scroll for the full list. This dataset has no Class III (cheese) SKUs &mdash; the one cheese line in the source file was flagged as residual inventory and excluded (see Appendix, footnote 3).</p>
     </div>
   </div>
 
@@ -326,11 +334,11 @@
 
   <div class="panel">
     <div class="panel-head">
-      <h3>Revenue &amp; Profit Margin by Customer<sup>1,2</sup></h3>
-      <span class="hint">TTM Jul 2026 &middot; hover a bar for % of revenue</span>
+      <h3>Revenue by Customer<sup>1</sup></h3>
+      <span class="hint">TTM Jul 2026 &middot; % of total revenue shown per customer</span>
     </div>
     <div class="panel-body">
-      <div class="chart-box h360 pending-reclass"><canvas id="customerMarginChart"></canvas></div>
+      <div class="chart-box h360 connected"><canvas id="customerMarginChart"></canvas></div>
     </div>
   </div>
 
@@ -640,9 +648,8 @@
       </div>
     </div>
     <div class="panel-body">
-      <div class="tbl-wrap">
-        <table class="dt" id="plantMetricTable"></table>
-      </div>
+      <div class="chart-box h320 connected"><canvas id="plantMetricChart"></canvas></div>
+      <p class="panel-note">Bars are volume processed (left axis); the solid line is labor hours per unit (right axis), with a dashed linear trendline showing the overall direction across the 12 months.</p>
     </div>
   </div>
 
@@ -941,7 +948,7 @@
   <div class="panel">
     <div class="panel-head"><h3>Appendix: Data Sources</h3></div>
     <div class="panel-body">
-      <p class="panel-note"><sup>1</sup> Revenue is not tracked in this data table; case volume is shown instead. Y-axis is log-scaled: a small number of wholesale/distributor accounts move far more volume than typical retail customers. Click a category in the legend to show/hide it; the dashed red vertical line marks the average distance of whichever customers are currently shown, and the dashed horizontal lines mark each visible category's own average case volume. The 3 largest accounts are excluded from this chart to keep the scale readable for typical customers: all 3 are United Natural Foods distributor locations (119,928 / 54,864 / 34,536 cases). They're included in the "Other" total on Cedar Crest Only Case Volume by Channel above. Penetration figures on Customer Share by Distance Band include any customer of any size within each distance band.</p>
+      <p class="panel-note"><sup>1</sup> Revenue is not tracked in this data table; case volume is shown instead. Y-axis is log-scaled: a small number of wholesale/distributor accounts move far more volume than typical retail customers. Click a category in the legend to show/hide it; the dashed red vertical line marks the average distance of whichever customers are currently shown, and the dashed horizontal lines mark each visible category's own average case volume. The 3 largest accounts are excluded from this chart to keep the scale readable for typical customers: all 3 are United Natural Foods distributor locations (119,928 / 54,864 / 34,536 cases). They're included in the "Whole Foods" total on Cedar Crest Only Case Volume by Channel above (UNFI is Whole Foods Market's primary distributor). Penetration figures on Customer Share by Distance Band include any customer of any size within each distance band.</p>
       <p class="panel-note"><sup>2</sup> Estimated Market Penetration by Distance &amp; Type is directional, not a measured figure, and mixes two very different kinds of numbers: the "actual customers" count is exact (it's Country Dairy's own sales data, the same customer points plotted on Cedar Crest Only Customer Cases by Distance, binned into the same 7 distance bands), but the "estimated total market" figure it's divided by is a rough desk estimate, not a GIS radius query or a real Google Maps count. Methodology: for each distance band, an approximate population was assigned to the land area that band covers, using Michigan (and, at longer distances, neighboring-state) counties actually reachable by road from New Era, MI &mdash; explicitly excluding Milwaukee/Chicago and the rest of Wisconsin/Illinois, which fall within some bands by straight-line distance across Lake Michigan but aren't a realistic delivery area. That population was then converted to an estimated business count per category using national businesses-per-capita benchmarks: convenience stores 1 per 2,204 people (NACS 2024 store count), grocery/supermarkets 1 per ~6,000 (blended from FMI's ~45,600-store supermarket definition and Census's broader ~66,000-store grocery count), K-12 schools 1 per 2,605 (NCES), coffee shops 1 per ~7,500 (industry estimates range 40,000&ndash;128,000 U.S. shops depending on definition; the middle of that range was used), and restaurants 1 per ~450 (National Restaurant Association's ~749,000 U.S. total). Two important caveats: (1) population-by-band and the density benchmarks are both approximations, not a precise radius calculation, so treat the resulting estimated-total figures &mdash; and the % figures computed from them &mdash; as order-of-magnitude, not exact; the true figure could reasonably be half to double what's shown. (2) National density benchmarks, especially for restaurants, count every establishment regardless of how it sources dairy; a large share of any category's raw count are chains supplied by broadline foodservice distributors, not realistic direct-from-Country-Dairy prospects, so the true penetration rate of the realistically addressable market is likely meaningfully higher than shown here, particularly for Restaurant/Food Service. 200&ndash;249 mi and 250&ndash;299 mi are included for consistency with the chart above, but actual customers = 0 for all 5 types at that distance; 300+ mi is omitted from the estimated-total calculation entirely, since it's an open-ended distance with no natural population boundary to estimate against (actual customers = 0 there too, for these 5 types).</p>
       <p class="panel-note"><sup>3</sup> Cedar Crest reflects the same Weekly Sales Database customers as Cedar Crest Only Customer Cases by Distance above (1,502 with a mapped ZIP). Kuster's reflects <em>Kusters_Country_Dairy_Sales_by_ZIP.xlsx</em> (Aug 2026), one row per Ship-To customer: 135 total, 130 with a mapped ZIP (distance computed straight-line from Country Dairy's ZIP, 49446, to each destination ZIP's centroid); the 5 unmapped customers (ship to an unspecified/consolidated location or a ZIP not on file) are excluded from the percentages, the same treatment Cedar Crest's own unmapped customers get. "Both Combined" sums each band's customer count across the two sources (1,632 total) and recomputes the % against that combined total &mdash; it is not an average of the two sources' percentages.</p>
     </div>
@@ -972,7 +979,7 @@
     <div class="panel">
       <div class="panel-head"><h3>Key</h3><span class="hint">locations &amp; distance from Country Dairy</span></div>
       <div class="panel-body">
-        <div class="tbl-wrap">
+        <div class="tbl-wrap comp-key-wrap">
           <table class="dt comp-key-table" id="compKeyTable"></table>
         </div>
         <p class="panel-note">Distances are approximate straight-line miles from Country Dairy (3476 S 80th Ave, New Era, MI). &ldquo;Other Michigan dairy farms&rdquo; are creameries with their own dairy herd and a dedicated farm-store or scoop-shop location &mdash; not just wholesale/grocery distribution (e.g. Hudsonville is excluded: it sells only through third-party retailers, with no retail location of its own).</p>
@@ -980,13 +987,24 @@
     </div>
   </div>
 
-  <div class="panel">
-    <div class="panel-head">
-      <h3>Competitor notes</h3>
-      <span class="hint">click into a list to add bullet points &mdash; saved only in the browser; closing or refreshing clears it</span>
+  <div class="grid-2">
+    <div class="panel">
+      <div class="panel-head"><h3>Largest Michigan Dairies</h3></div>
+      <div class="panel-body">
+        <div class="tbl-wrap">
+          <table class="dt" id="mDairiesTable"></table>
+        </div>
+        <p class="panel-note">Placeholder &mdash; to be filled in.</p>
+      </div>
     </div>
-    <div class="panel-body">
-      <div id="compCards"></div>
+    <div class="panel">
+      <div class="panel-head"><h3>Largest Michigan Producer Handlers</h3></div>
+      <div class="panel-body">
+        <div class="tbl-wrap">
+          <table class="dt" id="mHandlersTable"></table>
+        </div>
+        <p class="panel-note">Placeholder &mdash; to be filled in.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -1007,7 +1025,7 @@
     </div>
     <div class="panel-body">
       <div class="chart-box h760 connected"><canvas id="trendsCagrChart"></canvas></div>
-      <p class="panel-note">Each bar is one third-party publisher&rsquo;s own market-sizing methodology and forecast window (see Appendix below); figures are not additive across categories and will differ from other publishers covering the same category. &ldquo;High-Protein Drinks&rdquo; refers to ready-to-drink (RTD) protein beverages, distinct from &ldquo;Protein-Enhanced Milk&rdquo; below, which covers non-single-serve protein/ultra-filtered milk (e.g. Fairlife-style); &ldquo;Non-GMO&rdquo; and &ldquo;Organic Dairy&rdquo; are attribute/label call-outs that cut across several of Country Dairy&rsquo;s existing product lines rather than separate products; &ldquo;Dye-Free&rdquo; is proxied by the natural (non-synthetic) food colors market, the closest tracked category to a no-artificial-dyes claim; &ldquo;Hispanic Cheese&rdquo; is proxied by the broader Hispanic Foods market, the closest tracked category since no publisher issues a dedicated Hispanic-cheese report; &ldquo;Cheese (Commodity/General)&rdquo; is the overall global cheese market, distinct from Specialty Cheese above; &ldquo;UHT / Extended Shelf-Life Milk&rdquo; covers ultra-pasteurized, longer-dated fluid milk as its own tracked category, distinct from the conventional Fluid Milk market below.</p>
+      <p class="panel-note">Each bar is one third-party publisher&rsquo;s own market-sizing methodology and forecast window (see Appendix below); figures are not additive across categories and will differ from other publishers covering the same category. &ldquo;High-Protein Drinks&rdquo; refers to ready-to-drink (RTD) protein beverages, distinct from &ldquo;Protein-Enhanced Milk&rdquo; below, which covers non-single-serve protein/ultra-filtered milk (e.g. Fairlife-style); &ldquo;Non-GMO&rdquo; and &ldquo;Organic Dairy&rdquo; are attribute/label call-outs that cut across several of Country Dairy&rsquo;s existing product lines rather than separate products; &ldquo;Dye-Free&rdquo; is proxied by the natural (non-synthetic) food colors market, the closest tracked category to a no-artificial-dyes claim; &ldquo;Cheese (Commodity/General)&rdquo; is the overall global cheese market, distinct from Specialty Cheese above; &ldquo;UHT / Extended Shelf-Life Milk&rdquo; covers ultra-pasteurized, longer-dated fluid milk as its own tracked category, distinct from the conventional Fluid Milk market below.</p>
     </div>
   </div>
 
@@ -1035,7 +1053,7 @@
   <div class="panel">
     <div class="panel-head"><h3>Appendix: Data Sources</h3></div>
     <div class="panel-body">
-      <p class="panel-note">CAGR figures come from nineteen different research publishers/reports, each with its own market definition, scope, and base year &mdash; dollar market sizes are noted for context only and are not comparable across categories. Pulled Sep 2026; these are frequently-updated commercial reports, so verify against the publisher&rsquo;s live page before citing externally.</p>
+      <p class="panel-note">CAGR figures come from eighteen different research publishers/reports, each with its own market definition, scope, and base year &mdash; dollar market sizes are noted for context only and are not comparable across categories. Pulled Sep 2026; these are frequently-updated commercial reports, so verify against the publisher&rsquo;s live page before citing externally.</p>
 
       <p class="source-cat">A2 Milk &mdash; 13.77% CAGR, 2026&ndash;2034 (IMARC Group: $17.6B &rarr; $59.5B)</p>
       <ul class="source-list"><li><a href="https://www.imarcgroup.com/a2-milk-market" target="_blank" rel="noopener">imarcgroup.com/a2-milk-market</a></li></ul>
@@ -1048,9 +1066,6 @@
 
       <p class="source-cat">Organic Dairy &mdash; 8.18% CAGR, 2026&ndash;2035 (Precedence Research: $34.34B &rarr; $75.38B)</p>
       <ul class="source-list"><li><a href="https://www.precedenceresearch.com/organic-dairy-market" target="_blank" rel="noopener">precedenceresearch.com/organic-dairy-market</a></li></ul>
-
-      <p class="source-cat">Hispanic Cheese (proxied by Hispanic Foods) &mdash; 6.14% CAGR, 2026&ndash;2034 (Fortune Business Insights: $52.80B &rarr; $85.07B)</p>
-      <ul class="source-list"><li><a href="https://www.fortunebusinessinsights.com/hispanic-foods-market-112170" target="_blank" rel="noopener">fortunebusinessinsights.com/hispanic-foods-market-112170</a></li></ul>
 
       <p class="source-cat">Specialty Cheese &mdash; 5.67% CAGR, 2026&ndash;2035 (Precedence Research: $41.13B &rarr; $71.39B)</p>
       <ul class="source-list"><li><a href="https://www.precedenceresearch.com/specialty-cheese-market" target="_blank" rel="noopener">precedenceresearch.com/specialty-cheese-market</a></li></ul>
@@ -1224,7 +1239,7 @@
 
   <div class="panel growth-idea" id="growth-idea-3">
     <div class="panel-head">
-      <h3>Idea 3: Competitive Product Line in High End Grocers</h3>
+      <h3>Idea 3: Comprehensive Product Line in High End Grocers</h3>
       <label class="growth-include" title="Include this idea in the Opportunity Matrix above">
         <input type="checkbox" class="js-growth-include" data-idea="3" checked>
         <span class="switch"></span>
@@ -1670,6 +1685,6 @@
 
 <!-- Cache-busting: bump ?v= on this line whenever app.js changes, so browsers/CDN don't keep serving a stale cached copy after a deploy. -->
 <script src="carto-key.js?v=1"></script>
-<script src="app.js?v=11"></script>
+<script src="app.js?v=12"></script>
 </body>
 </html>
