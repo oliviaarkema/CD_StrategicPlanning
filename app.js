@@ -1791,6 +1791,49 @@ function initCompetitive() {
 // ═══════════════════════════════════════════════════════════════════════════════
 //  GROWTH OPPORTUNITIES
 // ═══════════════════════════════════════════════════════════════════════════════
+// Idea Evaluation Matrix: click-to-cycle green/yellow/red gut-check rating per
+// idea x criterion, saved to localStorage (separate from the Difficulty/
+// Expected Return ratings below) so it survives a reload.
+const EVAL_COLUMNS = [
+  ["market", "Market Growth Expectations"],
+  ["dna", "Fit with our DNA"],
+  ["resources", "Resource Requirements"],
+  ["timing", "Timing"],
+  ["cost", "Cost"],
+  ["other", "Other"],
+];
+const EVAL_STATES = [null, "green", "yellow", "red"];
+function renderIdeaEvalMatrix(ideas) {
+  const STORAGE_KEY = "cd_idea_eval";
+  let evalData;
+  try { evalData = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
+  catch(e) { evalData = {}; }
+  const save = () => localStorage.setItem(STORAGE_KEY, JSON.stringify(evalData));
+
+  document.getElementById("ideaEvalTable").innerHTML =
+    `<thead><tr><th>Idea</th>${EVAL_COLUMNS.map(([,label]) => `<th>${label}</th>`).join("")}</tr></thead>
+    <tbody>${ideas.map((label, i) => {
+      const idx = i + 1;
+      return `<tr><td>${idx}. ${label}</td>${EVAL_COLUMNS.map(([key]) => {
+        const state = (evalData[idx] && evalData[idx][key]) || null;
+        return `<td class="eval-cell"><button type="button" class="eval-swatch" data-idea="${idx}" data-col="${key}"${state ? ` data-state="${state}"` : ""} aria-label="${label} — ${key}"></button></td>`;
+      }).join("")}</tr>`;
+    }).join("")}
+    </tbody>`;
+
+  document.querySelectorAll("#ideaEvalTable .eval-swatch").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const idx = btn.dataset.idea, key = btn.dataset.col;
+      const current = (evalData[idx] && evalData[idx][key]) || null;
+      const next = EVAL_STATES[(EVAL_STATES.indexOf(current) + 1) % EVAL_STATES.length];
+      evalData[idx] = evalData[idx] || {};
+      evalData[idx][key] = next;
+      if (next) btn.dataset.state = next; else delete btn.dataset.state;
+      save();
+    });
+  });
+}
+
 function initGrowth() {
   const GROWTH_IDEAS = [
     "Expand Ice Cream",
@@ -1803,6 +1846,7 @@ function initGrowth() {
     "TBD",
     "TBD",
   ];
+  renderIdeaEvalMatrix(GROWTH_IDEAS);
   // Ideas 8 and 9 are blank placeholders (see the panels below) -- default them out
   // of the matrix until they're filled in and switched on.
   const DEFAULT_EXCLUDED = new Set([8, 9]);

@@ -11,7 +11,7 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <!-- Cache-busting: bump ?v= on this line whenever styles.css changes, so browsers/CDN don't keep serving a stale cached copy after a deploy. -->
-<link rel="stylesheet" href="styles.css?v=10">
+<link rel="stylesheet" href="styles.css?v=11">
 </head>
 <body>
 
@@ -1137,6 +1137,19 @@
   </div>
 
   <div class="panel">
+    <div class="panel-head">
+      <h3>Idea Evaluation Matrix</h3>
+      <span class="hint">click a cell to cycle green / yellow / red</span>
+    </div>
+    <div class="panel-body">
+      <div class="tbl-wrap">
+        <table class="dt eval-matrix" id="ideaEvalTable"></table>
+      </div>
+      <p class="panel-note">A quick gut-check rating per idea, saved in this browser. Green = favorable, yellow = mixed/uncertain, red = unfavorable; click an empty cell to start, click again to cycle, four clicks returns it to blank.</p>
+    </div>
+  </div>
+
+  <div class="panel">
     <div class="panel-head"><h3>Opportunity Matrix: Difficulty vs. Expected Return</h3></div>
     <div class="panel-body">
       <div class="growth-matrix-wrap">
@@ -1685,6 +1698,6 @@
 
 <!-- Cache-busting: bump ?v= on this line whenever app.js changes, so browsers/CDN don't keep serving a stale cached copy after a deploy. -->
 <script src="carto-key.js?v=1"></script>
-<script src="app.js?v=12"></script>
+<script src="app.js?v=13"></script>
 </body>
 </html>

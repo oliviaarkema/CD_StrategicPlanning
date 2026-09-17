@@ -287,6 +287,17 @@ table.dt tr.row-total td{border-top:2px solid var(--border);font-weight:700}
 table.dt tr.row-pending td{opacity:.5;filter:grayscale(1);cursor:help}
 table.dt td.col-ttm{color:var(--kelly)}
 table.dt th.col-ttm{color:var(--kelly)}
+table.dt.eval-matrix th:not(:first-child),
+table.dt.eval-matrix td.eval-cell{text-align:center}
+.eval-swatch{
+  width:28px;height:28px;border-radius:8px;border:1px solid var(--border);
+  background:var(--bg);cursor:pointer;display:inline-block;padding:0;
+  transition:background .15s,border-color .15s;
+}
+.eval-swatch:hover{border-color:var(--muted)}
+.eval-swatch[data-state="green"]{background:#3dae2b;border-color:#2f9123}
+.eval-swatch[data-state="yellow"]{background:#eab308;border-color:#ca9006}
+.eval-swatch[data-state="red"]{background:#dc2626;border-color:#b91c1c}
 
 #marketRadiusHeatmap{position:relative;min-height:80px}
 #marketRadiusHeatmap>*{filter:grayscale(1);opacity:.35}
