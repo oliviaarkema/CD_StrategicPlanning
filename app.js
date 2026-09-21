@@ -1766,10 +1766,40 @@ function initCompetitive() {
       </tr>`).join("")}
     </tbody>`;
 
-  // --- Placeholder tables: to be filled in ---
+  // Largest Michigan Dairies: [Farm, Location(s) count, # of Milking, Milking
+  // System Type, Acres Farmed]. Blank cells are farms with a location count
+  // on file but no further detail yet.
+  const MI_DAIRIES = [
+    ["De Saegher", 4, "13,000", "2-Parallel", "2,800"],
+    ["Green Meadows", 1, "3,900", "2-Herringbone", "8,000"],
+    ["Den Dulk", 4, "", "", ""],
+    ["Gernaat", 1, "", "", ""],
+    ["Hickory Gables", 1, "", "", ""],
+    ["Swiss Lane", 3, "7,000", "2-Herringbone, 1-Parallel", "5,000"],
+    ["Rathmourne", 9, "", "", ""],
+    ["Masselink", 3, "", "", ""],
+    ["VanLoon", 3, "", "", ""],
+    ["Cow Pleasant", 2, "3,500", "2-Rotary", ""],
+    ["Red Arrow", "", "", "", ""],
+    ["Rich Ro", 2, "", "", ""],
+    ["Shaendorf", 2, "", "", ""],
+    ["River Ridge", 2, "", "", ""],
+    ["Ryzebol", 1, "3,000", "1-Parallel", ""],
+    ["Prairie View", 1, "", "", ""],
+    ["Trierweiler", 2, "", "", ""],
+    ["Vanderploeg", 1, "2,700", "1-Rotary", ""],
+    ["Zwemmer", 4, "12,000", "4-Rotary", ""],
+    ["Geerlings", 3, "4,000", "2-Herringbone, 1-Rotary", "5,000"],
+    ["Double Eagle", 1, "3,500", "1-Rotary", "6,000"],
+    ["Jandernoa", 3, "6,000", "3-Parallel", "5,000"],
+  ];
   document.getElementById("mDairiesTable").innerHTML =
-    `<thead><tr><th>Dairy</th><th class="n">Herd Size</th><th class="n">Annual Production</th></tr></thead>
-    <tbody><tr class="row-pending" title="Pending review"><td colspan="3">Placeholder &mdash; to be filled in</td></tr></tbody>`;
+    `<thead><tr><th>Farm</th><th class="n">Location(s)</th><th class="n"># of Milking</th><th>Milking System Type</th><th class="n">Acres Farmed</th></tr></thead>
+    <tbody>${MI_DAIRIES.map(([farm, loc, milking, system, acres]) => `
+      <tr><td>${farm}</td><td class="n">${loc || "&mdash;"}</td><td class="n">${milking || "&mdash;"}</td><td>${system || "&mdash;"}</td><td class="n">${acres || "&mdash;"}</td></tr>`
+    ).join("")}
+    </tbody>`;
+
   document.getElementById("mHandlersTable").innerHTML =
     `<thead><tr><th>Producer Handler</th><th class="n">Volume</th><th class="n">Market Share</th></tr></thead>
     <tbody><tr class="row-pending" title="Pending review"><td colspan="3">Placeholder &mdash; to be filled in</td></tr></tbody>`;
