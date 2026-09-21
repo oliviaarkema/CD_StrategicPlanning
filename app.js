@@ -1709,10 +1709,6 @@ function initCompetitive() {
       fb:28269, ig:9515,
       products:["Milk", "Ice Cream", "Restaurant Menu"],
       locations:[{ label:"Northville", addr:"21300 Novi Rd, Northville, MI 48167", lat:42.4306, lng:-83.483 }] },
-    { id:"houseofflavors", name:"House of Flavors", color:"#8b3fa8", primary:true,
-      fb:17627, ig:1704,
-      products:["Ice Cream", "Diner Menu"],
-      locations:[{ label:"Ludington", addr:"402 W Ludington Ave, Ludington, MI 49431", lat:43.955, lng:-86.453 }] },
     { id:"cooksfarm", name:"Cook's Farm Dairy", color:"#e377c2", primary:true,
       fb:16521, ig:null,
       products:["Milk", "Ice Cream", "Hot Fudge", "Ice Cream Pies"],
@@ -1767,36 +1763,37 @@ function initCompetitive() {
     </tbody>`;
 
   // Largest Michigan Dairies: [Farm, Location(s) count, # of Milking, Milking
-  // System Type, Acres Farmed]. Blank cells are farms with a location count
-  // on file but no further detail yet.
+  // System Type, Acres Farmed, A2 Status, Non-GMO Status]. Blank cells are
+  // farms with a location count on file but no further detail yet; A2/Non-GMO
+  // status isn't gathered yet for any farm.
   const MI_DAIRIES = [
-    ["De Saegher", 4, "13,000", "2-Parallel", "2,800"],
-    ["Green Meadows", 1, "3,900", "2-Herringbone", "8,000"],
-    ["Den Dulk", 4, "", "", ""],
-    ["Gernaat", 1, "", "", ""],
-    ["Hickory Gables", 1, "", "", ""],
-    ["Swiss Lane", 3, "7,000", "2-Herringbone, 1-Parallel", "5,000"],
-    ["Rathmourne", 9, "", "", ""],
-    ["Masselink", 3, "", "", ""],
-    ["VanLoon", 3, "", "", ""],
-    ["Cow Pleasant", 2, "3,500", "2-Rotary", ""],
-    ["Red Arrow", "", "", "", ""],
-    ["Rich Ro", 2, "", "", ""],
-    ["Shaendorf", 2, "", "", ""],
-    ["River Ridge", 2, "", "", ""],
-    ["Ryzebol", 1, "3,000", "1-Parallel", ""],
-    ["Prairie View", 1, "", "", ""],
-    ["Trierweiler", 2, "", "", ""],
-    ["Vanderploeg", 1, "2,700", "1-Rotary", ""],
-    ["Zwemmer", 4, "12,000", "4-Rotary", ""],
-    ["Geerlings", 3, "4,000", "2-Herringbone, 1-Rotary", "5,000"],
-    ["Double Eagle", 1, "3,500", "1-Rotary", "6,000"],
-    ["Jandernoa", 3, "6,000", "3-Parallel", "5,000"],
+    ["De Saegher", 4, "13,000", "2-Parallel", "2,800", "", ""],
+    ["Green Meadows", 1, "3,900", "2-Herringbone", "8,000", "", ""],
+    ["Den Dulk", 4, "", "", "", "", ""],
+    ["Gernaat", 1, "", "", "", "", ""],
+    ["Hickory Gables", 1, "", "", "", "", ""],
+    ["Swiss Lane", 3, "7,000", "2-Herringbone, 1-Parallel", "5,000", "", ""],
+    ["Rathmourne", 9, "", "", "", "", ""],
+    ["Masselink", 3, "", "", "", "", ""],
+    ["VanLoon", 3, "", "", "", "", ""],
+    ["Cow Pleasant", 2, "3,500", "2-Rotary", "", "", ""],
+    ["Red Arrow", "", "", "", "", "", ""],
+    ["Rich Ro", 2, "", "", "", "", ""],
+    ["Shaendorf", 2, "", "", "", "", ""],
+    ["River Ridge", 2, "", "", "", "", ""],
+    ["Ryzebol", 1, "3,000", "1-Parallel", "", "", ""],
+    ["Prairie View", 1, "", "", "", "", ""],
+    ["Trierweiler", 2, "", "", "", "", ""],
+    ["Vanderploeg", 1, "2,700", "1-Rotary", "", "", ""],
+    ["Zwemmer", 4, "12,000", "4-Rotary", "", "", ""],
+    ["Geerlings", 3, "4,000", "2-Herringbone, 1-Rotary", "5,000", "", ""],
+    ["Double Eagle", 1, "3,500", "1-Rotary", "6,000", "", ""],
+    ["Jandernoa", 3, "6,000", "3-Parallel", "5,000", "", ""],
   ];
   document.getElementById("mDairiesTable").innerHTML =
-    `<thead><tr><th>Farm</th><th class="n">Location(s)</th><th class="n"># of Milking</th><th>Milking System Type</th><th class="n">Acres Farmed</th></tr></thead>
-    <tbody>${MI_DAIRIES.map(([farm, loc, milking, system, acres]) => `
-      <tr><td>${farm}</td><td class="n">${loc || "&mdash;"}</td><td class="n">${milking || "&mdash;"}</td><td>${system || "&mdash;"}</td><td class="n">${acres || "&mdash;"}</td></tr>`
+    `<thead><tr><th>Farm</th><th class="n">Location(s)</th><th class="n"># of Milking</th><th>Milking System Type</th><th class="n">Acres Farmed</th><th>A2 Status</th><th>Non-GMO Status</th></tr></thead>
+    <tbody>${MI_DAIRIES.map(([farm, loc, milking, system, acres, a2, nonGmo]) => `
+      <tr><td>${farm}</td><td class="n">${loc || "&mdash;"}</td><td class="n">${milking || "&mdash;"}</td><td>${system || "&mdash;"}</td><td class="n">${acres || "&mdash;"}</td><td>${a2 || "&mdash;"}</td><td>${nonGmo || "&mdash;"}</td></tr>`
     ).join("")}
     </tbody>`;
 
