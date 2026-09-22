@@ -1797,9 +1797,47 @@ function initCompetitive() {
     ).join("")}
     </tbody>`;
 
+  // Michigan producer handlers (farms that bottle/process their own milk):
+  // [Business, url, Location, Own milk?, Main products, Distribution,
+  // Distribution confidence, A2, Non-GMO]. A2/Non-GMO are "" unless the
+  // farm's own site or listing claims it. Rows are grouped by those two
+  // fields below: A2 first, then Non-GMO/Organic, then everyone else.
+  const MI_HANDLERS = [
+    ["Country Dairy", "https://countrydairy.com/", "New Era", "Yes", "Fluid milk, chocolate milk, cream, butter, cheese, ice cream", "Distributor serving grocery/convenience accounts across MI and neighboring states; name not public", "Confirmed distributor, name unknown", "", "Certified Non-GMO"],
+    ["MOO-ville Creamery", "https://www.moo-ville.com/wholesale", "Nashville", "Yes", "A2A2 fluid milk, chocolate milk, ice cream, cheese, butter, eggnog", "Two ice cream distributors (names not public); also delivers/wholesales direct", "Confirmed", "A2A2 herd", ""],
+    ["Annie G's Dairy", "https://anniegsdairy.com/", "Ann Arbor", "Yes", "A2A2 milk, cheese curds", "Self-distributed: farm store, milk vending, farm markets, local farm stands", "Confirmed self-distribution", "A2A2 herd", ""],
+    ["The Farmer's Creamery", "https://heymichigan.com/places/the-farmers-creamery-farm-kitchen-of-michigan/", "Mio", "Yes (Amish co-op of 5 farms)", "A2 grass-fed glass-bottled milk, ice cream, yogurt", "Unknown", "Unknown", "A2, 100% grass-fed", ""],
+    ["Crooked Creek Farm Dairy", "https://crookedcreekfarmdairy.com/", "Bruce Township/Romeo", "Yes", "Creamline pasteurized milk, ice cream, beef", "Unknown; farm store plus listed retail locations", "Unknown", "", "Non-GMO feed (self-raised)"],
+    ["Hilhof Farm Dairy", "https://www.organicproviders.com/michigan/hersey/ecocert-ico-llc/hilhof-farm-dairy", "Hersey", "Yes", "Organic grass-fed glass-bottled milk (non-homogenized)", "Unknown", "Unknown", "", "Certified Organic"],
+    ["Cook's Farm Dairy", "https://cooksfarmdairy.com/", "Ortonville", "Yes", "Fluid milk, ice cream, cream, butter, cheese", "Wholesale products/delivery and nearby retail accounts; no named distributor", "Unknown", "", ""],
+    ["DeBacker Family Dairy", "https://www.michigan.org/property/debacker-family-dairy", "Daggett", "Yes", "Milk, ice cream, butter, cheese, cream", "Self-distributed throughout the U.P.", "Confirmed self-distribution", "", ""],
+    ["Shetler Family Dairy", "https://mynorth.com/outdoors/6-northern-michigan-dairy-farms-stores/", "Kalkaska", "Yes", "Glass-bottled milk, cream, buttermilk, ice cream", "Self-delivers to 65+ northern MI stores (Oryana, Olesons, Ric's, etc.)", "Likely self-distributed", "", ""],
+    ["Calder Dairy & Farm", "https://calderdairy.com/stores-markets/", "Carleton", "Yes", "Fluid milk, ice cream, dairy products", "Own farm/store locations and home delivery; no third-party distributor found", "Likely self-distributed", "", ""],
+    ["Brink's Family Creamery", "https://brinksfamilycreamery.com/", "McBain", "Yes", "Bottled milk, cheese curds, ice cream, beef", "Primarily direct/on-farm; no named distributor", "Unknown", "", ""],
+    ["Cream Cup Dairy", "https://www.localdifference.org/partner/cream-cup-dairy/", "Kaleva", "Yes", "Glass-bottled creamline milk, cream, half &amp; half, cheese curds", "Unknown", "Unknown", "", ""],
+    ["Moomers Homemade Ice Cream", "https://mynorth.com/outdoors/6-northern-michigan-dairy-farms-stores/", "Traverse City", "Yes (own farm milk)", "Ice cream, bottled milk", "Primarily direct; milk also in local stores (Olesons, Oryana, Tom's)", "Likely direct", "", ""],
+    ["Charlevoix Cheese Co. / Boss Dairy Farms", "", "Charlevoix", "Yes", "Farmstead cheese", "Wholesale/retail relationships; no third-party distributor verified", "Unknown", "", ""],
+    ["De Vor Dairy Farm &amp; Creamery", "https://www.devordairyfarmandcreamery.com/store/ice-cream/", "Kalkaska", "Yes", "Ice cream, dairy products", "Self-distributed; actively seeking distributors, ice cream shipped special-order", "Confirmed, no named distributor", "", ""],
+    ["Idyll Farms", "https://idyllfarms.com/", "Northport", "Yes (goat)", "Artisan goat cheese", "Delivers to wholesale and distributor facilities; distributor not named", "Confirmed distributor channel, name unknown", "", ""],
+    ["Maple Leaf Farm &amp; Creamery", "https://mapleleaffarmmi.com/", "Falmouth", "Yes (goat)", "Fresh goat cheese", "Primarily direct; farm store", "Unknown", "", ""],
+    ["KandyLand Dairy &amp; Creamery", "", "Scottville", "Yes", "Goat milk, bottled yogurt, feta, ch&egrave;vre", "Unknown", "Unknown", "", ""],
+    ["Green Vale Farm Creamery", "https://greenvalefarmcreamery.com/", "Coopersville", "Yes", "Farmstead dairy/cheese, meat", "Ships direct to customers nationwide; no dairy distributor found", "Likely self-distributed", "", ""],
+    ["Verdant Hollow Farms", "https://www.verdanthollowfarms.com/creamery", "Buchanan", "Yes (goat)", "Goat ch&egrave;vre, feta, other goat cheese", "Own farm store plus named local retailers; accepts wholesale inquiries", "Likely self-distributed", "", ""],
+  ];
+  const HANDLER_GROUPS = [
+    ["A2 milk", h => h[7]],
+    ["Non-GMO / Organic", h => !h[7] && h[8]],
+    ["Not confirmed A2 or Non-GMO", h => !h[7] && !h[8]],
+  ];
   document.getElementById("mHandlersTable").innerHTML =
-    `<thead><tr><th>Producer Handler</th><th class="n">Volume</th><th class="n">Market Share</th></tr></thead>
-    <tbody><tr class="row-pending" title="Pending review"><td colspan="3">Placeholder &mdash; to be filled in</td></tr></tbody>`;
+    `<thead><tr><th>Producer Handler</th><th>Location</th><th>Own Milk?</th><th>Main Products</th><th>Distribution</th><th>A2 Status</th><th>Non-GMO Status</th></tr></thead>
+    <tbody>${HANDLER_GROUPS.map(([label, test]) => {
+      const rows = MI_HANDLERS.filter(test);
+      return `<tr class="row-group"><td colspan="7">${label} <span>(${rows.length})</span></td></tr>` +
+        rows.map(([name, url, loc, own, products, dist, conf, a2, nonGmo]) => `
+      <tr><td class="handler-name">${url ? `<a href="${url}" target="_blank" rel="noopener">${name}</a>` : name}</td><td>${loc}</td><td>${own}</td><td>${products}</td><td>${dist}${conf !== dist ? `<div class="handler-conf">${conf}</div>` : ""}</td><td>${a2 || "&mdash;"}</td><td>${nonGmo || "&mdash;"}</td></tr>`).join("");
+    }).join("")}
+    </tbody>`;
 
   // --- Leaflet map ---
   const map = L.map("compMap", { scrollWheelZoom:false }).setView([44.3,-85.0], 6);
