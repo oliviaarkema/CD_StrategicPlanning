@@ -533,3 +533,4 @@ footer{max-width:1200px;margin:0 auto;padding:0 20px 50px;color:var(--muted);fon
   table.dt{font-size:.64rem}
   table.dt th,table.dt td{padding:4px 5px}
 }
+.comp-figure{display:block;width:100%;max-width:760px;height:auto;margin:0 auto;border-radius:8px}

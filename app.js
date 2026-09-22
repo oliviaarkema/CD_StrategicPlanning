@@ -504,13 +504,13 @@ const COPACK_SKUS = [
 ];
 
 // USDA Federal Milk Marketing Order class, tagged per SKU for the All Dairy
-// Products chart. Assigned by source category, with two name-based overrides:
-// whipping cream in MILK_SKUS is a cream product (Class II), not drinking
-// milk, and eggnog in COPACK_SKUS is Class I like the rest of the eggnog
-// line, unlike the dips/mixes that make up the rest of that category.
+// Products chart. Assigned by source category (whipping cream stays Class I
+// with the rest of MILK_SKUS), with one name-based override: eggnog in
+// COPACK_SKUS is Class I like the rest of the eggnog line, unlike the
+// dips/mixes that make up the rest of that category.
 const MILK_CLASS_COLORS = { I:C.blue, II:C.kelly, III:C.amber, IV:"#8b5cf6" };
 const ALL_DAIRY_SKUS = [
-  ...MILK_SKUS.map(s => ({ ...s, milkClass: /WHIP|WHP CRM/i.test(s.name) ? "II" : "I" })),
+  ...MILK_SKUS.map(s => ({ ...s, milkClass:"I" })),
   ...ICE_CREAM_SKUS.map(s => ({ ...s, milkClass:"II" })),
   ...SOURCREAM_SKUS.map(s => ({ ...s, milkClass:"II" })),
   ...SOFTSERVE_SKUS.map(s => ({ ...s, milkClass:"II" })),
@@ -1923,13 +1923,13 @@ function initGrowth() {
     "A2/Grocery Expansion",
     "Expand Animal Breeding/Calves",
     "Expand Other Products (Class 2 & 3 -- Butter, Yogurt, Frozen Yogurt, etc.)",
-    "TBD",
+    "Efficiency Improvements",
     "TBD",
   ];
   renderIdeaEvalMatrix(GROWTH_IDEAS);
-  // Ideas 8 and 9 are blank placeholders (see the panels below) -- default them out
-  // of the matrix until they're filled in and switched on.
-  const DEFAULT_EXCLUDED = new Set([8, 9]);
+  // Idea 9 is a blank placeholder (see the panels below) -- default it out of the
+  // matrix until it's filled in and switched on.
+  const DEFAULT_EXCLUDED = new Set([9]);
   const LEVEL = {Low:0.5, Medium:1.5, High:2.5};
   const STORAGE_KEY = "cd_growth_ratings";
 
